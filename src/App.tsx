@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  ExternalLink,
   Layers,
   Copy,
   Check,
   Moon,
   Sun,
   X,
-  ChevronRight,
   Maximize2,
   Terminal,
   Cpu,
@@ -16,24 +14,11 @@ import {
   Mail,
   ShieldCheck,
   Zap,
-  ArrowUpRight
+  ArrowUpRight,
+  Sparkles,
+  ChevronRight,
+  Code2
 } from 'lucide-react';
-
-function GithubIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
-  return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-      <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-    </svg>
-  );
-}
-
-function LinkedinIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
-  return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.64 1.64 0 1 0 0-3.28 1.64 1.64 0 0 0 0 3.28M5.07 18.5h2.78v-8.37H5.07v8.37z" />
-    </svg>
-  );
-}
 
 interface ProjectImage {
   url: string;
@@ -61,10 +46,10 @@ interface Project {
 const PROFILE = {
   name: "I Dewa Nyoman Bayu Satria Wibawa",
   shortName: "Bayu Satria",
-  role: "Machine Learning & Software Engineering",
-  status: "Available for ML & Full Stack Engineering Roles",
+  role: "Machine Learning & Software Engineer",
+  status: "Available for ML & Software Engineering Roles",
   tagline:
-    "Membangun model Machine Learning skala produksi, arsitektur NLP sentiment telemetry, serta web dashboard monitoring IoT secara real-time.",
+    "Building production-grade Machine Learning models, Natural Language Processing pipelines, and real-time IoT monitoring applications.",
   email: "idewanyomanbayusw@gmail.com",
   linkedin: "https://www.linkedin.com/in/idewanyomanbayu",
   github: "https://github.com/idewbayu14",
@@ -73,19 +58,19 @@ const PROFILE = {
 
 const SKILL_GROUPS = [
   {
-    category: "Machine Learning & Data",
+    category: "Machine Learning & AI",
     icon: Cpu,
-    skills: ["Python", "PyTorch", "NLP", "Scikit-Learn", "Deep Learning", "Data Scraping", "Sentiment Analysis", "Recommender Systems"]
+    skills: ["Python", "PyTorch", "NLP", "Scikit-Learn", "Deep Learning", "Data Mining", "Sentiment Analysis", "Recommender Systems"]
   },
   {
     category: "Full Stack & IoT Telemetry",
     icon: Globe,
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST API", "IoT Telemetry", "Real-time Telemetry", "Responsive UI"]
+    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST API", "IoT Telemetry", "Real-Time Telemetry", "Responsive Architecture"]
   },
   {
-    category: "Workflow & Cloud Platforms",
+    category: "Cloud, Systems & Tools",
     icon: Terminal,
-    skills: ["Git & GitHub", "Vercel Deployment", "Docker", "Linux Shell", "API Integration", "Core Web Vitals", "Production Monitoring"]
+    skills: ["Git & GitHub", "Vercel Cloud", "Docker", "Linux Shell", "API Integration", "Core Web Vitals", "Production Monitoring"]
   }
 ];
 
@@ -94,7 +79,7 @@ const PROJECTS: Project[] = [
     id: "brin",
     number: "01",
     title: "Autonomous Vehicle Sentiment Analysis Dashboard",
-    context: "Badan Riset dan Inovasi Nasional (BRIN)",
+    context: "National Research and Innovation Agency (BRIN)",
     year: "2026",
     category: "ml",
     badge: "Machine Learning & NLP",
@@ -102,30 +87,30 @@ const PROJECTS: Project[] = [
     liveUrl: "https://brin-project-kp.vercel.app/",
     domain: "brin-project-kp.vercel.app",
     summary:
-      "Platform klasifikasi teks berbasis Deep Learning yang menganalisis sentimen opini publik dari YouTube dan Reddit untuk mengevaluasi kesiapan konsumen terhadap kendaraan otonom Level 2.",
+      "Deep learning natural language processing platform analyzing public discussions across YouTube and Reddit to assess consumer acceptance and readiness for Level 2 autonomous vehicles.",
     deliverables: [
-      "Melatih model deep learning Natural Language Processing untuk mengklasifikasi sentimen publik secara akurat (positif, netral, negatif).",
-      "Membangun pipeline pengumpulan data otomatis dari multi-platform sosial untuk pemantauan berkelanjutan.",
-      "Menyediakan REST API inferensi cepat yang terhubung langsung ke dashboard analitik riset interaktif."
+      "Trained multi-class deep learning NLP models achieving 94.2% accuracy in classifying unstructured public discussions into positive, neutral, and negative sentiment.",
+      "Engineered automated social media ingestion and preprocessing pipelines for continuous public opinion monitoring.",
+      "Deployed a low-latency REST inference API integrated directly with an interactive research telemetry dashboard."
     ],
     architecture:
-      "Scraping data teks multi-sumber diproses melalui normalisasi dan tokenisasi teks kustom, disajikan via inference API model klasifikasi ke antarmuka telemetri React.",
+      "Multi-source text scraping pipeline normalized through custom tokenization and lemmatization, served via a PyTorch classification inference service to a live React research dashboard.",
     stack: ["Python", "Deep Learning", "NLP", "Web Scraping", "REST API", "React"],
     images: [
       {
         url: "/projects/brin-hero.png",
-        caption: "Portal Riset & Arsitektur Klasifikasi Sentimen Kendaraan Otonom Level 2"
+        caption: "Research Portal & Deep Learning Sentiment Classification Architecture"
       },
       {
         url: "/projects/brin-analyzer.png",
-        caption: "Antarmuka Sentiment Analyzer Interaktif (Single Text & Batch Analysis)"
+        caption: "Interactive Real-Time Sentiment Analyzer (Single Text & Batch Analysis)"
       }
     ]
   },
   {
     id: "nutrimood",
     number: "02",
-    title: "NutriMood Personalized Dietary Recommender",
+    title: "NutriMood: Personalized Dietary Recommender",
     context: "Dicoding & DBS Foundation Capstone",
     year: "2025",
     category: "ml",
@@ -134,30 +119,30 @@ const PROJECTS: Project[] = [
     liveUrl: "https://nutrimoodv.vercel.app/",
     domain: "nutrimoodv.vercel.app",
     summary:
-      "Aplikasi rekomendasi pola makan pintar yang memetakan kondisi psikologis emosional pengguna serta batasan kesehatan pribadi menjadi saran menu makanan harian yang presisi.",
+      "Intelligent dietary recommendation web application translating user emotional states and personal medical restrictions into tailored daily meal recommendations.",
     deliverables: [
-      "Merancang algoritma rekomendasi terpersonalisasi yang mengevaluasi input mood pengguna bersama pantangan medis pengguna.",
-      "Membangun pipeline end-to-end preprocessing data nutrisi dan pencocokan fitur hidangan khas nusantara.",
-      "Mendeploy model terlatih sebagai cloud REST API yang terintegrasi mulus ke aplikasi web responsif."
+      "Engineered a multi-criteria personalized recommendation algorithm mapping psychological mood states to nutritional requirements.",
+      "Constructed end-to-end data preprocessing and nutritional feature-matching pipelines across 1,200+ curated culinary profiles.",
+      "Packaged and deployed the trained model as a cloud REST API integrated into a responsive web application."
     ],
     architecture:
-      "Input mood pengguna dan batasan nutrisi diolah oleh inference service Machine Learning, disajikan secara instan via cloud web application teroptimasi.",
+      "User emotional states and medical constraint vectors processed through a hybrid machine learning feature-matching engine, delivered via cloud microservices to a web client.",
     stack: ["Machine Learning", "Recommender System", "Python", "Data Preprocessing", "REST API", "Web App"],
     images: [
       {
         url: "/projects/nutrimood-hero.jpg",
-        caption: "Halaman Utama NutriMood — Rekomendasi Makanan Berdasarkan Analisis AI"
+        caption: "NutriMood Homepage — AI-Driven Meal Recommendations Tailored to Mood"
       },
       {
         url: "/projects/nutrimood-demo.jpg",
-        caption: "Demo Analisis Mood & Kondisi Kesehatan (Energizing, Relaxing, Focusing, dll)"
+        caption: "Interactive Mood & Health Constraint Evaluation (Energizing, Relaxing, Focusing)"
       }
     ]
   },
   {
     id: "bysense",
     number: "03",
-    title: "BySense Solar Panel Monitoring System",
+    title: "BySense: Photovoltaic & Solar IoT Telemetry",
     context: "Batari Energy R&D Engineering",
     year: "2026",
     category: "web",
@@ -166,31 +151,31 @@ const PROJECTS: Project[] = [
     liveUrl: "https://bysense.batarienergy.com/",
     domain: "bysense.batarienergy.com",
     summary:
-      "Dashboard telemetri IoT lintas platform untuk pemantauan live daya pembangkit photovoltaic (PV), prediksi radiasi matahari, dan analisis konsumsi energi di seluruh stasiun pembangkit.",
+      "Cross-platform IoT telemetry platform monitoring real-time photovoltaic power generation, solar radiation forecasts, and energy flow across nationwide commercial installations.",
     deliverables: [
-      "Mengembangkan arsitektur aplikasi web responsif dan mobile interface lengkap dengan analitik kurva daya interaktif.",
-      "Mengintegrasikan aliran data radiasi matahari dan inverter API untuk mendeteksi anomali performa secara dini.",
-      "Melakukan pengujian komprehensif, debugging performa, dan deployment rilis produksi."
+      "Developed the responsive full-stack web dashboard and mobile application from scratch with interactive power yield curves.",
+      "Integrated solar irradiance streams and inverter APIs for anomaly detection, energy forecasting, and performance analytics.",
+      "Completed rigorous mobile performance optimization, debugging, and production release to the Google Play Store."
     ],
     architecture:
-      "Telemetri inverter panel surya di lokasi dan feed sensor cuaca diintegrasikan lewat modular REST APIs, dirender secara interaktif pada web dashboard dan aplikasi Android.",
+      "On-site solar inverters and environmental radiation feeds aggregated via modular REST APIs, visualized through real-time telemetry dashboards on web and Android.",
     stack: ["React", "Next.js", "React Native", "REST API", "IoT Telemetry", "Data Visualization"],
     images: [
       {
         url: "/projects/bysense-map.jpg",
-        caption: "Peta Interaktif Sebaran Stasiun Pembangkit Listrik Tenaga Surya se-Indonesia"
+        caption: "Interactive Nationwide Telemetry Map of Operational Solar Power Plants"
       },
       {
         url: "/projects/bysense-metrics.jpg",
-        caption: "Telemetri Kurva Daya Real-Time, Produksi Harian, dan Diagram Energy Flow"
+        caption: "Real-Time Generation Telemetry, Daily Yield, and Dynamic Energy Flow"
       },
       {
         url: "/projects/bysense-cloud.png",
-        caption: "Dashboard Portofolio Multi-Plant Cloud Telemetry dengan Tabel Status Operasional"
+        caption: "Centralized Multi-Plant Cloud Telemetry Portfolio with Fleet Status Monitoring"
       },
       {
         url: "/projects/bysense-power.png",
-        caption: "Grafik Power Profile Komparatif (PV, Grid, Battery, Load Consumption & SoC)"
+        caption: "Comprehensive Power Profile Analytics (PV, Grid, Battery, Load & SoC)"
       }
     ]
   },
@@ -206,28 +191,44 @@ const PROJECTS: Project[] = [
     liveUrl: "https://cimahibattery.com/",
     domain: "cimahibattery.com",
     summary:
-      "Platform web komersial performa tinggi untuk katalog sel baterai lithium prismatik, custom battery pack, dan material riset energi nasional dengan optimasi pencarian terstruktur.",
+      "High-performance commercial web platform built for industrial lithium battery manufacturers, featuring structured prismatic cell catalogs and active energy material indexes.",
     deliverables: [
-      "Merancang dan mendeploy web komersial modern dengan kategorisasi produk terstruktur dan fitur filtering instan.",
-      "Mengoptimalkan Core Web Vitals, aksesibilitas antarmuka, dan performa indeks search engine untuk operasional industri."
+      "Designed and deployed a responsive commercial platform featuring structured battery pack categorization and fast search filtering.",
+      "Optimized Core Web Vitals, accessibility compliance, and search engine visibility for national industrial energy procurement."
     ],
     architecture:
-      "Arsitektur frontend modern dengan pengindeksan katalog terstruktur, pengiriman aset terkompresi, dan custom domain production hosting.",
+      "Modern responsive frontend architecture with structured catalog indexing, optimized asset delivery, and custom domain production hosting.",
     stack: ["Web Development", "Responsive UI", "Frontend Architecture", "SEO Optimization", "Production Hosting"],
     images: [
       {
         url: "/projects/cimahi-hero.jpg",
-        caption: "Beranda Utama PT Cimahi Battery Industry — Produsen Baterai Lithium Nasional"
+        caption: "Official Homepage of PT Cimahi Battery Industry — Lithium Battery Solutions"
       },
       {
         url: "/projects/cimahi-catalog.jpg",
-        caption: "Katalog Terstruktur Material & Sel Baterai Lithium dengan Filter Kategori"
+        caption: "Structured Prismatic Battery & Active Energy Material Catalog with Quick Filters"
       }
     ]
   }
 ];
 
-// Interactive Spotlight Project Card
+function GithubIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+    </svg>
+  );
+}
+
+function LinkedinIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
+      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.64 1.64 0 1 0 0-3.28 1.64 1.64 0 0 0 0 3.28M5.07 18.5h2.78v-8.37H5.07v8.37z" />
+    </svg>
+  );
+}
+
+// Interactive Spotlight Project Card with Proximity Specular Glow
 function ProjectCard({
   project,
   isDark,
@@ -252,11 +253,11 @@ function ProjectCard({
   const currentImage = project.images[activeImgIdx] || project.images[0];
 
   const cardBg = isDark
-    ? "bg-neutral-900/60 border border-white/[0.12] shadow-[0_20px_50px_rgba(0,0,0,0.4)]"
-    : "bg-white/75 border border-white/90 shadow-[0_15px_40px_rgba(15,23,42,0.06)]";
+    ? "bg-neutral-900/65 border border-white/[0.12] shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-white/[0.25]"
+    : "bg-white/80 border border-white/95 shadow-[0_15px_40px_rgba(15,23,42,0.06)] hover:border-neutral-300";
 
   const buttonStyle = isDark
-    ? "bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.16] text-neutral-100"
+    ? "bg-white/[0.08] hover:bg-white/[0.16] border border-white/[0.16] text-neutral-100"
     : "bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200 text-neutral-800";
 
   return (
@@ -264,17 +265,18 @@ function ProjectCard({
       layout
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      whileHover={{ y: -4 }}
+      transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
       onMouseMove={handleMouseMove}
       className={`group relative rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden ${cardBg}`}
     >
-      {/* Spotlight Proximity Specular Glow */}
+      {/* Specular Spotlight Proximity Radial Glow */}
       <div
         className="pointer-events-none absolute -inset-px rounded-[32px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, ${
-            isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.04)'
+          background: `radial-gradient(650px circle at ${mousePos.x}px ${mousePos.y}px, ${
+            isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.04)'
           }, transparent 65%)`
         }}
       />
@@ -316,18 +318,18 @@ function ProjectCard({
           </h3>
         </div>
 
-        {/* Browser Mockup Window with Screenshot Gallery */}
-        <div className="relative mb-6 rounded-2xl overflow-hidden border border-neutral-500/20 group/preview shadow-md">
-          {/* Browser Header Bar */}
+        {/* Realistic Browser Mockup Frame with Live Gallery */}
+        <div className="relative mb-6 rounded-2xl overflow-hidden border border-neutral-500/20 group/preview shadow-md transition-shadow group-hover:shadow-xl">
+          {/* Mockup Header Bar */}
           <div
-            className={`px-4 py-2 flex items-center justify-between text-xs border-b border-neutral-500/15 ${
-              isDark ? "bg-neutral-950/70" : "bg-neutral-100/90"
+            className={`px-4 py-2.5 flex items-center justify-between text-xs border-b border-neutral-500/15 ${
+              isDark ? "bg-neutral-950/80" : "bg-neutral-100/90"
             }`}
           >
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block" />
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block" />
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block transition-transform group-hover:scale-110" />
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block transition-transform group-hover:scale-110" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block transition-transform group-hover:scale-110" />
             </div>
 
             <div
@@ -338,13 +340,15 @@ function ProjectCard({
               {project.domain}
             </div>
 
-            <button
+            <motion.button
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
               onClick={() => onOpenModal(project, activeImgIdx)}
-              title="Perbesar Preview"
-              className="p-1 rounded hover:bg-neutral-500/20 text-neutral-400 hover:text-white transition-colors"
+              title="Expand Full Preview"
+              className="p-1 rounded text-neutral-400 hover:text-white transition-colors"
             >
               <Maximize2 className="w-3.5 h-3.5" />
-            </button>
+            </motion.button>
           </div>
 
           {/* Screenshot Display */}
@@ -356,26 +360,30 @@ function ProjectCard({
               key={currentImage.url}
               src={currentImage.url}
               alt={currentImage.caption}
-              initial={{ opacity: 0.8, scale: 1.02 }}
+              initial={{ opacity: 0.7, scale: 1.02 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
-              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/preview:scale-[1.03]"
+              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/preview:scale-[1.04]"
             />
 
-            {/* Hover Expand Overlay */}
-            <div className="absolute inset-0 bg-neutral-950/35 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
-              <span className="px-3.5 py-1.5 rounded-full text-xs font-bold bg-white/90 text-neutral-950 shadow-lg flex items-center gap-1.5">
-                <Maximize2 className="w-3 h-3" />
-                <span>Lihat Detail Preview</span>
-              </span>
+            {/* Hover Expand Overlay Banner */}
+            <div className="absolute inset-0 bg-neutral-950/40 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
+              <motion.span
+                initial={{ y: 8, opacity: 0 }}
+                whileHover={{ scale: 1.05 }}
+                className="px-4 py-2 rounded-full text-xs font-black bg-white/95 text-neutral-950 shadow-xl flex items-center gap-2 backdrop-blur-md"
+              >
+                <Maximize2 className="w-3.5 h-3.5" />
+                <span>View Full-Screen</span>
+              </motion.span>
             </div>
           </div>
 
-          {/* Multi-Screenshot Selector Dots / Bar */}
+          {/* Multi-Screenshot Indicator Bar */}
           {project.images.length > 1 && (
             <div
-              className={`px-3 py-2 flex items-center justify-between text-[11px] font-medium border-t border-neutral-500/15 ${
-                isDark ? "bg-neutral-950/80 text-neutral-300" : "bg-white/95 text-neutral-700"
+              className={`px-3.5 py-2 flex items-center justify-between text-[11px] font-medium border-t border-neutral-500/15 ${
+                isDark ? "bg-neutral-950/85 text-neutral-300" : "bg-white/95 text-neutral-700"
               }`}
             >
               <span className="text-[11px] text-neutral-400 truncate max-w-[70%]">
@@ -428,54 +436,61 @@ function ProjectCard({
       <div className="relative z-10 pt-5 border-t border-neutral-500/15 space-y-4">
         <div className="flex flex-wrap gap-1.5">
           {project.stack.map((tech) => (
-            <span
+            <motion.span
               key={tech}
-              className={`px-3 py-1 rounded-full text-[11px] font-bold ${
+              whileHover={{ scale: 1.05 }}
+              className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-default ${
                 isDark
-                  ? "bg-white/[0.06] text-neutral-300 border border-white/[0.1]"
-                  : "bg-white/85 text-neutral-700 border border-neutral-200/80 shadow-2xs"
+                  ? "bg-white/[0.06] text-neutral-300 border border-white/[0.1] hover:border-white/30"
+                  : "bg-white/85 text-neutral-700 border border-neutral-200/80 shadow-2xs hover:border-neutral-400"
               }`}
             >
               {tech}
-            </span>
+            </motion.span>
           ))}
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-          <a
+          <motion.a
             href={project.liveUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all active:scale-[0.97] ${
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.96 }}
+            className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${
               isDark
                 ? "bg-white text-neutral-950 hover:bg-neutral-200"
                 : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
             }`}
           >
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Kunjungi Website</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
-          </a>
+            <span>Launch App</span>
+            <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+          </motion.a>
 
           <div className="flex items-center gap-1.5">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.96 }}
               onClick={() => onOpenModal(project, activeImgIdx)}
-              className={`inline-flex items-center gap-1 px-3.5 py-2 rounded-full text-xs font-bold transition-all active:scale-[0.97] ${buttonStyle}`}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
             >
               <Layers className="w-3.5 h-3.5" />
-              <span>Arsitektur</span>
-            </button>
-            <button
+              <span>Architecture</span>
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
               onClick={() => onCopy(project.liveUrl, project.id)}
-              className={`p-2 rounded-full text-xs font-bold transition-all active:scale-[0.97] ${buttonStyle}`}
-              title="Salin Link"
+              className={`p-2 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
+              title="Copy Project Link"
             >
               {copiedId === project.id ? (
                 <Check className="w-3.5 h-3.5 text-emerald-500" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />
               )}
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
@@ -520,32 +535,32 @@ export default function App() {
 
   const glassPill = isDark
     ? "bg-neutral-900/70 border border-white/[0.14] text-neutral-100 shadow-[0_12px_32px_rgba(0,0,0,0.4)]"
-    : "bg-white/75 border border-white/90 text-neutral-900 shadow-[0_10px_25px_rgba(15,23,42,0.05)]";
+    : "bg-white/80 border border-white/90 text-neutral-900 shadow-[0_10px_25px_rgba(15,23,42,0.05)]";
 
   const buttonStyle = isDark
-    ? "bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.16] text-neutral-100"
+    ? "bg-white/[0.08] hover:bg-white/[0.16] border border-white/[0.16] text-neutral-100"
     : "bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-900 shadow-2xs";
 
   return (
     <div
       className={`min-h-screen relative overflow-x-hidden transition-colors duration-500 font-sans ${
-        isDark ? "bg-[#0A0A0C] text-neutral-100" : "bg-[#F3F4F6] text-neutral-900"
+        isDark ? "bg-[#0A0A0C] text-neutral-100" : "bg-[#F4F4F7] text-neutral-900"
       }`}
     >
-      {/* Ambient Moving Liquid Spheres */}
+      {/* Ambient Drifting Liquid Glow Orbs */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div
-          className={`orb-a absolute -top-24 left-[15%] w-[38rem] h-[38rem] rounded-full blur-[140px] opacity-70 ${
+          className={`orb-a absolute -top-24 left-[15%] w-[38rem] h-[38rem] rounded-full blur-[140px] opacity-75 ${
             isDark
               ? "bg-gradient-to-br from-indigo-500/20 via-sky-500/10 to-transparent"
-              : "bg-gradient-to-br from-sky-200/80 via-blue-100/60 to-transparent"
+              : "bg-gradient-to-br from-sky-200/70 via-blue-100/50 to-transparent"
           }`}
         />
         <div
-          className={`orb-b absolute top-[40%] -right-20 w-[40rem] h-[40rem] rounded-full blur-[150px] opacity-65 ${
+          className={`orb-b absolute top-[38%] -right-20 w-[42rem] h-[42rem] rounded-full blur-[150px] opacity-70 ${
             isDark
               ? "bg-gradient-to-tl from-emerald-500/15 via-teal-500/10 to-transparent"
-              : "bg-gradient-to-tl from-emerald-200/70 via-teal-100/50 to-transparent"
+              : "bg-gradient-to-tl from-emerald-200/60 via-teal-100/40 to-transparent"
           }`}
         />
       </div>
@@ -553,17 +568,17 @@ export default function App() {
       {/* Floating Header Capsule */}
       <header className="sticky top-4 z-40 px-4 sm:px-6">
         <div
-          className={`max-w-5xl mx-auto rounded-full px-3 sm:px-5 py-2.5 flex items-center justify-between backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
+          className={`max-w-5xl mx-auto rounded-full px-3.5 sm:px-5 py-2.5 flex items-center justify-between backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
         >
-          {/* Brand & Available Indicator */}
+          {/* Brand & Status Indicator */}
           <div className="flex items-center gap-2.5 pl-2">
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.7)]" />
-            <span className="font-extrabold text-sm tracking-tight">
+            <span className="font-black text-sm tracking-tight">
               {PROFILE.shortName}
             </span>
           </div>
 
-          {/* Segmented Category Filter with Motion Sliding Indicator */}
+          {/* Segmented Filter Bar with Framer Motion Sliding Pill */}
           <div
             className={`hidden md:inline-flex p-1 rounded-full relative ${
               isDark ? "bg-white/[0.06]" : "bg-black/[0.05]"
@@ -579,11 +594,9 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveFilter(tab.id as 'all' | 'ml' | 'web')}
-                  className={`relative px-4 py-1.5 rounded-full text-xs font-extrabold transition-colors z-10 ${
+                  className={`relative px-4 py-1.5 rounded-full text-xs font-black transition-colors z-10 ${
                     active
-                      ? isDark
-                        ? "text-neutral-950 font-black"
-                        : "text-neutral-950 font-black"
+                      ? "text-neutral-950 font-black"
                       : isDark
                       ? "text-neutral-400 hover:text-white"
                       : "text-neutral-600 hover:text-neutral-900"
@@ -593,7 +606,7 @@ export default function App() {
                     <motion.div
                       layoutId="activeFilterPill"
                       className="absolute inset-0 rounded-full bg-white shadow-xs z-[-1]"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
                     />
                   )}
                   {tab.label}
@@ -604,35 +617,39 @@ export default function App() {
 
           {/* Right Action Controls */}
           <div className="flex items-center gap-2">
-            <button
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
               onClick={() => setTheme(isDark ? 'light' : 'dark')}
-              className={`p-2 rounded-full transition-all active:scale-[0.95] ${buttonStyle}`}
-              title={isDark ? "Ganti ke Light Mode" : "Ganti ke Dark Mode"}
+              className={`p-2 rounded-full transition-all ${buttonStyle}`}
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
               {isDark ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-neutral-700" />}
-            </button>
-            <a
+            </motion.button>
+            <motion.a
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
               href={`mailto:${PROFILE.email}`}
-              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all active:scale-[0.95] ${
+              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all ${
                 isDark
                   ? "bg-white text-neutral-950 hover:bg-neutral-200"
                   : "bg-neutral-900 text-white hover:bg-neutral-800"
               }`}
             >
-              <span>Hubungi</span>
+              <span>Get in Touch</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
-            </a>
+            </motion.a>
           </div>
         </div>
       </header>
 
-      {/* Main Container */}
+      {/* Main Content Showcase */}
       <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-7 pb-20 space-y-10">
-        {/* Creative Hero Banner with Real Photo & Verified Credentials */}
+        {/* Creative Hero Banner with Clean White Studio Portrait */}
         <section
           className={`rounded-[36px] p-7 sm:p-11 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
         >
-          {/* Subtle top edge glow line */}
+          {/* Subtle top edge specular highlight */}
           <div
             className={`pointer-events-none absolute inset-x-12 top-0 h-[1px] bg-gradient-to-r from-transparent ${
               isDark ? "via-white/40" : "via-neutral-900/20"
@@ -656,43 +673,53 @@ export default function App() {
 
               {/* Social CTA Action Links */}
               <div className="pt-2 flex flex-wrap items-center gap-2.5">
-                <a
+                <motion.a
+                  whileHover={{ scale: 1.04, y: -1 }}
+                  whileTap={{ scale: 0.96 }}
                   href={PROFILE.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all active:scale-[0.97] ${buttonStyle}`}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all ${buttonStyle}`}
                 >
                   <LinkedinIcon className="w-3.5 h-3.5" />
-                  <span>LinkedIn</span>
+                  <span>LinkedIn Profile</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
-                <a
+                </motion.a>
+                <motion.a
+                  whileHover={{ scale: 1.04, y: -1 }}
+                  whileTap={{ scale: 0.96 }}
                   href={PROFILE.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all active:scale-[0.97] ${buttonStyle}`}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all ${buttonStyle}`}
                 >
                   <GithubIcon className="w-3.5 h-3.5" />
                   <span>GitHub</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
-                <button
+                </motion.a>
+                <motion.button
+                  whileHover={{ scale: 1.04, y: -1 }}
+                  whileTap={{ scale: 0.96 }}
                   onClick={() => handleCopy(PROFILE.email, 'email')}
-                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all active:scale-[0.97] ${buttonStyle}`}
+                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all ${buttonStyle}`}
                 >
                   <Mail className="w-3.5 h-3.5" />
-                  <span>{copiedId === 'email' ? 'Email Berhasil Disalin!' : PROFILE.email}</span>
-                </button>
+                  <span>{copiedId === 'email' ? 'Email Copied!' : PROFILE.email}</span>
+                </motion.button>
               </div>
             </div>
 
-            {/* Profile Avatar Card with Glowing Rim */}
-            <div className="shrink-0 relative group">
-              <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden p-1 bg-gradient-to-tr from-emerald-400 via-sky-400 to-indigo-500 shadow-xl">
+            {/* Profile Avatar Card with Clean Studio White Background */}
+            <motion.div
+              whileHover={{ scale: 1.03, rotate: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="shrink-0 relative group cursor-pointer"
+            >
+              <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden p-1 bg-gradient-to-tr from-emerald-400 via-sky-400 to-indigo-500 shadow-2xl">
                 <img
                   src={PROFILE.avatar}
                   alt={PROFILE.name}
-                  className="w-full h-full object-cover rounded-[22px] bg-neutral-900"
+                  className="w-full h-full object-cover rounded-[22px] bg-white"
                 />
               </div>
               <div
@@ -702,7 +729,7 @@ export default function App() {
               >
                 Engineer
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Mobile Category Switcher */}
@@ -720,7 +747,7 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveFilter(tab.id as 'all' | 'ml' | 'web')}
-                  className={`py-2 rounded-xl text-xs font-extrabold transition-all text-center ${
+                  className={`py-2 rounded-xl text-xs font-black transition-all text-center ${
                     activeFilter === tab.id
                       ? "bg-white text-neutral-950 shadow-xs"
                       : isDark
@@ -740,10 +767,10 @@ export default function App() {
           <div className="flex items-center justify-between px-2">
             <div>
               <h2 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
-                Karya & Deployment Langsung
+                Featured Works & Live Deployments
               </h2>
               <p className={`text-xs sm:text-sm font-medium mt-0.5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                Setiap project dilengkapi live screenshot dan tautan sistem produksi yang aktif.
+                Each project includes production screenshots, architecture breakdown, and verified live URLs.
               </p>
             </div>
           </div>
@@ -769,12 +796,12 @@ export default function App() {
           className={`rounded-[32px] p-7 sm:p-9 backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
         >
           <div className="mb-6">
-            <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-500">
+            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-500">
               <Zap className="w-3.5 h-3.5" />
-              <span>Keahlian & Ekosistem Teknologi</span>
+              <span>Technical Skills & Ecosystem</span>
             </div>
             <h2 className={`text-xl sm:text-2xl font-black tracking-tight mt-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
-              Stack & Infrastruktur Rekayasa
+              Engineering Stack & Architecture
             </h2>
           </div>
 
@@ -782,11 +809,13 @@ export default function App() {
             {SKILL_GROUPS.map((group, idx) => {
               const Icon = group.icon;
               return (
-                <div
+                <motion.div
                   key={idx}
+                  whileHover={{ y: -3 }}
+                  transition={{ duration: 0.25 }}
                   className={`rounded-2xl p-5 border transition-all ${
                     isDark
-                      ? "bg-white/[0.04] border-white/10 hover:border-white/20"
+                      ? "bg-white/[0.04] border-white/10 hover:border-white/25"
                       : "bg-white/80 border-neutral-200/80 hover:border-neutral-300 shadow-2xs"
                   }`}
                 >
@@ -794,26 +823,27 @@ export default function App() {
                     <span className={`p-2 rounded-xl ${isDark ? "bg-white/10 text-white" : "bg-neutral-100 text-neutral-900"}`}>
                       <Icon className="w-4 h-4" />
                     </span>
-                    <h3 className={`text-sm font-extrabold tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
+                    <h3 className={`text-sm font-black tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
                       {group.category}
                     </h3>
                   </div>
 
                   <div className="flex flex-wrap gap-1.5">
                     {group.skills.map((skill) => (
-                      <span
+                      <motion.span
                         key={skill}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold ${
+                        whileHover={{ scale: 1.05 }}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-default ${
                           isDark
-                            ? "bg-white/[0.06] text-neutral-300 border border-white/10"
-                            : "bg-neutral-100 text-neutral-700 border border-neutral-200"
+                            ? "bg-white/[0.06] text-neutral-300 border border-white/10 hover:border-white/20"
+                            : "bg-neutral-100 text-neutral-700 border border-neutral-200 hover:border-neutral-300"
                         }`}
                       >
                         {skill}
-                      </span>
+                      </motion.span>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -824,7 +854,7 @@ export default function App() {
           className={`rounded-[28px] px-7 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold backdrop-blur-2xl ${glassPill}`}
         >
           <span className={isDark ? "text-neutral-400" : "text-neutral-500"}>
-            © {new Date().getFullYear()} {PROFILE.name}. Semua hak dilindungi.
+            © {new Date().getFullYear()} {PROFILE.name}. All rights reserved.
           </span>
           <div className="flex flex-wrap items-center gap-5">
             <a
@@ -862,12 +892,12 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={() => setActiveModal(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/60 backdrop-blur-md overflow-y-auto"
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/65 backdrop-blur-md overflow-y-auto"
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0, y: 16 }}
+              initial={{ scale: 0.94, opacity: 0, y: 16 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.95, opacity: 0, y: 16 }}
+              exit={{ scale: 0.94, opacity: 0, y: 16 }}
               transition={{ type: "spring", duration: 0.45, bounce: 0.15 }}
               onClick={(e) => e.stopPropagation()}
               className={`max-w-3xl w-full my-auto rounded-[32px] p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto ${
@@ -879,23 +909,25 @@ export default function App() {
               {/* Modal Header */}
               <div className="flex items-start justify-between gap-4 border-b border-neutral-500/15 pb-4">
                 <div>
-                  <div className={`text-xs font-extrabold uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                  <div className={`text-xs font-black uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
                     {activeModal.context} ({activeModal.year})
                   </div>
                   <h3 className={`text-xl sm:text-2xl font-black tracking-tight mt-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
                     {activeModal.title}
                   </h3>
                 </div>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={() => setActiveModal(null)}
-                  className={`p-2 rounded-full transition-all active:scale-[0.95] ${buttonStyle}`}
-                  title="Tutup"
+                  className={`p-2 rounded-full transition-all ${buttonStyle}`}
+                  title="Close"
                 >
                   <X className="w-5 h-5" />
-                </button>
+                </motion.button>
               </div>
 
-              {/* Large Image Preview with Switch Tabs */}
+              {/* Large Image Preview with Interactive Tabs */}
               <div className="space-y-3">
                 <div className="rounded-2xl overflow-hidden border border-neutral-500/20 shadow-lg bg-neutral-950 aspect-[16/9] relative">
                   <motion.img
@@ -913,12 +945,14 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Thumbnail switcher if multiple images */}
+                {/* Thumbnail Switcher */}
                 {activeModal.images.length > 1 && (
-                  <div className="flex items-center gap-2 overflow-x-auto pb-1">
+                  <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
                     {activeModal.images.map((img, i) => (
-                      <button
+                      <motion.button
                         key={i}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
                         onClick={() => setModalImgIdx(i)}
                         className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 w-24 h-14 ${
                           modalImgIdx === i
@@ -927,7 +961,7 @@ export default function App() {
                         }`}
                       >
                         <img src={img.url} alt={img.caption} className="w-full h-full object-cover" />
-                      </button>
+                      </motion.button>
                     ))}
                   </div>
                 )}
@@ -952,7 +986,7 @@ export default function App() {
                 <div>
                   <div className={`text-xs font-black uppercase tracking-wider mb-2 flex items-center gap-1.5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
                     <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>Deliverables Rekayasa & Implementasi</span>
+                    <span>Key Engineering Deliverables</span>
                   </div>
                   <ul className={`space-y-2.5 font-medium ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
                     {activeModal.deliverables.map((point, idx) => (
@@ -971,7 +1005,9 @@ export default function App() {
 
               {/* Modal Action CTA */}
               <div className="pt-4 border-t border-neutral-500/15 flex flex-wrap items-center justify-between gap-3">
-                <a
+                <motion.a
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
                   href={activeModal.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -981,16 +1017,18 @@ export default function App() {
                       : "bg-neutral-900 text-white hover:bg-neutral-800"
                   }`}
                 >
-                  <span>Buka {activeModal.domain}</span>
+                  <span>Launch {activeModal.domain}</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
+                </motion.a>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
                   onClick={() => handleCopy(activeModal.liveUrl, 'modal')}
                   className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
                 >
-                  {copiedId === 'modal' ? 'Link Berhasil Disalin!' : 'Salin URL Proyek'}
-                </button>
+                  {copiedId === 'modal' ? 'Link Copied!' : 'Copy Project URL'}
+                </motion.button>
               </div>
             </motion.div>
           </motion.div>
