@@ -4,8 +4,6 @@ import {
   Layers,
   Copy,
   Check,
-  Moon,
-  Sun,
   X,
   Maximize2,
   Terminal,
@@ -18,8 +16,6 @@ import {
   Database,
   BarChart3,
   Network,
-  LayoutGrid,
-  LayoutList,
   ExternalLink
 } from 'lucide-react';
 
@@ -564,200 +560,13 @@ function ProjectCard({
   );
 }
 
-// Compact Bento Card for fast visual scanning with 3D Spring Parallax Tilt
-function ProjectBentoCard({
-  project,
-  isDark,
-  onOpenModal,
-  onCopy,
-  copiedId
-}: {
-  project: Project;
-  isDark: boolean;
-  onOpenModal: (project: Project, imageIndex?: number) => void;
-  onCopy: (text: string, id: string) => void;
-  copiedId: string | null;
-}) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setMousePos({ x, y });
-
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -3;
-    const rotateY = ((x - centerX) / centerX) * 3;
-    setTilt({ rotateX, rotateY });
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setTilt({ rotateX: 0, rotateY: 0 });
-  };
-
-  const primaryImage = project.images[0];
-
-  const cardBg = isDark
-    ? "bg-neutral-900/65 border border-white/[0.12] shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-white/[0.25]"
-    : "bg-white/80 border border-white/95 shadow-[0_15px_40px_rgba(15,23,42,0.06)] hover:border-neutral-300";
-
-  return (
-    <motion.article
-      ref={cardRef}
-      layout
-      initial={{ opacity: 0, y: 20 }}
-      animate={{
-        opacity: 1,
-        y: isHovered ? -3 : 0,
-        rotateX: tilt.rotateX,
-        rotateY: tilt.rotateY
-      }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      transition={{
-        rotateX: { type: "spring", stiffness: 350, damping: 25 },
-        rotateY: { type: "spring", stiffness: 350, damping: 25 },
-        y: { duration: 0.25 }
-      }}
-      style={{
-        perspective: 1000,
-        transformStyle: "preserve-3d"
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      className={`group relative rounded-[28px] p-5 sm:p-6 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden ${cardBg}`}
-    >
-      {/* Specular Spotlight Proximity Glow */}
-      <div
-        className="pointer-events-none absolute -inset-px rounded-[28px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(550px circle at ${mousePos.x}px ${mousePos.y}px, ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.035)'
-            }, transparent 65%)`
-        }}
-      />
-
-      <div className="relative z-10">
-        {/* Top Badges */}
-        <div className="flex items-center justify-between gap-2 mb-3.5">
-          <div className="flex items-center gap-2">
-            <span
-              className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${project.featured
-                  ? isDark
-                    ? "bg-white text-neutral-950 font-black"
-                    : "bg-neutral-900 text-white font-black"
-                  : isDark
-                    ? "bg-white/[0.1] text-neutral-200 border border-white/15"
-                    : "bg-black/[0.06] text-neutral-800"
-                }`}
-            >
-              {project.badge}
-            </span>
-            <span className={`text-[11px] font-bold ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-              {project.year}
-            </span>
-          </div>
-
-          <span className={`text-xs font-black tracking-widest ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-            {project.number}
-          </span>
-        </div>
-
-        {/* Thumbnail Image */}
-        <div
-          onClick={() => onOpenModal(project, 0)}
-          style={{ transform: "translateZ(8px)" }}
-          className="relative cursor-pointer aspect-[16/10] mb-4 rounded-xl overflow-hidden border border-neutral-500/15 bg-neutral-950/20 flex items-center justify-center p-1.5 group/thumb shadow-sm"
-        >
-          <img
-            src={primaryImage.url}
-            alt={primaryImage.caption}
-            className="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover/thumb:scale-[1.03]"
-          />
-          <div className="absolute inset-0 bg-neutral-950/30 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
-            <span className="px-3 py-1.5 rounded-full text-[11px] font-bold bg-white text-neutral-900 shadow-md flex items-center gap-1.5">
-              <Maximize2 className="w-3 h-3" />
-              <span>Inspect</span>
-            </span>
-          </div>
-        </div>
-
-        {/* Title & Context */}
-        <p className={`text-[11px] font-bold uppercase tracking-wider mb-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-          {project.context}
-        </p>
-        <h3 className={`text-base sm:text-lg font-black tracking-tight leading-snug mb-2 ${isDark ? "text-white" : "text-neutral-900"}`}>
-          {project.title}
-        </h3>
-
-        {/* Short summary */}
-        <p className={`text-xs font-medium leading-relaxed mb-4 line-clamp-2 ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
-          {project.summary}
-        </p>
-
-        {/* Tech Stack Pills */}
-        <div className="flex flex-wrap gap-1.5 mb-5">
-          {project.stack.slice(0, 4).map((tech, i) => (
-            <span
-              key={i}
-              className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${isDark
-                  ? "bg-white/[0.06] text-neutral-300 border border-white/10"
-                  : "bg-neutral-100 text-neutral-700 border border-neutral-200"
-                }`}
-            >
-              {tech}
-            </span>
-          ))}
-          {project.stack.length > 4 && (
-            <span className={`px-1.5 py-0.5 text-[10px] font-bold ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-              +{project.stack.length - 4}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Card Action Footer */}
-      <div className="relative z-10 pt-3 border-t border-neutral-500/15 flex items-center justify-between">
-        <button
-          onClick={() => onOpenModal(project, 0)}
-          className={`inline-flex items-center gap-1.5 text-xs font-black transition-colors ${isDark ? "text-neutral-200 hover:text-white" : "text-neutral-800 hover:text-neutral-950"
-            }`}
-        >
-          <span>View Architecture</span>
-          <ArrowUpRight className="w-3.5 h-3.5" />
-        </button>
-
-        {project.liveUrl && (
-          <a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-[11px] font-bold text-emerald-500 hover:underline flex items-center gap-1"
-          >
-            <span>Live System</span>
-            <ExternalLink className="w-3 h-3" />
-          </a>
-        )}
-      </div>
-    </motion.article>
-  );
-}
-
 // Floating Action Dock at bottom center
 function FloatingDock({
   isDark,
-  onToggleTheme,
   onCopyEmail,
   activeSection
 }: {
   isDark: boolean;
-  onToggleTheme: () => void;
   onCopyEmail: () => void;
   activeSection: string;
 }) {
@@ -770,37 +579,41 @@ function FloatingDock({
       aria-label="Quick Action Dock"
     >
       <div
-        className={`px-2.5 py-2 rounded-full flex items-center gap-1.5 sm:gap-2 shadow-2xl backdrop-blur-2xl border transition-all duration-300 ${isDark
+        className={`px-3 py-2 rounded-full flex items-center gap-1.5 sm:gap-2.5 shadow-2xl backdrop-blur-2xl border transition-all duration-300 ${
+          isDark
             ? "bg-neutral-950/85 border-white/[0.14] text-neutral-200 shadow-black/70"
             : "bg-white/90 border-neutral-200 text-neutral-800 shadow-neutral-950/15"
-          }`}
+        }`}
       >
         <a
           href="#overview"
-          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${activeSection === 'overview'
+          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
+            activeSection === 'overview'
               ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
               : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
-            }`}
+          }`}
         >
           Overview
         </a>
 
         <a
           href="#projects"
-          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${activeSection === 'projects'
+          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
+            activeSection === 'projects'
               ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
               : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
-            }`}
+          }`}
         >
           Projects
         </a>
 
         <a
           href="#skills"
-          className={`hidden xs:inline-block px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${activeSection === 'skills'
+          className={`hidden xs:inline-block px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
+            activeSection === 'skills'
               ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
               : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
-            }`}
+          }`}
         >
           Skills
         </a>
@@ -809,25 +622,15 @@ function FloatingDock({
 
         <button
           onClick={onCopyEmail}
-          className={`px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors ${isDark
+          className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors ${
+            isDark
               ? "bg-white/10 hover:bg-white/20 text-white"
               : "bg-neutral-100 hover:bg-neutral-200 text-neutral-900"
-            }`}
+          }`}
           title="Copy email to clipboard"
         >
           <Mail className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Copy Email</span>
-        </button>
-
-        <button
-          onClick={onToggleTheme}
-          className={`p-1.5 rounded-full transition-colors ${isDark
-              ? "hover:bg-white/15 text-amber-300"
-              : "hover:bg-neutral-200 text-neutral-700"
-            }`}
-          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-        >
-          {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          <span>Copy Email</span>
         </button>
       </div>
     </motion.aside>
@@ -870,17 +673,14 @@ function ToastNotification({
 }
 
 export default function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const isDark = true;
   const [activeFilter, setActiveFilter] = useState<'all' | 'ml' | 'web'>('all');
-  const [viewMode, setViewMode] = useState<'showcase' | 'bento'>('showcase');
   const [activeModal, setActiveModal] = useState<Project | null>(null);
   const [modalImgIdx, setModalImgIdx] = useState(0);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<'overview' | 'projects' | 'skills'>('overview');
   const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const isDark = theme === 'dark';
 
   const visibleProjects =
     activeFilter === 'all'
@@ -1011,23 +811,11 @@ export default function App() {
 
           {/* Right Action Controls */}
           <div className="flex items-center gap-2">
-            <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
-              onClick={() => setTheme(isDark ? 'light' : 'dark')}
-              className={`p-2 rounded-full transition-all ${buttonStyle}`}
-              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-            >
-              {isDark ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-neutral-700" />}
-            </motion.button>
             <motion.a
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               href={`mailto:${PROFILE.email}`}
-              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all ${isDark
-                  ? "bg-white text-neutral-950 hover:bg-neutral-200"
-                  : "bg-neutral-900 text-white hover:bg-neutral-800"
-                }`}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all bg-white text-neutral-950 hover:bg-neutral-200"
             >
               <span>Get in Touch</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1183,98 +971,31 @@ export default function App() {
 
         {/* Live Projects Grid Showcase with Visual Previews */}
         <section id="projects" className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-2">
+          <div className="flex items-center justify-between px-2">
             <div>
-              <h2 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
                 Machine Learning & Systems Showcase
               </h2>
-              <p className={`text-xs sm:text-sm font-medium mt-0.5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+              <p className="text-xs sm:text-sm font-medium mt-0.5 text-neutral-400">
                 Applied research, deep learning classification pipelines, and full-stack telemetry deployments.
               </p>
             </div>
-
-            {/* View Mode Switcher: Detailed Showcase vs Compact Bento Grid */}
-            <div
-              className={`self-start sm:self-auto p-1 rounded-full flex items-center gap-1 border transition-colors ${isDark
-                  ? "bg-neutral-900/80 border-white/[0.12]"
-                  : "bg-white border-neutral-200 shadow-2xs"
-                }`}
-            >
-              <button
-                onClick={() => setViewMode('showcase')}
-                className={`relative px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors z-10 ${viewMode === 'showcase'
-                    ? "text-neutral-950 font-black"
-                    : isDark
-                      ? "text-neutral-400 hover:text-white"
-                      : "text-neutral-600 hover:text-neutral-900"
-                  }`}
-                title="Detailed Showcase with Mockup Previews & Architecture"
-              >
-                {viewMode === 'showcase' && (
-                  <motion.div
-                    layoutId="activeViewPill"
-                    className="absolute inset-0 rounded-full bg-white shadow-xs z-[-1]"
-                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <LayoutList className="w-3.5 h-3.5" />
-                <span className="hidden xs:inline">Showcase</span>
-              </button>
-
-              <button
-                onClick={() => setViewMode('bento')}
-                className={`relative px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors z-10 ${viewMode === 'bento'
-                    ? "text-neutral-950 font-black"
-                    : isDark
-                      ? "text-neutral-400 hover:text-white"
-                      : "text-neutral-600 hover:text-neutral-900"
-                  }`}
-                title="Compact Bento Grid View"
-              >
-                {viewMode === 'bento' && (
-                  <motion.div
-                    layoutId="activeViewPill"
-                    className="absolute inset-0 rounded-full bg-white shadow-xs z-[-1]"
-                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                  />
-                )}
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span className="hidden xs:inline">Compact Bento</span>
-              </button>
-            </div>
           </div>
 
-          {viewMode === 'showcase' ? (
-            <div className="grid md:grid-cols-2 gap-6">
-              <AnimatePresence mode="popLayout">
-                {visibleProjects.map((project) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    isDark={isDark}
-                    onOpenModal={handleOpenModal}
-                    onCopy={handleCopy}
-                    copiedId={copiedId}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 gap-5">
-              <AnimatePresence mode="popLayout">
-                {visibleProjects.map((project) => (
-                  <ProjectBentoCard
-                    key={project.id}
-                    project={project}
-                    isDark={isDark}
-                    onOpenModal={handleOpenModal}
-                    onCopy={handleCopy}
-                    copiedId={copiedId}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-          )}
+          <div className="grid md:grid-cols-2 gap-6">
+            <AnimatePresence mode="popLayout">
+              {visibleProjects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  isDark={isDark}
+                  onOpenModal={handleOpenModal}
+                  onCopy={handleCopy}
+                  copiedId={copiedId}
+                />
+              ))}
+            </AnimatePresence>
+          </div>
         </section>
 
         {/* Technical Competencies Bento Grid */}
@@ -1531,7 +1252,6 @@ export default function App() {
       {/* Floating Action Dock */}
       <FloatingDock
         isDark={isDark}
-        onToggleTheme={() => setTheme(isDark ? 'light' : 'dark')}
         onCopyEmail={() => handleCopy(PROFILE.email, 'Email address')}
         activeSection={activeSection}
       />
