@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Layers,
@@ -17,7 +17,10 @@ import {
   ArrowUpRight,
   Database,
   BarChart3,
-  Network
+  Network,
+  LayoutGrid,
+  LayoutList,
+  ExternalLink
 } from 'lucide-react';
 
 interface ProjectImage {
@@ -45,7 +48,7 @@ interface Project {
 
 const PROFILE = {
   name: "I Dewa Nyoman Bayu Satria Wibawa",
-  shortName: "Bayu Satria",
+  shortName: "Idew Bayu",
   role: "Machine Learning & Software Engineer",
   status: "Available for Machine Learning & Software Engineering Roles",
   tagline:
@@ -246,7 +249,7 @@ function LinkedinIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
   );
 }
 
-// Interactive Spotlight Project Card with Proximity Specular Glow
+// Interactive Spotlight Project Card with Proximity Specular Glow & 3D Spring Parallax Tilt
 function ProjectCard({
   project,
   isDark,
@@ -260,12 +263,30 @@ function ProjectCard({
   onCopy: (text: string, id: string) => void;
   copiedId: string | null;
 }) {
+  const cardRef = useRef<HTMLDivElement>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const [isHovered, setIsHovered] = useState(false);
   const [activeImgIdx, setActiveImgIdx] = useState(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setMousePos({ x, y });
+
+    // Subtle 3D tilt calculation (max 3.5 deg for restrained, executive feel)
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -3.5;
+    const rotateY = ((x - centerX) / centerX) * 3.5;
+    setTilt({ rotateX, rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setTilt({ rotateX: 0, rotateY: 0 });
   };
 
   const currentImage = project.images[activeImgIdx] || project.images[0];
@@ -280,22 +301,36 @@ function ProjectCard({
 
   return (
     <motion.article
+      ref={cardRef}
       layout
       initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={{
+        opacity: 1,
+        y: isHovered ? -4 : 0,
+        rotateX: tilt.rotateX,
+        rotateY: tilt.rotateY
+      }}
       exit={{ opacity: 0, scale: 0.96 }}
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+      transition={{
+        rotateX: { type: "spring", stiffness: 350, damping: 25 },
+        rotateY: { type: "spring", stiffness: 350, damping: 25 },
+        y: { duration: 0.25 }
+      }}
+      style={{
+        perspective: 1000,
+        transformStyle: "preserve-3d"
+      }}
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
       className={`group relative rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden ${cardBg}`}
     >
       {/* Specular Spotlight Proximity Radial Glow */}
       <div
         className="pointer-events-none absolute -inset-px rounded-[32px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: `radial-gradient(650px circle at ${mousePos.x}px ${mousePos.y}px, ${
-            isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.04)'
-          }, transparent 65%)`
+          background: `radial-gradient(650px circle at ${mousePos.x}px ${mousePos.y}px, ${isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.04)'
+            }, transparent 65%)`
         }}
       />
 
@@ -304,15 +339,14 @@ function ProjectCard({
         <div className="flex items-center justify-between gap-2 mb-5">
           <div className="flex items-center gap-2">
             <span
-              className={`px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${
-                project.featured
+              className={`px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${project.featured
                   ? isDark
                     ? "bg-white text-neutral-950 font-black shadow-xs"
                     : "bg-neutral-900 text-white font-black shadow-xs"
                   : isDark
-                  ? "bg-white/[0.1] text-neutral-200 border border-white/15"
-                  : "bg-black/[0.06] text-neutral-800"
-              }`}
+                    ? "bg-white/[0.1] text-neutral-200 border border-white/15"
+                    : "bg-black/[0.06] text-neutral-800"
+                }`}
             >
               {project.badge}
             </span>
@@ -337,12 +371,14 @@ function ProjectCard({
         </div>
 
         {/* Realistic Browser/Artifact Mockup Frame */}
-        <div className="relative mb-6 rounded-2xl overflow-hidden border border-neutral-500/20 group/preview shadow-md transition-shadow group-hover:shadow-xl">
+        <div
+          style={{ transform: "translateZ(8px)" }}
+          className="relative mb-6 rounded-2xl overflow-hidden border border-neutral-500/20 group/preview shadow-md transition-shadow group-hover:shadow-xl"
+        >
           {/* Mockup Header Bar */}
           <div
-            className={`px-4 py-2.5 flex items-center justify-between text-xs border-b border-neutral-500/15 ${
-              isDark ? "bg-neutral-950/80" : "bg-neutral-100/90"
-            }`}
+            className={`px-4 py-2.5 flex items-center justify-between text-xs border-b border-neutral-500/15 ${isDark ? "bg-neutral-950/80" : "bg-neutral-100/90"
+              }`}
           >
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block transition-transform group-hover:scale-110" />
@@ -351,9 +387,8 @@ function ProjectCard({
             </div>
 
             <div
-              className={`px-3 py-0.5 rounded-md text-[11px] font-mono tracking-tight max-w-[220px] truncate ${
-                isDark ? "bg-white/[0.06] text-neutral-300" : "bg-white text-neutral-600 shadow-2xs"
-              }`}
+              className={`px-3 py-0.5 rounded-md text-[11px] font-mono tracking-tight max-w-[220px] truncate ${isDark ? "bg-white/[0.06] text-neutral-300" : "bg-white text-neutral-600 shadow-2xs"
+                }`}
             >
               {project.domain || "research.unikom.ac.id"}
             </div>
@@ -400,9 +435,8 @@ function ProjectCard({
           {/* Multi-Screenshot Indicator Bar */}
           {project.images.length > 1 && (
             <div
-              className={`px-3.5 py-2 flex items-center justify-between text-[11px] font-medium border-t border-neutral-500/15 ${
-                isDark ? "bg-neutral-950/85 text-neutral-300" : "bg-white/95 text-neutral-700"
-              }`}
+              className={`px-3.5 py-2 flex items-center justify-between text-[11px] font-medium border-t border-neutral-500/15 ${isDark ? "bg-neutral-950/85 text-neutral-300" : "bg-white/95 text-neutral-700"
+                }`}
             >
               <span className="text-[11px] text-neutral-400 truncate max-w-[70%]">
                 {currentImage.caption}
@@ -415,13 +449,12 @@ function ProjectCard({
                       e.stopPropagation();
                       setActiveImgIdx(idx);
                     }}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      activeImgIdx === idx
+                    className={`h-2 rounded-full transition-all duration-300 ${activeImgIdx === idx
                         ? isDark
                           ? "w-6 bg-white"
                           : "w-6 bg-neutral-900"
                         : "w-2 bg-neutral-500/30 hover:bg-neutral-500/60"
-                    }`}
+                      }`}
                     title={`Slide ${idx + 1}`}
                   />
                 ))}
@@ -440,9 +473,8 @@ function ProjectCard({
           {project.deliverables.slice(0, 2).map((item, i) => (
             <li key={i} className="flex items-start gap-2.5">
               <span
-                className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${
-                  isDark ? "bg-neutral-400" : "bg-neutral-700"
-                }`}
+                className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${isDark ? "bg-neutral-400" : "bg-neutral-700"
+                  }`}
               />
               <span>{item}</span>
             </li>
@@ -457,11 +489,10 @@ function ProjectCard({
             <motion.span
               key={tech}
               whileHover={{ scale: 1.05 }}
-              className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-default ${
-                isDark
+              className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-default ${isDark
                   ? "bg-white/[0.06] text-neutral-300 border border-white/[0.1] hover:border-white/30"
                   : "bg-white/85 text-neutral-700 border border-neutral-200/80 shadow-2xs hover:border-neutral-400"
-              }`}
+                }`}
             >
               {tech}
             </motion.span>
@@ -476,11 +507,10 @@ function ProjectCard({
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.96 }}
-              className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${
-                isDark
+              className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${isDark
                   ? "bg-white text-neutral-950 hover:bg-neutral-200"
                   : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
-              }`}
+                }`}
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Launch App</span>
@@ -491,11 +521,10 @@ function ProjectCard({
               onClick={() => onOpenModal(project, 0)}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.96 }}
-              className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${
-                isDark
+              className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${isDark
                   ? "bg-white text-neutral-950 hover:bg-neutral-200"
                   : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
-              }`}
+                }`}
             >
               <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
               <span>View Research Details</span>
@@ -535,12 +564,321 @@ function ProjectCard({
   );
 }
 
+// Compact Bento Card for fast visual scanning with 3D Spring Parallax Tilt
+function ProjectBentoCard({
+  project,
+  isDark,
+  onOpenModal,
+  onCopy,
+  copiedId
+}: {
+  project: Project;
+  isDark: boolean;
+  onOpenModal: (project: Project, imageIndex?: number) => void;
+  onCopy: (text: string, id: string) => void;
+  copiedId: string | null;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setMousePos({ x, y });
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -3;
+    const rotateY = ((x - centerX) / centerX) * 3;
+    setTilt({ rotateX, rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    setTilt({ rotateX: 0, rotateY: 0 });
+  };
+
+  const primaryImage = project.images[0];
+
+  const cardBg = isDark
+    ? "bg-neutral-900/65 border border-white/[0.12] shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-white/[0.25]"
+    : "bg-white/80 border border-white/95 shadow-[0_15px_40px_rgba(15,23,42,0.06)] hover:border-neutral-300";
+
+  return (
+    <motion.article
+      ref={cardRef}
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{
+        opacity: 1,
+        y: isHovered ? -3 : 0,
+        rotateX: tilt.rotateX,
+        rotateY: tilt.rotateY
+      }}
+      exit={{ opacity: 0, scale: 0.96 }}
+      transition={{
+        rotateX: { type: "spring", stiffness: 350, damping: 25 },
+        rotateY: { type: "spring", stiffness: 350, damping: 25 },
+        y: { duration: 0.25 }
+      }}
+      style={{
+        perspective: 1000,
+        transformStyle: "preserve-3d"
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className={`group relative rounded-[28px] p-5 sm:p-6 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden ${cardBg}`}
+    >
+      {/* Specular Spotlight Proximity Glow */}
+      <div
+        className="pointer-events-none absolute -inset-px rounded-[28px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{
+          background: `radial-gradient(550px circle at ${mousePos.x}px ${mousePos.y}px, ${isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.035)'
+            }, transparent 65%)`
+        }}
+      />
+
+      <div className="relative z-10">
+        {/* Top Badges */}
+        <div className="flex items-center justify-between gap-2 mb-3.5">
+          <div className="flex items-center gap-2">
+            <span
+              className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${project.featured
+                  ? isDark
+                    ? "bg-white text-neutral-950 font-black"
+                    : "bg-neutral-900 text-white font-black"
+                  : isDark
+                    ? "bg-white/[0.1] text-neutral-200 border border-white/15"
+                    : "bg-black/[0.06] text-neutral-800"
+                }`}
+            >
+              {project.badge}
+            </span>
+            <span className={`text-[11px] font-bold ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+              {project.year}
+            </span>
+          </div>
+
+          <span className={`text-xs font-black tracking-widest ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+            {project.number}
+          </span>
+        </div>
+
+        {/* Thumbnail Image */}
+        <div
+          onClick={() => onOpenModal(project, 0)}
+          style={{ transform: "translateZ(8px)" }}
+          className="relative cursor-pointer aspect-[16/10] mb-4 rounded-xl overflow-hidden border border-neutral-500/15 bg-neutral-950/20 flex items-center justify-center p-1.5 group/thumb shadow-sm"
+        >
+          <img
+            src={primaryImage.url}
+            alt={primaryImage.caption}
+            className="w-full h-full object-contain rounded-lg transition-transform duration-300 group-hover/thumb:scale-[1.03]"
+          />
+          <div className="absolute inset-0 bg-neutral-950/30 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
+            <span className="px-3 py-1.5 rounded-full text-[11px] font-bold bg-white text-neutral-900 shadow-md flex items-center gap-1.5">
+              <Maximize2 className="w-3 h-3" />
+              <span>Inspect</span>
+            </span>
+          </div>
+        </div>
+
+        {/* Title & Context */}
+        <p className={`text-[11px] font-bold uppercase tracking-wider mb-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+          {project.context}
+        </p>
+        <h3 className={`text-base sm:text-lg font-black tracking-tight leading-snug mb-2 ${isDark ? "text-white" : "text-neutral-900"}`}>
+          {project.title}
+        </h3>
+
+        {/* Short summary */}
+        <p className={`text-xs font-medium leading-relaxed mb-4 line-clamp-2 ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
+          {project.summary}
+        </p>
+
+        {/* Tech Stack Pills */}
+        <div className="flex flex-wrap gap-1.5 mb-5">
+          {project.stack.slice(0, 4).map((tech, i) => (
+            <span
+              key={i}
+              className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${isDark
+                  ? "bg-white/[0.06] text-neutral-300 border border-white/10"
+                  : "bg-neutral-100 text-neutral-700 border border-neutral-200"
+                }`}
+            >
+              {tech}
+            </span>
+          ))}
+          {project.stack.length > 4 && (
+            <span className={`px-1.5 py-0.5 text-[10px] font-bold ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+              +{project.stack.length - 4}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Card Action Footer */}
+      <div className="relative z-10 pt-3 border-t border-neutral-500/15 flex items-center justify-between">
+        <button
+          onClick={() => onOpenModal(project, 0)}
+          className={`inline-flex items-center gap-1.5 text-xs font-black transition-colors ${isDark ? "text-neutral-200 hover:text-white" : "text-neutral-800 hover:text-neutral-950"
+            }`}
+        >
+          <span>View Architecture</span>
+          <ArrowUpRight className="w-3.5 h-3.5" />
+        </button>
+
+        {project.liveUrl && (
+          <a
+            href={project.liveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] font-bold text-emerald-500 hover:underline flex items-center gap-1"
+          >
+            <span>Live System</span>
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        )}
+      </div>
+    </motion.article>
+  );
+}
+
+// Floating Action Dock at bottom center
+function FloatingDock({
+  isDark,
+  onToggleTheme,
+  onCopyEmail,
+  activeSection
+}: {
+  isDark: boolean;
+  onToggleTheme: () => void;
+  onCopyEmail: () => void;
+  activeSection: string;
+}) {
+  return (
+    <motion.aside
+      initial={{ y: 50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 25 }}
+      className="fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 max-w-[95vw]"
+      aria-label="Quick Action Dock"
+    >
+      <div
+        className={`px-2.5 py-2 rounded-full flex items-center gap-1.5 sm:gap-2 shadow-2xl backdrop-blur-2xl border transition-all duration-300 ${isDark
+            ? "bg-neutral-950/85 border-white/[0.14] text-neutral-200 shadow-black/70"
+            : "bg-white/90 border-neutral-200 text-neutral-800 shadow-neutral-950/15"
+          }`}
+      >
+        <a
+          href="#overview"
+          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${activeSection === 'overview'
+              ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
+              : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
+            }`}
+        >
+          Overview
+        </a>
+
+        <a
+          href="#projects"
+          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${activeSection === 'projects'
+              ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
+              : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
+            }`}
+        >
+          Projects
+        </a>
+
+        <a
+          href="#skills"
+          className={`hidden xs:inline-block px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${activeSection === 'skills'
+              ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
+              : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
+            }`}
+        >
+          Skills
+        </a>
+
+        <div className={`w-[1px] h-4 ${isDark ? "bg-white/15" : "bg-neutral-200"}`} />
+
+        <button
+          onClick={onCopyEmail}
+          className={`px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors ${isDark
+              ? "bg-white/10 hover:bg-white/20 text-white"
+              : "bg-neutral-100 hover:bg-neutral-200 text-neutral-900"
+            }`}
+          title="Copy email to clipboard"
+        >
+          <Mail className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Copy Email</span>
+        </button>
+
+        <button
+          onClick={onToggleTheme}
+          className={`p-1.5 rounded-full transition-colors ${isDark
+              ? "hover:bg-white/15 text-amber-300"
+              : "hover:bg-neutral-200 text-neutral-700"
+            }`}
+          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        </button>
+      </div>
+    </motion.aside>
+  );
+}
+
+// Floating Toast Notification
+function ToastNotification({
+  message,
+  isDark
+}: {
+  message: string | null;
+  isDark: boolean;
+}) {
+  return (
+    <AnimatePresence>
+      {message && (
+        <motion.div
+          initial={{ opacity: 0, y: 16, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 12, scale: 0.95 }}
+          transition={{ type: "spring", stiffness: 450, damping: 30 }}
+          className="fixed bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none max-w-[90vw]"
+        >
+          <div
+            className={`px-4 py-2 rounded-full shadow-2xl border flex items-center gap-2.5 backdrop-blur-2xl ${isDark
+                ? "bg-neutral-950/95 border-white/20 text-white shadow-black/80"
+                : "bg-white/95 border-neutral-200 text-neutral-900 shadow-neutral-950/20"
+              }`}
+          >
+            <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
+              <Check className="w-3.5 h-3.5 stroke-[3]" />
+            </span>
+            <span className="text-xs font-bold tracking-tight whitespace-nowrap">{message}</span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export default function App() {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [activeFilter, setActiveFilter] = useState<'all' | 'ml' | 'web'>('all');
+  const [viewMode, setViewMode] = useState<'showcase' | 'bento'>('showcase');
   const [activeModal, setActiveModal] = useState<Project | null>(null);
   const [modalImgIdx, setModalImgIdx] = useState(0);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<'overview' | 'projects' | 'skills'>('overview');
+  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isDark = theme === 'dark';
 
@@ -549,11 +887,16 @@ export default function App() {
       ? PROJECTS
       : PROJECTS.filter((item) => item.category === activeFilter);
 
-  const handleCopy = (text: string, id: string) => {
+  const handleCopy = (text: string, label: string) => {
     if (navigator?.clipboard) {
       navigator.clipboard.writeText(text);
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
+      setCopiedId(label);
+      setToastMessage(`${label} copied to clipboard`);
+      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+      toastTimeoutRef.current = setTimeout(() => {
+        setToastMessage(null);
+        setCopiedId(null);
+      }, 2400);
     }
   };
 
@@ -570,6 +913,25 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKeyDown);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const projectsEl = document.getElementById('projects');
+      const skillsEl = document.getElementById('skills');
+
+      if (skillsEl && scrollY >= skillsEl.offsetTop - 240) {
+        setActiveSection('skills');
+      } else if (projectsEl && scrollY >= projectsEl.offsetTop - 240) {
+        setActiveSection('projects');
+      } else {
+        setActiveSection('overview');
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const glassPill = isDark
     ? "bg-neutral-900/70 border border-white/[0.14] text-neutral-100 shadow-[0_12px_32px_rgba(0,0,0,0.4)]"
     : "bg-white/80 border border-white/90 text-neutral-900 shadow-[0_10px_25px_rgba(15,23,42,0.05)]";
@@ -580,25 +942,22 @@ export default function App() {
 
   return (
     <div
-      className={`min-h-screen relative overflow-x-hidden transition-colors duration-500 font-sans ${
-        isDark ? "bg-[#0A0A0C] text-neutral-100" : "bg-[#F4F4F7] text-neutral-900"
-      }`}
+      className={`min-h-screen relative overflow-x-hidden transition-colors duration-500 font-sans ${isDark ? "bg-[#0A0A0C] text-neutral-100" : "bg-[#F4F4F7] text-neutral-900"
+        }`}
     >
       {/* Ambient Drifting Liquid Glow Orbs */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div
-          className={`orb-a absolute -top-24 left-[15%] w-[38rem] h-[38rem] rounded-full blur-[140px] opacity-75 ${
-            isDark
+          className={`orb-a absolute -top-24 left-[15%] w-[38rem] h-[38rem] rounded-full blur-[140px] opacity-75 ${isDark
               ? "bg-gradient-to-br from-indigo-500/20 via-sky-500/10 to-transparent"
               : "bg-gradient-to-br from-sky-200/70 via-blue-100/50 to-transparent"
-          }`}
+            }`}
         />
         <div
-          className={`orb-b absolute top-[38%] -right-20 w-[42rem] h-[42rem] rounded-full blur-[150px] opacity-70 ${
-            isDark
+          className={`orb-b absolute top-[38%] -right-20 w-[42rem] h-[42rem] rounded-full blur-[150px] opacity-70 ${isDark
               ? "bg-gradient-to-tl from-emerald-500/15 via-teal-500/10 to-transparent"
               : "bg-gradient-to-tl from-emerald-200/60 via-teal-100/40 to-transparent"
-          }`}
+            }`}
         />
       </div>
 
@@ -617,9 +976,8 @@ export default function App() {
 
           {/* Segmented Filter Bar with Framer Motion Sliding Pill */}
           <div
-            className={`hidden md:inline-flex p-1 rounded-full relative ${
-              isDark ? "bg-white/[0.06]" : "bg-black/[0.05]"
-            }`}
+            className={`hidden md:inline-flex p-1 rounded-full relative ${isDark ? "bg-white/[0.06]" : "bg-black/[0.05]"
+              }`}
           >
             {[
               { id: 'all', label: 'All Projects (4)' },
@@ -631,13 +989,12 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveFilter(tab.id as 'all' | 'ml' | 'web')}
-                  className={`relative px-4 py-1.5 rounded-full text-xs font-black transition-colors z-10 ${
-                    active
+                  className={`relative px-4 py-1.5 rounded-full text-xs font-black transition-colors z-10 ${active
                       ? "text-neutral-950 font-black"
                       : isDark
-                      ? "text-neutral-400 hover:text-white"
-                      : "text-neutral-600 hover:text-neutral-900"
-                  }`}
+                        ? "text-neutral-400 hover:text-white"
+                        : "text-neutral-600 hover:text-neutral-900"
+                    }`}
                 >
                   {active && (
                     <motion.div
@@ -667,11 +1024,10 @@ export default function App() {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               href={`mailto:${PROFILE.email}`}
-              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all ${
-                isDark
+              className={`hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all ${isDark
                   ? "bg-white text-neutral-950 hover:bg-neutral-200"
                   : "bg-neutral-900 text-white hover:bg-neutral-800"
-              }`}
+                }`}
             >
               <span>Get in Touch</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -684,13 +1040,13 @@ export default function App() {
       <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-7 pb-20 space-y-10">
         {/* Creative Hero Banner with Clean White Studio Portrait */}
         <section
+          id="overview"
           className={`rounded-[36px] p-7 sm:p-11 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
         >
           {/* Subtle top edge specular highlight */}
           <div
-            className={`pointer-events-none absolute inset-x-12 top-0 h-[1px] bg-gradient-to-r from-transparent ${
-              isDark ? "via-white/40" : "via-neutral-900/20"
-            } to-transparent`}
+            className={`pointer-events-none absolute inset-x-12 top-0 h-[1px] bg-gradient-to-r from-transparent ${isDark ? "via-white/40" : "via-neutral-900/20"
+              } to-transparent`}
           />
 
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
@@ -746,25 +1102,24 @@ export default function App() {
               </div>
             </div>
 
-            {/* Profile Photo Card fitting exact fitted portrait aspect ratio */}
+            {/* Profile Photo Card fitting exact original photo aspect ratio */}
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="shrink-0 relative group self-center md:self-start"
             >
-              <div className="relative w-36 sm:w-44 md:w-48 aspect-[718/902] rounded-[24px] overflow-hidden p-1 bg-gradient-to-b from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 shadow-xl shadow-neutral-900/10 dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10">
+              <div className="relative w-36 sm:w-44 md:w-48 aspect-[718/1024] rounded-[24px] overflow-hidden p-1 bg-gradient-to-b from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 shadow-xl shadow-neutral-900/10 dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10">
                 <img
                   src={PROFILE.avatar}
                   alt={PROFILE.name}
-                  className="w-full h-full object-cover rounded-[20px] bg-white select-none"
+                  className="w-full h-full object-cover rounded-[20px] select-none"
                 />
               </div>
               <div
-                className={`absolute -bottom-2.5 right-2 px-3 py-1 rounded-full text-[11px] font-bold tracking-tight shadow-md border flex items-center gap-1.5 ${
-                  isDark
+                className={`absolute -bottom-2.5 right-2 px-3 py-1 rounded-full text-[11px] font-bold tracking-tight shadow-md border flex items-center gap-1.5 ${isDark
                     ? "bg-neutral-900 border-neutral-700 text-neutral-200"
                     : "bg-white border-neutral-200 text-neutral-800"
-                }`}
+                  }`}
               >
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Available for roles</span>
@@ -779,11 +1134,10 @@ export default function App() {
               return (
                 <div
                   key={idx}
-                  className={`p-4 rounded-2xl border transition-all ${
-                    isDark
+                  className={`p-4 rounded-2xl border transition-all ${isDark
                       ? "bg-white/[0.03] border-white/10"
                       : "bg-white/60 border-neutral-200/80"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-2 mb-1.5">
                     <Icon className="w-4 h-4 text-emerald-500 shrink-0" />
@@ -802,9 +1156,8 @@ export default function App() {
           {/* Mobile Category Switcher */}
           <div className="mt-6 pt-5 border-t border-neutral-500/15 flex md:hidden">
             <div
-              className={`w-full grid grid-cols-3 p-1 rounded-2xl ${
-                isDark ? "bg-white/[0.06]" : "bg-black/[0.05]"
-              }`}
+              className={`w-full grid grid-cols-3 p-1 rounded-2xl ${isDark ? "bg-white/[0.06]" : "bg-black/[0.05]"
+                }`}
             >
               {[
                 { id: 'all', label: 'All (4)' },
@@ -814,13 +1167,12 @@ export default function App() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveFilter(tab.id as 'all' | 'ml' | 'web')}
-                  className={`py-2 rounded-xl text-xs font-black transition-all text-center ${
-                    activeFilter === tab.id
+                  className={`py-2 rounded-xl text-xs font-black transition-all text-center ${activeFilter === tab.id
                       ? "bg-white text-neutral-950 shadow-xs"
                       : isDark
-                      ? "text-neutral-400"
-                      : "text-neutral-600"
-                  }`}
+                        ? "text-neutral-400"
+                        : "text-neutral-600"
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -830,8 +1182,8 @@ export default function App() {
         </section>
 
         {/* Live Projects Grid Showcase with Visual Previews */}
-        <section className="space-y-4">
-          <div className="flex items-center justify-between px-2">
+        <section id="projects" className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-2">
             <div>
               <h2 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
                 Machine Learning & Systems Showcase
@@ -840,26 +1192,94 @@ export default function App() {
                 Applied research, deep learning classification pipelines, and full-stack telemetry deployments.
               </p>
             </div>
+
+            {/* View Mode Switcher: Detailed Showcase vs Compact Bento Grid */}
+            <div
+              className={`self-start sm:self-auto p-1 rounded-full flex items-center gap-1 border transition-colors ${isDark
+                  ? "bg-neutral-900/80 border-white/[0.12]"
+                  : "bg-white border-neutral-200 shadow-2xs"
+                }`}
+            >
+              <button
+                onClick={() => setViewMode('showcase')}
+                className={`relative px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors z-10 ${viewMode === 'showcase'
+                    ? "text-neutral-950 font-black"
+                    : isDark
+                      ? "text-neutral-400 hover:text-white"
+                      : "text-neutral-600 hover:text-neutral-900"
+                  }`}
+                title="Detailed Showcase with Mockup Previews & Architecture"
+              >
+                {viewMode === 'showcase' && (
+                  <motion.div
+                    layoutId="activeViewPill"
+                    className="absolute inset-0 rounded-full bg-white shadow-xs z-[-1]"
+                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <LayoutList className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline">Showcase</span>
+              </button>
+
+              <button
+                onClick={() => setViewMode('bento')}
+                className={`relative px-3 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors z-10 ${viewMode === 'bento'
+                    ? "text-neutral-950 font-black"
+                    : isDark
+                      ? "text-neutral-400 hover:text-white"
+                      : "text-neutral-600 hover:text-neutral-900"
+                  }`}
+                title="Compact Bento Grid View"
+              >
+                {viewMode === 'bento' && (
+                  <motion.div
+                    layoutId="activeViewPill"
+                    className="absolute inset-0 rounded-full bg-white shadow-xs z-[-1]"
+                    transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <LayoutGrid className="w-3.5 h-3.5" />
+                <span className="hidden xs:inline">Compact Bento</span>
+              </button>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <AnimatePresence mode="popLayout">
-              {visibleProjects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  isDark={isDark}
-                  onOpenModal={handleOpenModal}
-                  onCopy={handleCopy}
-                  copiedId={copiedId}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
+          {viewMode === 'showcase' ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              <AnimatePresence mode="popLayout">
+                {visibleProjects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    isDark={isDark}
+                    onOpenModal={handleOpenModal}
+                    onCopy={handleCopy}
+                    copiedId={copiedId}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 gap-5">
+              <AnimatePresence mode="popLayout">
+                {visibleProjects.map((project) => (
+                  <ProjectBentoCard
+                    key={project.id}
+                    project={project}
+                    isDark={isDark}
+                    onOpenModal={handleOpenModal}
+                    onCopy={handleCopy}
+                    copiedId={copiedId}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
         </section>
 
         {/* Technical Competencies Bento Grid */}
         <section
+          id="skills"
           className={`rounded-[32px] p-7 sm:p-9 backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
         >
           <div className="mb-6">
@@ -880,11 +1300,10 @@ export default function App() {
                   key={idx}
                   whileHover={{ y: -3 }}
                   transition={{ duration: 0.25 }}
-                  className={`rounded-2xl p-5 border transition-all ${
-                    isDark
+                  className={`rounded-2xl p-5 border transition-all ${isDark
                       ? "bg-white/[0.04] border-white/10 hover:border-white/25"
                       : "bg-white/80 border-neutral-200/80 hover:border-neutral-300 shadow-2xs"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-2.5 mb-3">
                     <span className={`p-2 rounded-xl ${isDark ? "bg-white/10 text-white" : "bg-neutral-100 text-neutral-900"}`}>
@@ -900,11 +1319,10 @@ export default function App() {
                       <motion.span
                         key={skill}
                         whileHover={{ scale: 1.05 }}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-default ${
-                          isDark
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-default ${isDark
                             ? "bg-white/[0.06] text-neutral-300 border border-white/10 hover:border-white/20"
                             : "bg-neutral-100 text-neutral-700 border border-neutral-200 hover:border-neutral-300"
-                        }`}
+                          }`}
                       >
                         {skill}
                       </motion.span>
@@ -967,11 +1385,10 @@ export default function App() {
               exit={{ scale: 0.94, opacity: 0, y: 20 }}
               transition={{ type: "spring", duration: 0.45, bounce: 0.15 }}
               onClick={(e) => e.stopPropagation()}
-              className={`max-w-4xl w-full my-6 sm:my-10 rounded-[32px] p-6 sm:p-8 space-y-6 ${
-                isDark
+              className={`max-w-4xl w-full my-6 sm:my-10 rounded-[32px] p-6 sm:p-8 space-y-6 ${isDark
                   ? "bg-neutral-900/95 border border-white/20 text-neutral-100 shadow-2xl"
                   : "bg-white/95 border border-neutral-200 text-neutral-900 shadow-2xl"
-              }`}
+                }`}
             >
               {/* Modal Header */}
               <div className="flex items-start justify-between gap-4 border-b border-neutral-500/15 pb-4">
@@ -1027,11 +1444,10 @@ export default function App() {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setModalImgIdx(i)}
-                        className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 w-24 sm:w-28 h-16 bg-neutral-950 flex items-center justify-center p-1 ${
-                          modalImgIdx === i
+                        className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 w-24 sm:w-28 h-16 bg-neutral-950 flex items-center justify-center p-1 ${modalImgIdx === i
                             ? "border-emerald-500 scale-105 shadow-md"
                             : "border-transparent opacity-60 hover:opacity-100"
-                        }`}
+                          }`}
                       >
                         <img src={img.url} alt={img.caption} className="max-w-full max-h-full object-contain" />
                       </motion.button>
@@ -1048,9 +1464,8 @@ export default function App() {
                     <span>System Architecture Flow</span>
                   </div>
                   <p
-                    className={`p-4 rounded-2xl font-bold leading-relaxed ${
-                      isDark ? "bg-white/[0.06] text-neutral-200" : "bg-neutral-100 text-neutral-800"
-                    }`}
+                    className={`p-4 rounded-2xl font-bold leading-relaxed ${isDark ? "bg-white/[0.06] text-neutral-200" : "bg-neutral-100 text-neutral-800"
+                      }`}
                   >
                     {activeModal.architecture}
                   </p>
@@ -1065,9 +1480,8 @@ export default function App() {
                     {activeModal.deliverables.map((point, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
                         <span
-                          className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${
-                            isDark ? "bg-neutral-400" : "bg-neutral-700"
-                          }`}
+                          className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${isDark ? "bg-neutral-400" : "bg-neutral-700"
+                            }`}
                         />
                         <span>{point}</span>
                       </li>
@@ -1085,11 +1499,10 @@ export default function App() {
                     href={activeModal.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-black tracking-tight ${
-                      isDark
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-black tracking-tight ${isDark
                         ? "bg-white text-neutral-950 hover:bg-neutral-200"
                         : "bg-neutral-900 text-white hover:bg-neutral-800"
-                    }`}
+                      }`}
                   >
                     <span>Launch {activeModal.domain}</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
@@ -1115,6 +1528,16 @@ export default function App() {
           </motion.div>
         )}
       </AnimatePresence>
+      {/* Floating Action Dock */}
+      <FloatingDock
+        isDark={isDark}
+        onToggleTheme={() => setTheme(isDark ? 'light' : 'dark')}
+        onCopyEmail={() => handleCopy(PROFILE.email, 'Email address')}
+        activeSection={activeSection}
+      />
+
+      {/* Tactile Toast Notification */}
+      <ToastNotification message={toastMessage} isDark={isDark} />
     </div>
   );
 }
