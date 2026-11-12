@@ -746,17 +746,17 @@ export default function App() {
               </div>
             </div>
 
-            {/* Profile Photo Card fitting exact original photo aspect ratio */}
+            {/* Profile Photo Card fitting exact fitted portrait aspect ratio */}
             <motion.div
               whileHover={{ scale: 1.02, y: -2 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="shrink-0 relative group self-center md:self-start"
             >
-              <div className="relative w-36 sm:w-44 md:w-48 aspect-[718/1024] rounded-[24px] overflow-hidden p-1 bg-gradient-to-b from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 shadow-xl shadow-neutral-900/10 dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10">
+              <div className="relative w-36 sm:w-44 md:w-48 aspect-[718/902] rounded-[24px] overflow-hidden p-1 bg-gradient-to-b from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 shadow-xl shadow-neutral-900/10 dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10">
                 <img
                   src={PROFILE.avatar}
                   alt={PROFILE.name}
-                  className="w-full h-full object-cover rounded-[20px] select-none"
+                  className="w-full h-full object-cover rounded-[20px] bg-white select-none"
                 />
               </div>
               <div
