@@ -59,17 +59,17 @@ const PROFILE = {
 const ML_PILLARS = [
   {
     title: "NLP & Text Classification",
-    desc: "Sentiment analysis, multi-class emotion modeling, tokenization, and semantic overlap resolution",
+    desc: "Sentiment analysis, deep learning text classification, tokenization, and social opinion tracking",
     icon: Network
   },
   {
-    title: "Imbalanced Learning & Resampling",
-    desc: "Adaptive Synthetic Sampling (ADASYN), SMOTE, and minority boundary distribution modeling",
+    title: "Intelligent Recommender Systems",
+    desc: "Multi-criteria constraint mapping, hybrid feature matching, and user state evaluation",
     icon: Database
   },
   {
     title: "Production Inference & Telemetry",
-    desc: "PyTorch model serving, low-latency REST APIs, and live telemetry interfaces",
+    desc: "PyTorch model serving, low-latency REST APIs, and live telemetry web interfaces",
     icon: BarChart3
   }
 ];
@@ -78,12 +78,12 @@ const SKILL_GROUPS = [
   {
     category: "Machine Learning & Deep Learning",
     icon: Cpu,
-    skills: ["Python", "PyTorch", "NLP", "Scikit-Learn", "ADASYN", "SMOTE", "Transformers", "Maximum Entropy", "Sentiment Analysis", "t-SNE & PCA"]
+    skills: ["Python", "PyTorch", "NLP", "Scikit-Learn", "Transformers", "Recommender Systems", "Deep Learning", "Sentiment Analysis", "Data Mining"]
   },
   {
     category: "Data Pipelines & Feature Engineering",
     icon: Database,
-    skills: ["Pandas", "NumPy", "TF-IDF Vectorization", "Tokenization & Lemmatization", "Web Scraping", "Confusion Matrix Analysis", "ROC-AUC Evaluation"]
+    skills: ["Pandas", "NumPy", "TF-IDF Vectorization", "Tokenization & Lemmatization", "Web Scraping", "Data Preprocessing", "ROC-AUC Evaluation"]
   },
   {
     category: "Production, Systems & Cloud",
@@ -126,38 +126,8 @@ const PROJECTS: Project[] = [
     ]
   },
   {
-    id: "adasyn",
-    number: "02",
-    title: "Imbalanced Emotion Classification with ADASYN and Maximum Entropy",
-    context: "Undergraduate Machine Learning Research (UNIKOM)",
-    year: "2026",
-    category: "ml",
-    badge: "ML Research & Resampling",
-    featured: true,
-    summary:
-      "Machine learning research solving severe class imbalance and lexical feature overlap in text emotion classification using Adaptive Synthetic Sampling (ADASYN) and Maximum Entropy models.",
-    deliverables: [
-      "Formulated a complete NLP pipeline covering slang normalization with custom dictionaries, Sastrawi stemming, and 10,000-dimensional TF-IDF unigram and bigram feature representations.",
-      "Applied Adaptive Synthetic Sampling (ADASYN) to generate synthetic minority samples weighted by local Euclidean distribution hardness.",
-      "Conducted high-dimensional t-SNE projection and confusion matrix diagnostics to resolve semantic overlap across complex emotional classes."
-    ],
-    architecture:
-      "Raw tweet text normalized and vectorized into 10,000 TF-IDF features, rebalanced adaptively in Euclidean space using ADASYN, and trained against Maximum Entropy probabilistic classifiers.",
-    stack: ["Python", "ADASYN Resampling", "Maximum Entropy", "NLP", "TF-IDF", "t-SNE Analysis", "Scikit-Learn"],
-    images: [
-      {
-        url: "/projects/adasyn-tsne.png",
-        caption: "High-Dimensional t-SNE Projection Visualizing Feature Overlap Across Emotion Classes"
-      },
-      {
-        url: "/projects/adasyn-flowchart.png",
-        caption: "Algorithmic Architecture Flowchart for Adaptive Synthetic Sampling (ADASYN)"
-      }
-    ]
-  },
-  {
     id: "nutrimood",
-    number: "03",
+    number: "02",
     title: "NutriMood: Personalized Dietary Recommender",
     context: "Dicoding & DBS Foundation Capstone",
     year: "2025",
@@ -189,7 +159,7 @@ const PROJECTS: Project[] = [
   },
   {
     id: "bysense",
-    number: "04",
+    number: "03",
     title: "BySense: Photovoltaic and Solar IoT Telemetry",
     context: "Batari Energy R&D Engineering",
     year: "2026",
@@ -229,7 +199,7 @@ const PROJECTS: Project[] = [
   },
   {
     id: "cimahi",
-    number: "05",
+    number: "04",
     title: "Cimahi Battery Commercial Web Platform",
     context: "Production Web Deployment",
     year: "2026",
@@ -652,8 +622,8 @@ export default function App() {
             }`}
           >
             {[
-              { id: 'all', label: 'All Projects (5)' },
-              { id: 'ml', label: 'Machine Learning & NLP (3)' },
+              { id: 'all', label: 'All Projects (4)' },
+              { id: 'ml', label: 'Machine Learning (2)' },
               { id: 'web', label: 'Web & IoT Systems (2)' }
             ].map((tab) => {
               const active = activeFilter === tab.id;
@@ -834,8 +804,8 @@ export default function App() {
               }`}
             >
               {[
-                { id: 'all', label: 'All (5)' },
-                { id: 'ml', label: 'ML & NLP (3)' },
+                { id: 'all', label: 'All (4)' },
+                { id: 'ml', label: 'ML & AI (2)' },
                 { id: 'web', label: 'Web & IoT (2)' }
               ].map((tab) => (
                 <button
