@@ -15,9 +15,9 @@ import {
   ShieldCheck,
   Zap,
   ArrowUpRight,
-  Sparkles,
-  ChevronRight,
-  Code2
+  Database,
+  BarChart3,
+  Network
 } from 'lucide-react';
 
 interface ProjectImage {
@@ -34,8 +34,8 @@ interface Project {
   category: 'ml' | 'web';
   badge: string;
   featured: boolean;
-  liveUrl: string;
-  domain: string;
+  liveUrl?: string;
+  domain?: string;
   summary: string;
   deliverables: string[];
   architecture: string;
@@ -47,30 +47,48 @@ const PROFILE = {
   name: "I Dewa Nyoman Bayu Satria Wibawa",
   shortName: "Bayu Satria",
   role: "Machine Learning & Software Engineer",
-  status: "Available for ML & Software Engineering Roles",
+  status: "Available for Machine Learning & Software Engineering Roles",
   tagline:
-    "Building production-grade Machine Learning models, Natural Language Processing pipelines, and real-time IoT monitoring applications.",
+    "Machine Learning Engineer specializing in Natural Language Processing, text classification pipelines, and production inference systems. Experienced in end-to-end model development at BRIN, algorithmic resampling research, and real-time telemetry dashboards.",
   email: "idewanyomanbayusw@gmail.com",
   linkedin: "https://www.linkedin.com/in/idewanyomanbayu",
   github: "https://github.com/idewbayu14",
   avatar: "/profile/bayu.jpg"
 };
 
+const ML_PILLARS = [
+  {
+    title: "NLP & Text Classification",
+    desc: "Sentiment analysis, multi-class emotion modeling, tokenization, and semantic overlap resolution",
+    icon: Network
+  },
+  {
+    title: "Imbalanced Learning & Resampling",
+    desc: "Adaptive Synthetic Sampling (ADASYN), SMOTE, and minority boundary distribution modeling",
+    icon: Database
+  },
+  {
+    title: "Production Inference & Telemetry",
+    desc: "PyTorch model serving, low-latency REST APIs, and live telemetry interfaces",
+    icon: BarChart3
+  }
+];
+
 const SKILL_GROUPS = [
   {
-    category: "Machine Learning & AI",
+    category: "Machine Learning & Deep Learning",
     icon: Cpu,
-    skills: ["Python", "PyTorch", "NLP", "Scikit-Learn", "Deep Learning", "Data Mining", "Sentiment Analysis", "Recommender Systems"]
+    skills: ["Python", "PyTorch", "NLP", "Scikit-Learn", "ADASYN", "SMOTE", "Transformers", "Maximum Entropy", "Sentiment Analysis", "t-SNE & PCA"]
   },
   {
-    category: "Full Stack & IoT Telemetry",
-    icon: Globe,
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "REST API", "IoT Telemetry", "Real-Time Telemetry", "Responsive Architecture"]
+    category: "Data Pipelines & Feature Engineering",
+    icon: Database,
+    skills: ["Pandas", "NumPy", "TF-IDF Vectorization", "Tokenization & Lemmatization", "Web Scraping", "Confusion Matrix Analysis", "ROC-AUC Evaluation"]
   },
   {
-    category: "Cloud, Systems & Tools",
+    category: "Production, Systems & Cloud",
     icon: Terminal,
-    skills: ["Git & GitHub", "Vercel Cloud", "Docker", "Linux Shell", "API Integration", "Core Web Vitals", "Production Monitoring"]
+    skills: ["FastAPI", "RESTful APIs", "React", "Next.js", "TypeScript", "Tailwind CSS", "Docker", "Git & GitHub", "Vercel", "Linux Shell"]
   }
 ];
 
@@ -99,17 +117,47 @@ const PROJECTS: Project[] = [
     images: [
       {
         url: "/projects/brin-hero.png",
-        caption: "Research Portal & Deep Learning Sentiment Classification Architecture"
+        caption: "Research Portal and Deep Learning Sentiment Classification Architecture"
       },
       {
         url: "/projects/brin-analyzer.png",
-        caption: "Interactive Real-Time Sentiment Analyzer (Single Text & Batch Analysis)"
+        caption: "Interactive Real-Time Sentiment Analyzer for Single Text and Batch Analysis"
+      }
+    ]
+  },
+  {
+    id: "adasyn",
+    number: "02",
+    title: "Imbalanced Emotion Classification with ADASYN and Maximum Entropy",
+    context: "Undergraduate Machine Learning Research (UNIKOM)",
+    year: "2026",
+    category: "ml",
+    badge: "ML Research & Resampling",
+    featured: true,
+    summary:
+      "Machine learning research solving severe class imbalance and lexical feature overlap in text emotion classification using Adaptive Synthetic Sampling (ADASYN) and Maximum Entropy models.",
+    deliverables: [
+      "Formulated a complete NLP pipeline covering slang normalization with custom dictionaries, Sastrawi stemming, and 10,000-dimensional TF-IDF unigram and bigram feature representations.",
+      "Applied Adaptive Synthetic Sampling (ADASYN) to generate synthetic minority samples weighted by local Euclidean distribution hardness.",
+      "Conducted high-dimensional t-SNE projection and confusion matrix diagnostics to resolve semantic overlap across complex emotional classes."
+    ],
+    architecture:
+      "Raw tweet text normalized and vectorized into 10,000 TF-IDF features, rebalanced adaptively in Euclidean space using ADASYN, and trained against Maximum Entropy probabilistic classifiers.",
+    stack: ["Python", "ADASYN Resampling", "Maximum Entropy", "NLP", "TF-IDF", "t-SNE Analysis", "Scikit-Learn"],
+    images: [
+      {
+        url: "/projects/adasyn-tsne.png",
+        caption: "High-Dimensional t-SNE Projection Visualizing Feature Overlap Across Emotion Classes"
+      },
+      {
+        url: "/projects/adasyn-flowchart.png",
+        caption: "Algorithmic Architecture Flowchart for Adaptive Synthetic Sampling (ADASYN)"
       }
     ]
   },
   {
     id: "nutrimood",
-    number: "02",
+    number: "03",
     title: "NutriMood: Personalized Dietary Recommender",
     context: "Dicoding & DBS Foundation Capstone",
     year: "2025",
@@ -131,18 +179,18 @@ const PROJECTS: Project[] = [
     images: [
       {
         url: "/projects/nutrimood-hero.jpg",
-        caption: "NutriMood Homepage — AI-Driven Meal Recommendations Tailored to Mood"
+        caption: "NutriMood Homepage with AI Driven Meal Recommendations"
       },
       {
         url: "/projects/nutrimood-demo.jpg",
-        caption: "Interactive Mood & Health Constraint Evaluation (Energizing, Relaxing, Focusing)"
+        caption: "Interactive Mood and Health Constraint Evaluation"
       }
     ]
   },
   {
     id: "bysense",
-    number: "03",
-    title: "BySense: Photovoltaic & Solar IoT Telemetry",
+    number: "04",
+    title: "BySense: Photovoltaic and Solar IoT Telemetry",
     context: "Batari Energy R&D Engineering",
     year: "2026",
     category: "web",
@@ -175,13 +223,13 @@ const PROJECTS: Project[] = [
       },
       {
         url: "/projects/bysense-power.png",
-        caption: "Comprehensive Power Profile Analytics (PV, Grid, Battery, Load & SoC)"
+        caption: "Comprehensive Power Profile Analytics with PV, Grid, and Battery Flow"
       }
     ]
   },
   {
     id: "cimahi",
-    number: "04",
+    number: "05",
     title: "Cimahi Battery Commercial Web Platform",
     context: "Production Web Deployment",
     year: "2026",
@@ -202,11 +250,11 @@ const PROJECTS: Project[] = [
     images: [
       {
         url: "/projects/cimahi-hero.jpg",
-        caption: "Official Homepage of PT Cimahi Battery Industry — Lithium Battery Solutions"
+        caption: "Official Homepage of PT Cimahi Battery Industry"
       },
       {
         url: "/projects/cimahi-catalog.jpg",
-        caption: "Structured Prismatic Battery & Active Energy Material Catalog with Quick Filters"
+        caption: "Structured Prismatic Battery and Active Energy Material Catalog"
       }
     ]
   }
@@ -318,7 +366,7 @@ function ProjectCard({
           </h3>
         </div>
 
-        {/* Realistic Browser Mockup Frame with Live Gallery */}
+        {/* Realistic Browser/Artifact Mockup Frame */}
         <div className="relative mb-6 rounded-2xl overflow-hidden border border-neutral-500/20 group/preview shadow-md transition-shadow group-hover:shadow-xl">
           {/* Mockup Header Bar */}
           <div
@@ -333,11 +381,11 @@ function ProjectCard({
             </div>
 
             <div
-              className={`px-3 py-0.5 rounded-md text-[11px] font-mono tracking-tight max-w-[200px] truncate ${
+              className={`px-3 py-0.5 rounded-md text-[11px] font-mono tracking-tight max-w-[220px] truncate ${
                 isDark ? "bg-white/[0.06] text-neutral-300" : "bg-white text-neutral-600 shadow-2xs"
               }`}
             >
-              {project.domain}
+              {project.domain || "research.unikom.ac.id"}
             </div>
 
             <motion.button
@@ -366,7 +414,7 @@ function ProjectCard({
               className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/preview:scale-[1.04]"
             />
 
-            {/* Hover Expand Overlay Banner */}
+            {/* Hover Expand Overlay */}
             <div className="absolute inset-0 bg-neutral-950/40 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
               <motion.span
                 initial={{ y: 8, opacity: 0 }}
@@ -451,22 +499,39 @@ function ProjectCard({
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-          <motion.a
-            href={project.liveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.96 }}
-            className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${
-              isDark
-                ? "bg-white text-neutral-950 hover:bg-neutral-200"
-                : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
-            }`}
-          >
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Launch App</span>
-            <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-          </motion.a>
+          {project.liveUrl ? (
+            <motion.a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.96 }}
+              className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${
+                isDark
+                  ? "bg-white text-neutral-950 hover:bg-neutral-200"
+                  : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Launch App</span>
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+            </motion.a>
+          ) : (
+            <motion.button
+              onClick={() => onOpenModal(project, 0)}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.96 }}
+              className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${
+                isDark
+                  ? "bg-white text-neutral-950 hover:bg-neutral-200"
+                  : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+              <span>View Research Details</span>
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+            </motion.button>
+          )}
 
           <div className="flex items-center gap-1.5">
             <motion.button
@@ -478,19 +543,21 @@ function ProjectCard({
               <Layers className="w-3.5 h-3.5" />
               <span>Architecture</span>
             </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
-              onClick={() => onCopy(project.liveUrl, project.id)}
-              className={`p-2 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
-              title="Copy Project Link"
-            >
-              {copiedId === project.id ? (
-                <Check className="w-3.5 h-3.5 text-emerald-500" />
-              ) : (
-                <Copy className="w-3.5 h-3.5" />
-              )}
-            </motion.button>
+            {project.liveUrl && (
+              <motion.button
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.92 }}
+                onClick={() => onCopy(project.liveUrl!, project.id)}
+                className={`p-2 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
+                title="Copy Project Link"
+              >
+                {copiedId === project.id ? (
+                  <Check className="w-3.5 h-3.5 text-emerald-500" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
+              </motion.button>
+            )}
           </div>
         </div>
       </div>
@@ -585,8 +652,8 @@ export default function App() {
             }`}
           >
             {[
-              { id: 'all', label: 'All Projects (4)' },
-              { id: 'ml', label: 'Machine Learning (2)' },
+              { id: 'all', label: 'All Projects (5)' },
+              { id: 'ml', label: 'Machine Learning & NLP (3)' },
               { id: 'web', label: 'Web & IoT Systems (2)' }
             ].map((tab) => {
               const active = activeFilter === tab.id;
@@ -732,17 +799,44 @@ export default function App() {
             </motion.div>
           </div>
 
+          {/* Core Machine Learning Pillars Strip */}
+          <div className="mt-8 pt-7 border-t border-neutral-500/15 grid sm:grid-cols-3 gap-4">
+            {ML_PILLARS.map((pillar, idx) => {
+              const Icon = pillar.icon;
+              return (
+                <div
+                  key={idx}
+                  className={`p-4 rounded-2xl border transition-all ${
+                    isDark
+                      ? "bg-white/[0.03] border-white/10"
+                      : "bg-white/60 border-neutral-200/80"
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Icon className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <h2 className={`text-xs font-black uppercase tracking-wider ${isDark ? "text-neutral-200" : "text-neutral-800"}`}>
+                      {pillar.title}
+                    </h2>
+                  </div>
+                  <p className={`text-xs font-medium leading-relaxed ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
+                    {pillar.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
           {/* Mobile Category Switcher */}
-          <div className="mt-8 pt-5 border-t border-neutral-500/15 flex md:hidden">
+          <div className="mt-6 pt-5 border-t border-neutral-500/15 flex md:hidden">
             <div
               className={`w-full grid grid-cols-3 p-1 rounded-2xl ${
                 isDark ? "bg-white/[0.06]" : "bg-black/[0.05]"
               }`}
             >
               {[
-                { id: 'all', label: 'All' },
-                { id: 'ml', label: 'ML & AI' },
-                { id: 'web', label: 'Web & IoT' }
+                { id: 'all', label: 'All (5)' },
+                { id: 'ml', label: 'ML & NLP (3)' },
+                { id: 'web', label: 'Web & IoT (2)' }
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -767,10 +861,10 @@ export default function App() {
           <div className="flex items-center justify-between px-2">
             <div>
               <h2 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
-                Featured Works & Live Deployments
+                Machine Learning & Systems Showcase
               </h2>
               <p className={`text-xs sm:text-sm font-medium mt-0.5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                Each project includes production screenshots, architecture breakdown, and verified live URLs.
+                Applied research, deep learning classification pipelines, and full-stack telemetry deployments.
               </p>
             </div>
           </div>
@@ -798,10 +892,10 @@ export default function App() {
           <div className="mb-6">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-500">
               <Zap className="w-3.5 h-3.5" />
-              <span>Technical Skills & Ecosystem</span>
+              <span>Technical Skills & Methodologies</span>
             </div>
             <h2 className={`text-xl sm:text-2xl font-black tracking-tight mt-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
-              Engineering Stack & Architecture
+              Machine Learning & Engineering Ecosystem
             </h2>
           </div>
 
@@ -1005,30 +1099,38 @@ export default function App() {
 
               {/* Modal Action CTA */}
               <div className="pt-4 border-t border-neutral-500/15 flex flex-wrap items-center justify-between gap-3">
-                <motion.a
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  href={activeModal.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-black tracking-tight ${
-                    isDark
-                      ? "bg-white text-neutral-950 hover:bg-neutral-200"
-                      : "bg-neutral-900 text-white hover:bg-neutral-800"
-                  }`}
-                >
-                  <span>Launch {activeModal.domain}</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </motion.a>
+                {activeModal.liveUrl ? (
+                  <motion.a
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.96 }}
+                    href={activeModal.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-black tracking-tight ${
+                      isDark
+                        ? "bg-white text-neutral-950 hover:bg-neutral-200"
+                        : "bg-neutral-900 text-white hover:bg-neutral-800"
+                    }`}
+                  >
+                    <span>Launch {activeModal.domain}</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </motion.a>
+                ) : (
+                  <span className={`text-xs font-bold ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                    Undergraduate Academic Research Publication
+                  </span>
+                )}
 
-                <motion.button
-                  whileHover={{ scale: 1.04 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => handleCopy(activeModal.liveUrl, 'modal')}
-                  className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
-                >
-                  {copiedId === 'modal' ? 'Link Copied!' : 'Copy Project URL'}
-                </motion.button>
+                {activeModal.liveUrl && (
+                  <motion.button
+                    whileHover={{ scale: 1.04 }}
+                    whileTap={{ scale: 0.96 }}
+                    onClick={() => handleCopy(activeModal.liveUrl!, 'modal')}
+                    className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
+                  >
+                    {copiedId === 'modal' ? 'Link Copied!' : 'Copy Project URL'}
+                  </motion.button>
+                )}
               </div>
             </motion.div>
           </motion.div>
