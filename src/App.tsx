@@ -752,15 +752,15 @@ export default function App() {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="shrink-0 relative group cursor-pointer"
             >
-              <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden p-1 bg-gradient-to-tr from-emerald-400 via-sky-400 to-indigo-500 shadow-2xl">
+              <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-[28px] overflow-hidden p-1 bg-gradient-to-tr from-emerald-400 via-sky-400 to-indigo-500 shadow-2xl">
                 <img
                   src={PROFILE.avatar}
                   alt={PROFILE.name}
-                  className="w-full h-full object-cover rounded-[22px] bg-white"
+                  className="w-full h-full object-contain rounded-[24px] bg-white p-0.5"
                 />
               </div>
               <div
-                className={`absolute -bottom-2 -right-2 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider shadow-md ${
+                className={`absolute -bottom-2 -right-2 px-3.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider shadow-md ${
                   isDark ? "bg-white text-neutral-950" : "bg-neutral-900 text-white"
                 }`}
               >
