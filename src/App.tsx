@@ -402,16 +402,16 @@ function ProjectCard({
           {/* Screenshot Display */}
           <div
             onClick={() => onOpenModal(project, activeImgIdx)}
-            className="relative cursor-pointer aspect-[16/9] overflow-hidden bg-neutral-950/20"
+            className="relative cursor-pointer aspect-[16/10] overflow-hidden bg-neutral-950/30 flex items-center justify-center p-2"
           >
             <motion.img
               key={currentImage.url}
               src={currentImage.url}
               alt={currentImage.caption}
-              initial={{ opacity: 0.7, scale: 1.02 }}
+              initial={{ opacity: 0.7, scale: 1 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3 }}
-              className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/preview:scale-[1.04]"
+              className="max-w-full max-h-full w-auto h-auto object-contain rounded-lg transition-transform duration-500 group-hover/preview:scale-[1.03]"
             />
 
             {/* Hover Expand Overlay */}
@@ -986,15 +986,15 @@ export default function App() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             onClick={() => setActiveModal(null)}
-            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/65 backdrop-blur-md overflow-y-auto"
+            className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-8 flex items-start justify-center bg-black/75 backdrop-blur-md"
           >
             <motion.div
-              initial={{ scale: 0.94, opacity: 0, y: 16 }}
+              initial={{ scale: 0.94, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.94, opacity: 0, y: 16 }}
+              exit={{ scale: 0.94, opacity: 0, y: 20 }}
               transition={{ type: "spring", duration: 0.45, bounce: 0.15 }}
               onClick={(e) => e.stopPropagation()}
-              className={`max-w-3xl w-full my-auto rounded-[32px] p-6 sm:p-8 space-y-6 max-h-[90vh] overflow-y-auto ${
+              className={`max-w-4xl w-full my-6 sm:my-10 rounded-[32px] p-6 sm:p-8 space-y-6 ${
                 isDark
                   ? "bg-neutral-900/95 border border-white/20 text-neutral-100 shadow-2xl"
                   : "bg-white/95 border border-neutral-200 text-neutral-900 shadow-2xl"
@@ -1006,7 +1006,7 @@ export default function App() {
                   <div className={`text-xs font-black uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
                     {activeModal.context} ({activeModal.year})
                   </div>
-                  <h3 className={`text-xl sm:text-2xl font-black tracking-tight mt-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
+                  <h3 className={`text-xl sm:text-2xl font-black tracking-tight mt-1.5 ${isDark ? "text-white" : "text-neutral-900"}`}>
                     {activeModal.title}
                   </h3>
                 </div>
@@ -1014,7 +1014,7 @@ export default function App() {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => setActiveModal(null)}
-                  className={`p-2 rounded-full transition-all ${buttonStyle}`}
+                  className={`p-2 rounded-full transition-all shrink-0 ${buttonStyle}`}
                   title="Close"
                 >
                   <X className="w-5 h-5" />
@@ -1023,38 +1023,44 @@ export default function App() {
 
               {/* Large Image Preview with Interactive Tabs */}
               <div className="space-y-3">
-                <div className="rounded-2xl overflow-hidden border border-neutral-500/20 shadow-lg bg-neutral-950 aspect-[16/9] relative">
+                <div className="rounded-2xl border border-neutral-500/20 shadow-xl bg-neutral-950 flex items-center justify-center p-2 sm:p-4 min-h-[300px] sm:min-h-[420px] max-h-[60vh] relative overflow-hidden">
                   <motion.img
                     key={activeModal.images[modalImgIdx]?.url}
                     src={activeModal.images[modalImgIdx]?.url}
                     alt={activeModal.images[modalImgIdx]?.caption}
-                    initial={{ opacity: 0.8 }}
-                    animate={{ opacity: 1 }}
-                    className="w-full h-full object-cover object-top"
+                    initial={{ opacity: 0.85, scale: 0.99 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.25 }}
+                    className="max-w-full max-h-[54vh] w-auto h-auto object-contain rounded-lg"
                   />
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/40 to-transparent p-4">
-                    <p className="text-xs sm:text-sm font-bold text-white">
-                      {activeModal.images[modalImgIdx]?.caption}
-                    </p>
-                  </div>
+                </div>
+
+                {/* Clean Caption Bar Below Image */}
+                <div className="flex items-center justify-between text-xs px-1 gap-2">
+                  <p className={`font-semibold truncate ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
+                    {activeModal.images[modalImgIdx]?.caption}
+                  </p>
+                  <span className={`text-[11px] font-mono px-2.5 py-1 rounded-md shrink-0 ${isDark ? "bg-white/10 text-neutral-300" : "bg-neutral-200 text-neutral-700"}`}>
+                    {modalImgIdx + 1} / {activeModal.images.length}
+                  </span>
                 </div>
 
                 {/* Thumbnail Switcher */}
                 {activeModal.images.length > 1 && (
-                  <div className="flex items-center gap-2.5 overflow-x-auto pb-1">
+                  <div className="flex items-center gap-2.5 overflow-x-auto pb-1 pt-1">
                     {activeModal.images.map((img, i) => (
                       <motion.button
                         key={i}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setModalImgIdx(i)}
-                        className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 w-24 h-14 ${
+                        className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 w-24 sm:w-28 h-16 bg-neutral-950 flex items-center justify-center p-1 ${
                           modalImgIdx === i
                             ? "border-emerald-500 scale-105 shadow-md"
                             : "border-transparent opacity-60 hover:opacity-100"
                         }`}
                       >
-                        <img src={img.url} alt={img.caption} className="w-full h-full object-cover" />
+                        <img src={img.url} alt={img.caption} className="max-w-full max-h-full object-contain" />
                       </motion.button>
                     ))}
                   </div>
