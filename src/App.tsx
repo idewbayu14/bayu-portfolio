@@ -748,23 +748,26 @@ export default function App() {
 
             {/* Profile Avatar Card with Clean Studio White Background */}
             <motion.div
-              whileHover={{ scale: 1.03, rotate: 1 }}
+              whileHover={{ scale: 1.02, y: -2 }}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="shrink-0 relative group cursor-pointer"
+              className="shrink-0 relative group"
             >
-              <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-[28px] overflow-hidden p-1 bg-gradient-to-tr from-emerald-400 via-sky-400 to-indigo-500 shadow-2xl">
+              <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-[26px] overflow-hidden p-1 bg-gradient-to-b from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 shadow-xl shadow-neutral-900/10 dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10">
                 <img
                   src={PROFILE.avatar}
                   alt={PROFILE.name}
-                  className="w-full h-full object-contain rounded-[24px] bg-white p-0.5"
+                  className="w-full h-full object-cover rounded-[22px] bg-white select-none"
                 />
               </div>
               <div
-                className={`absolute -bottom-2 -right-2 px-3.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wider shadow-md ${
-                  isDark ? "bg-white text-neutral-950" : "bg-neutral-900 text-white"
+                className={`absolute -bottom-2.5 right-2 px-3 py-1 rounded-full text-[11px] font-bold tracking-tight shadow-md border flex items-center gap-1.5 ${
+                  isDark
+                    ? "bg-neutral-900 border-neutral-700 text-neutral-200"
+                    : "bg-white border-neutral-200 text-neutral-800"
                 }`}
               >
-                Engineer
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Available for roles</span>
               </div>
             </motion.div>
           </div>
