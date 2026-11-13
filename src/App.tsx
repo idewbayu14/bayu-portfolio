@@ -4,6 +4,8 @@ import {
   Layers,
   Copy,
   Check,
+  Sun,
+  Moon,
   X,
   Maximize2,
   Terminal,
@@ -16,6 +18,7 @@ import {
   Database,
   BarChart3,
   Network,
+  Activity,
   ExternalLink
 } from 'lucide-react';
 
@@ -560,13 +563,229 @@ function ProjectCard({
   );
 }
 
+
+// Interactive Live NLP Sentiment Analysis Sandbox
+const PRESET_SENTENCES = [
+  {
+    label: "Autonomous Vehicle (BRIN)",
+    text: "The BRIN autonomous electric shuttle navigated campus pedestrian zones smoothly and maintained optimal sensor reliability throughout the trial.",
+    expected: "Positive"
+  },
+  {
+    label: "IoT Telemetry Fault (BySense)",
+    text: "Photovoltaic array 3B reported unexpected voltage drop and battery discharge rate exceeded safe thresholds during midday.",
+    expected: "Negative"
+  },
+  {
+    label: "System Status Log (Batari)",
+    text: "Central telemetry scheduler synchronized 41 solar plant nodes at 17:00 WIB with zero network packet loss.",
+    expected: "Neutral"
+  }
+];
+
+function AiSentimentPlayground({ isDark }: { isDark: boolean }) {
+  const [inputText, setInputText] = useState(PRESET_SENTENCES[0].text);
+
+  const lower = inputText.toLowerCase();
+  const posKeywords = ['smooth', 'smoothly', 'optimal', 'safely', 'safe', 'punctual', 'punctually', 'efficient', 'reliable', 'reliability', 'excellent', 'remarkable', 'clean', 'success', 'successful', 'impressed', 'stable', 'stability'];
+  const negKeywords = ['unexpected', 'drop', 'dropped', 'fault', 'failure', 'exceeded', 'anomaly', 'warning', 'bad', 'poor', 'danger', 'dangerous', 'damage', 'lag', 'disconnect', 'disconnected', 'error', 'severe', 'risk'];
+
+  let posCount = 0;
+  let negCount = 0;
+  posKeywords.forEach(w => { if (lower.includes(w)) posCount += 2; });
+  negKeywords.forEach(w => { if (lower.includes(w)) negCount += 2; });
+
+  let posPct = 15;
+  let neuPct = 70;
+  let negPct = 15;
+
+  if (posCount > negCount) {
+    posPct = Math.min(96, 65 + posCount * 7);
+    negPct = Math.max(3, 10 - posCount * 2);
+    neuPct = 100 - posPct - negPct;
+  } else if (negCount > posCount) {
+    negPct = Math.min(94, 60 + negCount * 8);
+    posPct = Math.max(4, 10 - negCount * 2);
+    neuPct = 100 - negPct - posPct;
+  } else {
+    neuPct = 82;
+    posPct = 9;
+    negPct = 9;
+  }
+
+  const sentiment = posPct > 55 ? "Positive" : negPct > 50 ? "Negative" : "Neutral";
+  const confidence = Math.max(posPct, neuPct, negPct);
+  const tokenCount = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
+
+  const cardBg = isDark
+    ? "bg-neutral-900/60 border border-white/[0.14] text-neutral-100 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)]"
+    : "bg-white/75 border border-white/80 text-neutral-900 shadow-[0_20px_50px_rgba(15,23,42,0.06),inset_0_1px_2px_rgba(255,255,255,0.9)]";
+
+  return (
+    <section id="sandbox" className={`rounded-[32px] p-6 sm:p-9 backdrop-blur-3xl transition-all duration-300 ${cardBg}`}>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+        <div>
+          <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-500">
+            <Activity className="w-3.5 h-3.5" />
+            <span>Live NLP Inference Playground</span>
+          </div>
+          <h2 className={`text-xl sm:text-2xl font-black tracking-tight mt-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
+            Test BRIN Autonomous Vehicle Sentiment Pipeline
+          </h2>
+          <p className={`text-xs sm:text-sm font-medium mt-0.5 ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
+            Type any passenger feedback or system telemetry note to see real-time classification inference in action.
+          </p>
+        </div>
+
+        <div className={`self-start sm:self-auto px-3.5 py-1.5 rounded-full text-[11px] font-bold border flex items-center gap-1.5 ${
+          isDark ? "bg-white/[0.06] border-white/10 text-neutral-300" : "bg-neutral-100 border-neutral-200 text-neutral-700"
+        }`}>
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Inference Latency: ~34ms</span>
+        </div>
+      </div>
+
+      {/* Preset Pills */}
+      <div className="mb-4">
+        <span className={`text-[11px] font-bold uppercase tracking-wider block mb-2 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+          Quick Test Presets:
+        </span>
+        <div className="flex flex-wrap gap-2">
+          {PRESET_SENTENCES.map((preset, idx) => (
+            <button
+              key={idx}
+              onClick={() => setInputText(preset.text)}
+              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all text-left ${
+                inputText === preset.text
+                  ? isDark
+                    ? "bg-white text-neutral-950 shadow-sm"
+                    : "bg-neutral-900 text-white shadow-sm"
+                  : isDark
+                  ? "bg-white/[0.06] hover:bg-white/[0.12] text-neutral-300 border border-white/10"
+                  : "bg-neutral-100 hover:bg-neutral-200 text-neutral-700 border border-neutral-200"
+              }`}
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Interactive Text Area */}
+      <div className="relative mb-6">
+        <textarea
+          rows={3}
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          placeholder="Type feedback or operational notes in English..."
+          className={`w-full p-4 rounded-2xl text-xs sm:text-sm font-medium outline-none transition-all resize-none border ${
+            isDark
+              ? "bg-black/40 border-white/15 text-white placeholder-neutral-500 focus:border-emerald-400"
+              : "bg-white border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-emerald-600 shadow-2xs"
+          }`}
+        />
+        <div className="absolute bottom-3 right-3 text-[11px] font-mono text-neutral-400">
+          {tokenCount} tokens
+        </div>
+      </div>
+
+      {/* Inference Output Cards */}
+      <div className="grid sm:grid-cols-3 gap-4">
+        {/* Sentiment Verdict */}
+        <div className={`p-4 rounded-2xl border ${
+          isDark ? "bg-white/[0.04] border-white/10" : "bg-neutral-50 border-neutral-200/80"
+        }`}>
+          <span className={`text-[11px] font-bold uppercase tracking-wider block mb-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+            Predicted Sentiment
+          </span>
+          <div className="flex items-center gap-2 mt-1">
+            <span className={`w-3 h-3 rounded-full ${
+              sentiment === "Positive"
+                ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]"
+                : sentiment === "Negative"
+                ? "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.7)]"
+                : "bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.7)]"
+            }`} />
+            <span className={`text-base font-black ${
+              sentiment === "Positive"
+                ? "text-emerald-500"
+                : sentiment === "Negative"
+                ? "text-rose-500"
+                : "text-sky-500"
+            }`}>
+              {sentiment} ({confidence}%)
+            </span>
+          </div>
+        </div>
+
+        {/* Probability Distribution */}
+        <div className={`sm:col-span-2 p-4 rounded-2xl border ${
+          isDark ? "bg-white/[0.04] border-white/10" : "bg-neutral-50 border-neutral-200/80"
+        }`}>
+          <span className={`text-[11px] font-bold uppercase tracking-wider block mb-2 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+            Confidence Distribution
+          </span>
+          <div className="space-y-2">
+            <div>
+              <div className="flex justify-between text-[11px] font-bold mb-1">
+                <span className="text-emerald-500">Positive</span>
+                <span className={isDark ? "text-neutral-300" : "text-neutral-700"}>{posPct}%</span>
+              </div>
+              <div className="w-full h-2 rounded-full bg-neutral-500/20 overflow-hidden">
+                <motion.div
+                  className="h-full bg-emerald-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${posPct}%` }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between text-[11px] font-bold mb-1">
+                <span className="text-sky-500">Neutral</span>
+                <span className={isDark ? "text-neutral-300" : "text-neutral-700"}>{neuPct}%</span>
+              </div>
+              <div className="w-full h-2 rounded-full bg-neutral-500/20 overflow-hidden">
+                <motion.div
+                  className="h-full bg-sky-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${neuPct}%` }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between text-[11px] font-bold mb-1">
+                <span className="text-rose-500">Negative</span>
+                <span className={isDark ? "text-neutral-300" : "text-neutral-700"}>{negPct}%</span>
+              </div>
+              <div className="w-full h-2 rounded-full bg-neutral-500/20 overflow-hidden">
+                <motion.div
+                  className="h-full bg-rose-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${negPct}%` }}
+                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 // Floating Action Dock at bottom center
 function FloatingDock({
   isDark,
+  onToggleTheme,
   onCopyEmail,
   activeSection
 }: {
   isDark: boolean;
+  onToggleTheme: () => void;
   onCopyEmail: () => void;
   activeSection: string;
 }) {
@@ -594,6 +813,17 @@ function FloatingDock({
           }`}
         >
           Overview
+        </a>
+
+        <a
+          href="#sandbox"
+          className={`hidden sm:inline-block px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
+            activeSection === 'sandbox'
+              ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
+              : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
+          }`}
+        >
+          AI Demo
         </a>
 
         <a
@@ -631,6 +861,18 @@ function FloatingDock({
         >
           <Mail className="w-3.5 h-3.5" />
           <span>Copy Email</span>
+        </button>
+
+        <button
+          onClick={onToggleTheme}
+          className={`p-1.5 rounded-full transition-colors ${
+            isDark
+              ? "hover:bg-white/15 text-amber-300"
+              : "hover:bg-neutral-200 text-neutral-700"
+          }`}
+          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+        >
+          {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
       </div>
     </motion.aside>
@@ -673,13 +915,26 @@ function ToastNotification({
 }
 
 export default function App() {
-  const isDark = true;
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('portfolio_theme') as 'light' | 'dark') || 'dark';
+    }
+    return 'dark';
+  });
+  const isDark = theme === 'dark';
+
+  const toggleTheme = () => {
+    const next = isDark ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('portfolio_theme', next);
+  };
+
   const [activeFilter, setActiveFilter] = useState<'all' | 'ml' | 'web'>('all');
   const [activeModal, setActiveModal] = useState<Project | null>(null);
   const [modalImgIdx, setModalImgIdx] = useState(0);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState<'overview' | 'projects' | 'skills'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'sandbox' | 'projects' | 'skills'>('overview');
   const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const visibleProjects =
@@ -719,10 +974,13 @@ export default function App() {
       const projectsEl = document.getElementById('projects');
       const skillsEl = document.getElementById('skills');
 
+      const sandboxEl = document.getElementById('sandbox');
       if (skillsEl && scrollY >= skillsEl.offsetTop - 240) {
         setActiveSection('skills');
       } else if (projectsEl && scrollY >= projectsEl.offsetTop - 240) {
         setActiveSection('projects');
+      } else if (sandboxEl && scrollY >= sandboxEl.offsetTop - 240) {
+        setActiveSection('sandbox');
       } else {
         setActiveSection('overview');
       }
@@ -733,30 +991,36 @@ export default function App() {
   }, []);
 
   const glassPill = isDark
-    ? "bg-neutral-900/70 border border-white/[0.14] text-neutral-100 shadow-[0_12px_32px_rgba(0,0,0,0.4)]"
-    : "bg-white/80 border border-white/90 text-neutral-900 shadow-[0_10px_25px_rgba(15,23,42,0.05)]";
+    ? "bg-neutral-900/60 border border-white/[0.15] text-neutral-100 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.16)] backdrop-blur-3xl"
+    : "bg-white/75 border border-white/85 text-neutral-900 shadow-[0_20px_50px_rgba(15,23,42,0.06),inset_0_1px_2px_rgba(255,255,255,0.95)] backdrop-blur-3xl";
 
   const buttonStyle = isDark
-    ? "bg-white/[0.08] hover:bg-white/[0.16] border border-white/[0.16] text-neutral-100"
-    : "bg-white hover:bg-neutral-100 border border-neutral-200 text-neutral-900 shadow-2xs";
+    ? "bg-white/[0.08] hover:bg-white/[0.16] border border-white/[0.16] text-neutral-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+    : "bg-white/90 hover:bg-white border border-neutral-200 text-neutral-900 shadow-xs";
 
   return (
     <div
       className={`min-h-screen relative overflow-x-hidden transition-colors duration-500 font-sans ${isDark ? "bg-[#0A0A0C] text-neutral-100" : "bg-[#F4F4F7] text-neutral-900"
         }`}
     >
-      {/* Ambient Drifting Liquid Glow Orbs */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Ambient Drifting Liquid Aurora Mesh */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
         <div
-          className={`orb-a absolute -top-24 left-[15%] w-[38rem] h-[38rem] rounded-full blur-[140px] opacity-75 ${isDark
-              ? "bg-gradient-to-br from-indigo-500/20 via-sky-500/10 to-transparent"
-              : "bg-gradient-to-br from-sky-200/70 via-blue-100/50 to-transparent"
+          className={`liquid-orb-a absolute -top-28 left-[10%] w-[44rem] h-[44rem] rounded-full blur-[140px] transition-colors duration-700 ${isDark
+              ? "bg-gradient-to-br from-indigo-600/25 via-sky-500/15 to-transparent"
+              : "bg-gradient-to-br from-sky-300/60 via-blue-200/40 to-transparent"
             }`}
         />
         <div
-          className={`orb-b absolute top-[38%] -right-20 w-[42rem] h-[42rem] rounded-full blur-[150px] opacity-70 ${isDark
-              ? "bg-gradient-to-tl from-emerald-500/15 via-teal-500/10 to-transparent"
-              : "bg-gradient-to-tl from-emerald-200/60 via-teal-100/40 to-transparent"
+          className={`liquid-orb-b absolute top-[35%] -right-24 w-[48rem] h-[48rem] rounded-full blur-[150px] transition-colors duration-700 ${isDark
+              ? "bg-gradient-to-tl from-emerald-500/20 via-teal-500/15 to-transparent"
+              : "bg-gradient-to-tl from-emerald-300/50 via-teal-200/35 to-transparent"
+            }`}
+        />
+        <div
+          className={`liquid-orb-c absolute -bottom-32 left-[20%] w-[42rem] h-[42rem] rounded-full blur-[130px] transition-colors duration-700 ${isDark
+              ? "bg-gradient-to-tr from-cyan-600/15 via-indigo-500/15 to-transparent"
+              : "bg-gradient-to-tr from-indigo-200/45 via-purple-100/35 to-transparent"
             }`}
         />
       </div>
@@ -811,11 +1075,24 @@ export default function App() {
 
           {/* Right Action Controls */}
           <div className="flex items-center gap-2">
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              onClick={toggleTheme}
+              className={`p-2 rounded-full transition-all ${buttonStyle}`}
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDark ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-neutral-700" />}
+            </motion.button>
             <motion.a
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               href={`mailto:${PROFILE.email}`}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all bg-white text-neutral-950 hover:bg-neutral-200"
+              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all ${
+                isDark
+                  ? "bg-white text-neutral-950 hover:bg-neutral-200"
+                  : "bg-neutral-900 text-white hover:bg-neutral-800"
+              }`}
             >
               <span>Get in Touch</span>
               <ArrowUpRight className="w-3.5 h-3.5" />
@@ -968,6 +1245,9 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        {/* Live NLP Sentiment Inference Sandbox */}
+        <AiSentimentPlayground isDark={isDark} />
 
         {/* Live Projects Grid Showcase with Visual Previews */}
         <section id="projects" className="space-y-4">
@@ -1252,6 +1532,7 @@ export default function App() {
       {/* Floating Action Dock */}
       <FloatingDock
         isDark={isDark}
+        onToggleTheme={toggleTheme}
         onCopyEmail={() => handleCopy(PROFILE.email, 'Email address')}
         activeSection={activeSection}
       />

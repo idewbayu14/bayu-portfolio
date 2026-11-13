@@ -10,20 +10,46 @@
 }
 
 @keyframes driftA {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(30px, -25px, 0) scale(1.06); }
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(45px, -35px, 0) scale(1.08) rotate(8deg);
+  }
+  66% {
+    transform: translate3d(-30px, 25px, 0) scale(0.95) rotate(-6deg);
+  }
 }
 
 @keyframes driftB {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(-25px, 30px, 0) scale(1.05); }
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  33% {
+    transform: translate3d(-40px, 40px, 0) scale(1.07) rotate(-10deg);
+  }
+  66% {
+    transform: translate3d(35px, -20px, 0) scale(0.96) rotate(6deg);
+  }
 }
 
-.orb-a {
-  animation: driftA 20s ease-in-out infinite;
+@keyframes driftC {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(25px, 35px, 0) scale(1.12);
+  }
 }
 
-.orb-b {
-  animation: driftB 24s ease-in-out infinite;
+.liquid-orb-a {
+  animation: driftA 22s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+.liquid-orb-b {
+  animation: driftB 26s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.liquid-orb-c {
+  animation: driftC 20s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
