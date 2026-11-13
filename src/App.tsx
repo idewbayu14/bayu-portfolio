@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 import {
   Layers,
   Copy,
@@ -13,11 +13,12 @@ import {
   Globe,
   Mail,
   ShieldCheck,
-  Zap,
   ArrowUpRight,
   Database,
   BarChart3,
-  Network
+  Network,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 
 interface ProjectImage {
@@ -395,7 +396,7 @@ function ProjectCard({
             />
 
             {/* Hover Expand Overlay */}
-            <div className="absolute inset-0 bg-neutral-950/40 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2">
+            <div className="absolute inset-0 bg-neutral-950/40 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2 pointer-events-none">
               <motion.span
                 initial={{ y: 8, opacity: 0 }}
                 whileHover={{ scale: 1.05 }}
@@ -405,6 +406,46 @@ function ProjectCard({
                 <span>View Full-Screen</span>
               </motion.span>
             </div>
+
+            {/* Carousel Navigation Arrow Controls */}
+            {project.images.length > 1 && (
+              <>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveImgIdx((prev) => (prev - 1 + project.images.length) % project.images.length);
+                  }}
+                  className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all duration-200 backdrop-blur-md shadow-md ${
+                    isDark
+                      ? "bg-neutral-900/80 hover:bg-neutral-800 text-white border border-white/15"
+                      : "bg-white/90 hover:bg-white text-neutral-900 border border-neutral-200 shadow-sm"
+                  }`}
+                  title="Previous image"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveImgIdx((prev) => (prev + 1) % project.images.length);
+                  }}
+                  className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all duration-200 backdrop-blur-md shadow-md ${
+                    isDark
+                      ? "bg-neutral-900/80 hover:bg-neutral-800 text-white border border-white/15"
+                      : "bg-white/90 hover:bg-white text-neutral-900 border border-neutral-200 shadow-sm"
+                  }`}
+                  title="Next image"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </motion.button>
+              </>
+            )}
           </div>
 
           {/* Multi-Screenshot Indicator Bar */}
@@ -707,6 +748,13 @@ export default function App() {
     }
   };
 
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   const handleOpenModal = (project: Project, imageIndex: number = 0) => {
     setActiveModal(project);
     setModalImgIdx(imageIndex);
@@ -714,11 +762,20 @@ export default function App() {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setActiveModal(null);
+      if (e.key === 'Escape') {
+        setActiveModal(null);
+      }
+      if (activeModal && activeModal.images.length > 1) {
+        if (e.key === 'ArrowRight') {
+          setModalImgIdx((prev) => (prev + 1) % activeModal.images.length);
+        } else if (e.key === 'ArrowLeft') {
+          setModalImgIdx((prev) => (prev - 1 + activeModal.images.length) % activeModal.images.length);
+        }
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, []);
+  }, [activeModal]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -752,6 +809,12 @@ export default function App() {
       className={`min-h-screen relative overflow-x-hidden transition-colors duration-500 font-sans ${isDark ? "bg-[#0A0A0C] text-neutral-100" : "bg-[#F4F4F7] text-neutral-900"
         }`}
     >
+      {/* Scroll Depth Progress Bar */}
+      <motion.div
+        style={{ scaleX }}
+        className="fixed top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-emerald-500 via-cyan-400 to-indigo-500 origin-left z-50 pointer-events-none"
+      />
+
       {/* Ambient Drifting Liquid Aurora Mesh */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
         <div
@@ -803,7 +866,7 @@ export default function App() {
                   key={tab.id}
                   onClick={() => setActiveFilter(tab.id as 'all' | 'ml' | 'web')}
                   className={`relative px-4 py-1.5 rounded-full text-xs font-black transition-colors z-10 ${active
-                      ? "text-neutral-950 font-black"
+                      ? isDark ? "text-neutral-950 font-black" : "text-white font-black"
                       : isDark
                         ? "text-neutral-400 hover:text-white"
                         : "text-neutral-600 hover:text-neutral-900"
@@ -812,7 +875,9 @@ export default function App() {
                   {active && (
                     <motion.div
                       layoutId="activeFilterPill"
-                      className="absolute inset-0 rounded-full bg-white shadow-xs z-[-1]"
+                      className={`absolute inset-0 rounded-full shadow-xs z-[-1] ${
+                        isDark ? "bg-white" : "bg-neutral-900 shadow-sm"
+                      }`}
                       transition={{ type: "spring", stiffness: 450, damping: 35 }}
                     />
                   )}
@@ -982,7 +1047,7 @@ export default function App() {
                   key={tab.id}
                   onClick={() => setActiveFilter(tab.id as 'all' | 'ml' | 'web')}
                   className={`py-2 rounded-xl text-xs font-black transition-all text-center ${activeFilter === tab.id
-                      ? "bg-white text-neutral-950 shadow-xs"
+                      ? isDark ? "bg-white text-neutral-950 shadow-xs" : "bg-neutral-900 text-white shadow-xs"
                       : isDark
                         ? "text-neutral-400"
                         : "text-neutral-600"
@@ -1031,7 +1096,7 @@ export default function App() {
         >
           <div className="mb-6">
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-500">
-              <Zap className="w-3.5 h-3.5" />
+              <Cpu className="w-3.5 h-3.5" />
               <span>Technical Skills & Methodologies</span>
             </div>
             <h2 className={`text-xl sm:text-2xl font-black tracking-tight mt-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
@@ -1160,7 +1225,7 @@ export default function App() {
 
               {/* Large Image Preview with Interactive Tabs */}
               <div className="space-y-3">
-                <div className="rounded-2xl border border-neutral-500/20 shadow-xl bg-neutral-950 flex items-center justify-center p-2 sm:p-4 min-h-[300px] sm:min-h-[420px] max-h-[60vh] relative overflow-hidden">
+                <div className="rounded-2xl border border-neutral-500/20 shadow-xl bg-neutral-950 flex items-center justify-center p-2 sm:p-4 min-h-[300px] sm:min-h-[420px] max-h-[60vh] relative overflow-hidden group">
                   <motion.img
                     key={activeModal.images[modalImgIdx]?.url}
                     src={activeModal.images[modalImgIdx]?.url}
@@ -1170,6 +1235,30 @@ export default function App() {
                     transition={{ duration: 0.25 }}
                     className="max-w-full max-h-[54vh] w-auto h-auto object-contain rounded-lg"
                   />
+                  {activeModal.images.length > 1 && (
+                    <>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setModalImgIdx((prev) => (prev - 1 + activeModal.images.length) % activeModal.images.length)}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/65 hover:bg-black/90 text-white border border-white/20 flex items-center justify-center backdrop-blur-md shadow-lg transition-transform"
+                        title="Previous (Arrow Left)"
+                        aria-label="Previous image"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={() => setModalImgIdx((prev) => (prev + 1) % activeModal.images.length)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/65 hover:bg-black/90 text-white border border-white/20 flex items-center justify-center backdrop-blur-md shadow-lg transition-transform"
+                        title="Next (Arrow Right)"
+                        aria-label="Next image"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </motion.button>
+                    </>
+                  )}
                 </div>
 
                 {/* Clean Caption Bar Below Image */}
