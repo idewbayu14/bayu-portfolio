@@ -17,9 +17,7 @@ import {
   ArrowUpRight,
   Database,
   BarChart3,
-  Network,
-  Activity,
-  ExternalLink
+  Network
 } from 'lucide-react';
 
 interface ProjectImage {
@@ -98,7 +96,7 @@ const PROJECTS: Project[] = [
   {
     id: "brin",
     number: "01",
-    title: "Autonomous Vehicle Sentiment Analysis Dashboard",
+    title: "Autonomous Vehicle Sentiment Analysis Platform",
     context: "National Research and Innovation Agency (BRIN)",
     year: "2026",
     category: "ml",
@@ -107,23 +105,23 @@ const PROJECTS: Project[] = [
     liveUrl: "https://brin-project-kp.vercel.app/",
     domain: "brin-project-kp.vercel.app",
     summary:
-      "Deep learning natural language processing platform analyzing public discussions across YouTube and Reddit to assess consumer acceptance and readiness for Level 2 autonomous vehicles.",
+      "End-to-end deep learning NLP platform analyzing public discussions on Level 2 autonomous vehicle adoption. Powered by an independently curated research dataset and a custom-trained multi-class neural classification model, deployed live on a dedicated web application.",
     deliverables: [
-      "Trained multi-class deep learning NLP models achieving 94.2% accuracy in classifying unstructured public discussions into positive, neutral, and negative sentiment.",
-      "Engineered automated social media ingestion and preprocessing pipelines for continuous public opinion monitoring.",
-      "Deployed a low-latency REST inference API integrated directly with an interactive research telemetry dashboard."
+      "Independently collected, curated, and preprocessed multi-source public discussions, implementing domain-specific Indonesian text normalization.",
+      "Engineered and trained a multi-class deep learning NLP classification model from scratch achieving 94.2% accuracy without external black-box models.",
+      "Architected and deployed the real-time inference pipeline and interactive research telemetry web platform (brin-project-kp.vercel.app)."
     ],
     architecture:
-      "Multi-source text scraping pipeline normalized through custom tokenization and lemmatization, served via a PyTorch classification inference service to a live React research dashboard.",
-    stack: ["Python", "Deep Learning", "NLP", "Web Scraping", "REST API", "React"],
+      "Proprietary end-to-end pipeline: independent raw text ingestion, custom tokenization and preprocessing, self-trained deep learning inference engine, served to a responsive live web application.",
+    stack: ["Python", "Deep Learning", "NLP", "Custom Dataset", "PyTorch", "REST API", "React"],
     images: [
       {
         url: "/projects/brin-hero.png",
-        caption: "Research Portal and Deep Learning Sentiment Classification Architecture"
+        caption: "Research Portal and In-House Deep Learning Sentiment Classification Architecture"
       },
       {
         url: "/projects/brin-analyzer.png",
-        caption: "Interactive Real-Time Sentiment Analyzer for Single Text and Batch Analysis"
+        caption: "Live Interactive Real-Time Sentiment Analyzer Running on Custom-Trained Model"
       }
     ]
   },
@@ -271,14 +269,13 @@ function ProjectCard({
   copiedId: string | null;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
-  const [isHovered, setIsHovered] = useState(false);
   const [activeImgIdx, setActiveImgIdx] = useState(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    cardRef.current.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+    cardRef.current.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
   };
 
   const currentImage = project.images[activeImgIdx] || project.images[0];
@@ -294,25 +291,22 @@ function ProjectCard({
   return (
     <motion.article
       ref={cardRef}
-      layout
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96 }}
       whileHover={{ y: -6 }}
       transition={{
-        y: { type: "spring", stiffness: 320, damping: 24 },
+        y: { type: "spring", stiffness: 350, damping: 25 },
         opacity: { duration: 0.25 }
       }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className={`group relative rounded-[32px] p-6 sm:p-8 backdrop-blur-3xl flex flex-col justify-between overflow-hidden ${cardBg}`}
+      className={`group relative rounded-[32px] p-6 sm:p-8 backdrop-blur-3xl flex flex-col justify-between overflow-hidden transition-colors duration-300 ${cardBg}`}
     >
       {/* Specular Spotlight Proximity Radial Glow */}
       <div
         className="pointer-events-none absolute -inset-px rounded-[32px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: `radial-gradient(650px circle at ${mousePos.x}px ${mousePos.y}px, ${
+          background: `radial-gradient(650px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px), ${
             isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.035)'
           }, transparent 65%)`
         }}
@@ -355,10 +349,7 @@ function ProjectCard({
         </div>
 
         {/* Realistic Browser/Artifact Mockup Frame */}
-        <div
-          style={{ transform: "translateZ(8px)" }}
-          className="relative mb-6 rounded-2xl overflow-hidden border border-neutral-500/20 group/preview shadow-md transition-shadow group-hover:shadow-xl"
-        >
+        <div className="relative mb-6 rounded-2xl overflow-hidden border border-neutral-500/20 group/preview shadow-md transition-shadow group-hover:shadow-xl">
           {/* Mockup Header Bar */}
           <div
             className={`px-4 py-2.5 flex items-center justify-between text-xs border-b border-neutral-500/15 ${isDark ? "bg-neutral-950/80" : "bg-neutral-100/90"
@@ -549,219 +540,6 @@ function ProjectCard({
 }
 
 
-// Interactive Live NLP Sentiment Analysis Sandbox
-const PRESET_SENTENCES = [
-  {
-    label: "Autonomous Vehicle (BRIN)",
-    text: "The BRIN autonomous electric shuttle navigated campus pedestrian zones smoothly and maintained optimal sensor reliability throughout the trial.",
-    expected: "Positive"
-  },
-  {
-    label: "IoT Telemetry Fault (BySense)",
-    text: "Photovoltaic array 3B reported unexpected voltage drop and battery discharge rate exceeded safe thresholds during midday.",
-    expected: "Negative"
-  },
-  {
-    label: "System Status Log (Batari)",
-    text: "Central telemetry scheduler synchronized 41 solar plant nodes at 17:00 WIB with zero network packet loss.",
-    expected: "Neutral"
-  }
-];
-
-function AiSentimentPlayground({ isDark }: { isDark: boolean }) {
-  const [inputText, setInputText] = useState(PRESET_SENTENCES[0].text);
-
-  const lower = inputText.toLowerCase();
-  const posKeywords = ['smooth', 'smoothly', 'optimal', 'safely', 'safe', 'punctual', 'punctually', 'efficient', 'reliable', 'reliability', 'excellent', 'remarkable', 'clean', 'success', 'successful', 'impressed', 'stable', 'stability'];
-  const negKeywords = ['unexpected', 'drop', 'dropped', 'fault', 'failure', 'exceeded', 'anomaly', 'warning', 'bad', 'poor', 'danger', 'dangerous', 'damage', 'lag', 'disconnect', 'disconnected', 'error', 'severe', 'risk'];
-
-  let posCount = 0;
-  let negCount = 0;
-  posKeywords.forEach(w => { if (lower.includes(w)) posCount += 2; });
-  negKeywords.forEach(w => { if (lower.includes(w)) negCount += 2; });
-
-  let posPct = 15;
-  let neuPct = 70;
-  let negPct = 15;
-
-  if (posCount > negCount) {
-    posPct = Math.min(96, 65 + posCount * 7);
-    negPct = Math.max(3, 10 - posCount * 2);
-    neuPct = 100 - posPct - negPct;
-  } else if (negCount > posCount) {
-    negPct = Math.min(94, 60 + negCount * 8);
-    posPct = Math.max(4, 10 - negCount * 2);
-    neuPct = 100 - negPct - posPct;
-  } else {
-    neuPct = 82;
-    posPct = 9;
-    negPct = 9;
-  }
-
-  const sentiment = posPct > 55 ? "Positive" : negPct > 50 ? "Negative" : "Neutral";
-  const confidence = Math.max(posPct, neuPct, negPct);
-  const tokenCount = inputText.trim() ? inputText.trim().split(/\s+/).length : 0;
-
-  const cardBg = isDark
-    ? "bg-neutral-900/60 border border-white/[0.14] text-neutral-100 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)]"
-    : "bg-white/75 border border-white/80 text-neutral-900 shadow-[0_20px_50px_rgba(15,23,42,0.06),inset_0_1px_2px_rgba(255,255,255,0.9)]";
-
-  return (
-    <section id="sandbox" className={`rounded-[32px] p-6 sm:p-9 backdrop-blur-3xl transition-all duration-300 ${cardBg}`}>
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-500">
-            <Activity className="w-3.5 h-3.5" />
-            <span>Live NLP Inference Playground</span>
-          </div>
-          <h2 className={`text-xl sm:text-2xl font-black tracking-tight mt-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
-            Test BRIN Autonomous Vehicle Sentiment Pipeline
-          </h2>
-          <p className={`text-xs sm:text-sm font-medium mt-0.5 ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
-            Type any passenger feedback or system telemetry note to see real-time classification inference in action.
-          </p>
-        </div>
-
-        <div className={`self-start sm:self-auto px-3.5 py-1.5 rounded-full text-[11px] font-bold border flex items-center gap-1.5 ${
-          isDark ? "bg-white/[0.06] border-white/10 text-neutral-300" : "bg-neutral-100 border-neutral-200 text-neutral-700"
-        }`}>
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Inference Latency: ~34ms</span>
-        </div>
-      </div>
-
-      {/* Preset Pills */}
-      <div className="mb-4">
-        <span className={`text-[11px] font-bold uppercase tracking-wider block mb-2 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-          Quick Test Presets:
-        </span>
-        <div className="flex flex-wrap gap-2">
-          {PRESET_SENTENCES.map((preset, idx) => (
-            <button
-              key={idx}
-              onClick={() => setInputText(preset.text)}
-              className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all text-left ${
-                inputText === preset.text
-                  ? isDark
-                    ? "bg-white text-neutral-950 shadow-sm"
-                    : "bg-neutral-900 text-white shadow-sm"
-                  : isDark
-                  ? "bg-white/[0.06] hover:bg-white/[0.12] text-neutral-300 border border-white/10"
-                  : "bg-neutral-100 hover:bg-neutral-200 text-neutral-700 border border-neutral-200"
-              }`}
-            >
-              {preset.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Interactive Text Area */}
-      <div className="relative mb-6">
-        <textarea
-          rows={3}
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          placeholder="Type feedback or operational notes in English..."
-          className={`w-full p-4 rounded-2xl text-xs sm:text-sm font-medium outline-none transition-all resize-none border ${
-            isDark
-              ? "bg-black/40 border-white/15 text-white placeholder-neutral-500 focus:border-emerald-400"
-              : "bg-white border-neutral-200 text-neutral-900 placeholder-neutral-400 focus:border-emerald-600 shadow-2xs"
-          }`}
-        />
-        <div className="absolute bottom-3 right-3 text-[11px] font-mono text-neutral-400">
-          {tokenCount} tokens
-        </div>
-      </div>
-
-      {/* Inference Output Cards */}
-      <div className="grid sm:grid-cols-3 gap-4">
-        {/* Sentiment Verdict */}
-        <div className={`p-4 rounded-2xl border ${
-          isDark ? "bg-white/[0.04] border-white/10" : "bg-white border-neutral-200/90 shadow-2xs"
-        }`}>
-          <span className={`text-[11px] font-bold uppercase tracking-wider block mb-1 ${isDark ? "text-neutral-400" : "text-neutral-700"}`}>
-            Predicted Sentiment
-          </span>
-          <div className="flex items-center gap-2 mt-1">
-            <span className={`w-3 h-3 rounded-full ${
-              sentiment === "Positive"
-                ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]"
-                : sentiment === "Negative"
-                ? "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.7)]"
-                : "bg-sky-500 shadow-[0_0_8px_rgba(14,165,233,0.7)]"
-            }`} />
-            <span className={`text-base font-black ${
-              sentiment === "Positive"
-                ? isDark ? "text-emerald-400" : "text-emerald-700"
-                : sentiment === "Negative"
-                ? isDark ? "text-rose-400" : "text-rose-700"
-                : isDark ? "text-sky-400" : "text-sky-700"
-            }`}>
-              {sentiment} ({confidence}%)
-            </span>
-          </div>
-        </div>
-
-        {/* Probability Distribution */}
-        <div className={`sm:col-span-2 p-4 rounded-2xl border ${
-          isDark ? "bg-white/[0.04] border-white/10" : "bg-white border-neutral-200/90 shadow-2xs"
-        }`}>
-          <span className={`text-[11px] font-bold uppercase tracking-wider block mb-2 ${isDark ? "text-neutral-400" : "text-neutral-700"}`}>
-            Confidence Distribution
-          </span>
-          <div className="space-y-2">
-            <div>
-              <div className="flex justify-between text-[11px] font-bold mb-1">
-                <span className={isDark ? "text-emerald-400" : "text-emerald-700 font-extrabold"}>Positive</span>
-                <span className={isDark ? "text-neutral-300" : "text-neutral-900 font-extrabold"}>{posPct}%</span>
-              </div>
-              <div className={`w-full h-2 rounded-full overflow-hidden ${isDark ? "bg-white/10" : "bg-neutral-200"}`}>
-                <motion.div
-                  className="h-full bg-emerald-500 rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${posPct}%` }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between text-[11px] font-bold mb-1">
-                <span className={isDark ? "text-sky-400" : "text-sky-700 font-extrabold"}>Neutral</span>
-                <span className={isDark ? "text-neutral-300" : "text-neutral-900 font-extrabold"}>{neuPct}%</span>
-              </div>
-              <div className={`w-full h-2 rounded-full overflow-hidden ${isDark ? "bg-white/10" : "bg-neutral-200"}`}>
-                <motion.div
-                  className="h-full bg-sky-500 rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${neuPct}%` }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex justify-between text-[11px] font-bold mb-1">
-                <span className={isDark ? "text-rose-400" : "text-rose-700 font-extrabold"}>Negative</span>
-                <span className={isDark ? "text-neutral-300" : "text-neutral-900 font-extrabold"}>{negPct}%</span>
-              </div>
-              <div className={`w-full h-2 rounded-full overflow-hidden ${isDark ? "bg-white/10" : "bg-neutral-200"}`}>
-                <motion.div
-                  className="h-full bg-rose-500 rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${negPct}%` }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 // Floating Action Dock at bottom center
 function FloatingDock({
   isDark,
@@ -798,17 +576,6 @@ function FloatingDock({
           }`}
         >
           Overview
-        </a>
-
-        <a
-          href="#sandbox"
-          className={`hidden sm:inline-block px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
-            activeSection === 'sandbox'
-              ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
-              : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
-          }`}
-        >
-          AI Demo
         </a>
 
         <a
@@ -919,7 +686,7 @@ export default function App() {
   const [modalImgIdx, setModalImgIdx] = useState(0);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState<'overview' | 'sandbox' | 'projects' | 'skills'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'projects' | 'skills'>('overview');
   const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const visibleProjects =
@@ -959,13 +726,10 @@ export default function App() {
       const projectsEl = document.getElementById('projects');
       const skillsEl = document.getElementById('skills');
 
-      const sandboxEl = document.getElementById('sandbox');
       if (skillsEl && scrollY >= skillsEl.offsetTop - 240) {
         setActiveSection('skills');
       } else if (projectsEl && scrollY >= projectsEl.offsetTop - 240) {
         setActiveSection('projects');
-      } else if (sandboxEl && scrollY >= sandboxEl.offsetTop - 240) {
-        setActiveSection('sandbox');
       } else {
         setActiveSection('overview');
       }
@@ -1158,7 +922,7 @@ export default function App() {
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="shrink-0 relative group self-center md:self-start"
             >
-              <div className="relative w-36 sm:w-44 md:w-48 aspect-[718/1024] rounded-[24px] overflow-hidden p-1 bg-gradient-to-b from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 shadow-xl shadow-neutral-900/10 dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10">
+              <div className="relative w-36 sm:w-44 md:w-48 aspect-[718/902] rounded-[24px] overflow-hidden p-1 bg-gradient-to-b from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 shadow-xl shadow-neutral-900/10 dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10">
                 <img
                   src={PROFILE.avatar}
                   alt={PROFILE.name}
@@ -1230,9 +994,6 @@ export default function App() {
             </div>
           </div>
         </section>
-
-        {/* Live NLP Sentiment Inference Sandbox */}
-        <AiSentimentPlayground isDark={isDark} />
 
         {/* Live Projects Grid Showcase with Visual Previews */}
         <section id="projects" className="space-y-4">
