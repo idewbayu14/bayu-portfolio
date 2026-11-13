@@ -256,7 +256,7 @@ function LinkedinIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
   );
 }
 
-// Interactive Spotlight Project Card with Proximity Specular Glow & 3D Spring Parallax Tilt
+// Interactive Spotlight Project Card with Proximity Specular Glow & Butter-Smooth Spring Lift
 function ProjectCard({
   project,
   isDark,
@@ -271,73 +271,50 @@ function ProjectCard({
   copiedId: string | null;
 }) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
   const [isHovered, setIsHovered] = useState(false);
   const [activeImgIdx, setActiveImgIdx] = useState(0);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    setMousePos({ x, y });
-
-    // Subtle 3D tilt calculation (max 3.5 deg for restrained, executive feel)
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -3.5;
-    const rotateY = ((x - centerX) / centerX) * 3.5;
-    setTilt({ rotateX, rotateY });
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-    setTilt({ rotateX: 0, rotateY: 0 });
+    setMousePos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
   };
 
   const currentImage = project.images[activeImgIdx] || project.images[0];
 
   const cardBg = isDark
-    ? "bg-neutral-900/65 border border-white/[0.12] shadow-[0_20px_50px_rgba(0,0,0,0.5)] hover:border-white/[0.25]"
-    : "bg-white/80 border border-white/95 shadow-[0_15px_40px_rgba(15,23,42,0.06)] hover:border-neutral-300";
+    ? "bg-neutral-900/60 border border-white/[0.14] shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] hover:border-white/[0.28]"
+    : "bg-white/85 border border-white/90 shadow-[0_20px_50px_rgba(15,23,42,0.06),inset_0_1px_2px_rgba(255,255,255,0.95)] hover:border-neutral-300";
 
   const buttonStyle = isDark
-    ? "bg-white/[0.08] hover:bg-white/[0.16] border border-white/[0.16] text-neutral-100"
-    : "bg-neutral-100 hover:bg-neutral-200/80 border border-neutral-200 text-neutral-800";
+    ? "bg-white/[0.08] hover:bg-white/[0.16] border border-white/[0.16] text-neutral-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
+    : "bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 text-neutral-900 shadow-2xs font-bold";
 
   return (
     <motion.article
       ref={cardRef}
       layout
       initial={{ opacity: 0, y: 24 }}
-      animate={{
-        opacity: 1,
-        y: isHovered ? -4 : 0,
-        rotateX: tilt.rotateX,
-        rotateY: tilt.rotateY
-      }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96 }}
+      whileHover={{ y: -6 }}
       transition={{
-        rotateX: { type: "spring", stiffness: 350, damping: 25 },
-        rotateY: { type: "spring", stiffness: 350, damping: 25 },
-        y: { duration: 0.25 }
-      }}
-      style={{
-        perspective: 1000,
-        transformStyle: "preserve-3d"
+        y: { type: "spring", stiffness: 320, damping: 24 },
+        opacity: { duration: 0.25 }
       }}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      className={`group relative rounded-[32px] p-6 sm:p-8 backdrop-blur-2xl transition-all duration-300 flex flex-col justify-between overflow-hidden ${cardBg}`}
+      onMouseLeave={() => setIsHovered(false)}
+      className={`group relative rounded-[32px] p-6 sm:p-8 backdrop-blur-3xl flex flex-col justify-between overflow-hidden ${cardBg}`}
     >
       {/* Specular Spotlight Proximity Radial Glow */}
       <div
         className="pointer-events-none absolute -inset-px rounded-[32px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
-          background: `radial-gradient(650px circle at ${mousePos.x}px ${mousePos.y}px, ${isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.04)'
-            }, transparent 65%)`
+          background: `radial-gradient(650px circle at ${mousePos.x}px ${mousePos.y}px, ${
+            isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.035)'
+          }, transparent 65%)`
         }}
       />
 
@@ -369,7 +346,7 @@ function ProjectCard({
 
         {/* Project Context & Title */}
         <div className="space-y-1.5 mb-5">
-          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
             {project.context}
           </p>
           <h3 className={`text-xl sm:text-2xl font-black tracking-tight leading-snug ${isDark ? "text-white" : "text-neutral-900"}`}>
@@ -405,7 +382,7 @@ function ProjectCard({
               whileTap={{ scale: 0.9 }}
               onClick={() => onOpenModal(project, activeImgIdx)}
               title="Expand Full Preview"
-              className="p-1 rounded text-neutral-400 hover:text-white transition-colors"
+              className={`p-1 rounded transition-colors ${isDark ? "text-neutral-400 hover:text-white" : "text-neutral-500 hover:text-neutral-900"}`}
             >
               <Maximize2 className="w-3.5 h-3.5" />
             </motion.button>
@@ -471,12 +448,12 @@ function ProjectCard({
         </div>
 
         {/* Project Summary */}
-        <p className={`text-sm font-medium leading-relaxed mb-6 ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
+        <p className={`text-sm font-medium leading-relaxed mb-6 ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
           {project.summary}
         </p>
 
         {/* Key Deliverables Highlights */}
-        <ul className={`space-y-2.5 text-xs sm:text-sm font-medium mb-7 ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
+        <ul className={`space-y-2.5 text-xs sm:text-sm font-medium mb-7 ${isDark ? "text-neutral-300" : "text-neutral-800"}`}>
           {project.deliverables.slice(0, 2).map((item, i) => (
             <li key={i} className="flex items-start gap-2.5">
               <span
@@ -701,9 +678,9 @@ function AiSentimentPlayground({ isDark }: { isDark: boolean }) {
       <div className="grid sm:grid-cols-3 gap-4">
         {/* Sentiment Verdict */}
         <div className={`p-4 rounded-2xl border ${
-          isDark ? "bg-white/[0.04] border-white/10" : "bg-neutral-50 border-neutral-200/80"
+          isDark ? "bg-white/[0.04] border-white/10" : "bg-white border-neutral-200/90 shadow-2xs"
         }`}>
-          <span className={`text-[11px] font-bold uppercase tracking-wider block mb-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+          <span className={`text-[11px] font-bold uppercase tracking-wider block mb-1 ${isDark ? "text-neutral-400" : "text-neutral-700"}`}>
             Predicted Sentiment
           </span>
           <div className="flex items-center gap-2 mt-1">
@@ -716,10 +693,10 @@ function AiSentimentPlayground({ isDark }: { isDark: boolean }) {
             }`} />
             <span className={`text-base font-black ${
               sentiment === "Positive"
-                ? "text-emerald-500"
+                ? isDark ? "text-emerald-400" : "text-emerald-700"
                 : sentiment === "Negative"
-                ? "text-rose-500"
-                : "text-sky-500"
+                ? isDark ? "text-rose-400" : "text-rose-700"
+                : isDark ? "text-sky-400" : "text-sky-700"
             }`}>
               {sentiment} ({confidence}%)
             </span>
@@ -728,18 +705,18 @@ function AiSentimentPlayground({ isDark }: { isDark: boolean }) {
 
         {/* Probability Distribution */}
         <div className={`sm:col-span-2 p-4 rounded-2xl border ${
-          isDark ? "bg-white/[0.04] border-white/10" : "bg-neutral-50 border-neutral-200/80"
+          isDark ? "bg-white/[0.04] border-white/10" : "bg-white border-neutral-200/90 shadow-2xs"
         }`}>
-          <span className={`text-[11px] font-bold uppercase tracking-wider block mb-2 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+          <span className={`text-[11px] font-bold uppercase tracking-wider block mb-2 ${isDark ? "text-neutral-400" : "text-neutral-700"}`}>
             Confidence Distribution
           </span>
           <div className="space-y-2">
             <div>
               <div className="flex justify-between text-[11px] font-bold mb-1">
-                <span className="text-emerald-500">Positive</span>
-                <span className={isDark ? "text-neutral-300" : "text-neutral-700"}>{posPct}%</span>
+                <span className={isDark ? "text-emerald-400" : "text-emerald-700 font-extrabold"}>Positive</span>
+                <span className={isDark ? "text-neutral-300" : "text-neutral-900 font-extrabold"}>{posPct}%</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-neutral-500/20 overflow-hidden">
+              <div className={`w-full h-2 rounded-full overflow-hidden ${isDark ? "bg-white/10" : "bg-neutral-200"}`}>
                 <motion.div
                   className="h-full bg-emerald-500 rounded-full"
                   initial={{ width: 0 }}
@@ -751,10 +728,10 @@ function AiSentimentPlayground({ isDark }: { isDark: boolean }) {
 
             <div>
               <div className="flex justify-between text-[11px] font-bold mb-1">
-                <span className="text-sky-500">Neutral</span>
-                <span className={isDark ? "text-neutral-300" : "text-neutral-700"}>{neuPct}%</span>
+                <span className={isDark ? "text-sky-400" : "text-sky-700 font-extrabold"}>Neutral</span>
+                <span className={isDark ? "text-neutral-300" : "text-neutral-900 font-extrabold"}>{neuPct}%</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-neutral-500/20 overflow-hidden">
+              <div className={`w-full h-2 rounded-full overflow-hidden ${isDark ? "bg-white/10" : "bg-neutral-200"}`}>
                 <motion.div
                   className="h-full bg-sky-500 rounded-full"
                   initial={{ width: 0 }}
@@ -766,10 +743,10 @@ function AiSentimentPlayground({ isDark }: { isDark: boolean }) {
 
             <div>
               <div className="flex justify-between text-[11px] font-bold mb-1">
-                <span className="text-rose-500">Negative</span>
-                <span className={isDark ? "text-neutral-300" : "text-neutral-700"}>{negPct}%</span>
+                <span className={isDark ? "text-rose-400" : "text-rose-700 font-extrabold"}>Negative</span>
+                <span className={isDark ? "text-neutral-300" : "text-neutral-900 font-extrabold"}>{negPct}%</span>
               </div>
-              <div className="w-full h-2 rounded-full bg-neutral-500/20 overflow-hidden">
+              <div className={`w-full h-2 rounded-full overflow-hidden ${isDark ? "bg-white/10" : "bg-neutral-200"}`}>
                 <motion.div
                   className="h-full bg-rose-500 rounded-full"
                   initial={{ width: 0 }}
@@ -1261,10 +1238,10 @@ export default function App() {
         <section id="projects" className="space-y-4">
           <div className="flex items-center justify-between px-2">
             <div>
-              <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
+              <h2 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? "text-white" : "text-neutral-950"}`}>
                 Machine Learning & Systems Showcase
               </h2>
-              <p className="text-xs sm:text-sm font-medium mt-0.5 text-neutral-400">
+              <p className={`text-xs sm:text-sm font-medium mt-0.5 ${isDark ? "text-neutral-400" : "text-neutral-700"}`}>
                 Applied research, deep learning classification pipelines, and full-stack telemetry deployments.
               </p>
             </div>
