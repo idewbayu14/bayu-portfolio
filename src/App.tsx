@@ -357,9 +357,9 @@ function ProjectCard({
               }`}
           >
             <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 inline-block transition-transform group-hover:scale-110" />
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 inline-block transition-transform group-hover:scale-110" />
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 inline-block transition-transform group-hover:scale-110" />
+              <span className={`w-2.5 h-2.5 rounded-full inline-block ${isDark ? "bg-white/20" : "bg-neutral-300"}`} />
+              <span className={`w-2.5 h-2.5 rounded-full inline-block ${isDark ? "bg-white/20" : "bg-neutral-300"}`} />
+              <span className={`w-2.5 h-2.5 rounded-full inline-block ${isDark ? "bg-white/20" : "bg-neutral-300"}`} />
             </div>
 
             <div
@@ -528,7 +528,6 @@ function ProjectCard({
                   : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
                 }`}
             >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span>Launch App</span>
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
             </motion.a>
@@ -542,7 +541,6 @@ function ProjectCard({
                   : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
                 }`}
             >
-              <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
               <span>View Research Details</span>
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
             </motion.button>
@@ -567,7 +565,7 @@ function ProjectCard({
                 title="Copy Project Link"
               >
                 {copiedId === project.id ? (
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
+                  <Check className={`w-3.5 h-3.5 ${isDark ? "text-white" : "text-neutral-950"}`} />
                 ) : (
                   <Copy className="w-3.5 h-3.5" />
                 )}
@@ -660,8 +658,8 @@ function FloatingDock({
           onClick={onToggleTheme}
           className={`p-1.5 rounded-full transition-colors ${
             isDark
-              ? "hover:bg-white/15 text-amber-300"
-              : "hover:bg-neutral-200 text-neutral-700"
+              ? "hover:bg-white/15 text-neutral-300 hover:text-white"
+              : "hover:bg-neutral-200 text-neutral-700 hover:text-neutral-950"
           }`}
           title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
@@ -696,7 +694,7 @@ function ToastNotification({
                 : "bg-white/95 border-neutral-200 text-neutral-900 shadow-neutral-950/20"
               }`}
           >
-            <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
+            <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${isDark ? "bg-white/10 text-white" : "bg-neutral-900 text-white"}`}>
               <Check className="w-3.5 h-3.5 stroke-[3]" />
             </span>
             <span className="text-xs font-bold tracking-tight whitespace-nowrap">{message}</span>
@@ -806,34 +804,23 @@ export default function App() {
 
   return (
     <div
-      className={`min-h-screen relative overflow-x-hidden transition-colors duration-500 font-sans ${isDark ? "bg-[#0A0A0C] text-neutral-100" : "bg-[#F4F4F7] text-neutral-900"
+      className={`min-h-screen relative overflow-x-hidden transition-colors duration-500 font-sans ${isDark ? "bg-[#09090b] text-neutral-100" : "bg-[#f8f9fa] text-neutral-900"
         }`}
     >
-      {/* Scroll Depth Progress Bar */}
+      {/* Minimalist Scroll Depth Progress Bar */}
       <motion.div
         style={{ scaleX }}
-        className="fixed top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-emerald-500 via-cyan-400 to-indigo-500 origin-left z-50 pointer-events-none"
+        className={`fixed top-0 left-0 right-0 h-[2px] origin-left z-50 pointer-events-none ${
+          isDark ? "bg-white/85" : "bg-neutral-900"
+        }`}
       />
 
-      {/* Ambient Drifting Liquid Aurora Mesh */}
+      {/* Minimalist Subtle Ambient Vignette (Zero Rainbow, Zero Gradients) */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
         <div
-          className={`liquid-orb-a absolute -top-28 left-[10%] w-[44rem] h-[44rem] rounded-full blur-[140px] transition-colors duration-700 ${isDark
-              ? "bg-gradient-to-br from-indigo-600/25 via-sky-500/15 to-transparent"
-              : "bg-gradient-to-br from-sky-300/60 via-blue-200/40 to-transparent"
-            }`}
-        />
-        <div
-          className={`liquid-orb-b absolute top-[35%] -right-24 w-[48rem] h-[48rem] rounded-full blur-[150px] transition-colors duration-700 ${isDark
-              ? "bg-gradient-to-tl from-emerald-500/20 via-teal-500/15 to-transparent"
-              : "bg-gradient-to-tl from-emerald-300/50 via-teal-200/35 to-transparent"
-            }`}
-        />
-        <div
-          className={`liquid-orb-c absolute -bottom-32 left-[20%] w-[42rem] h-[42rem] rounded-full blur-[130px] transition-colors duration-700 ${isDark
-              ? "bg-gradient-to-tr from-cyan-600/15 via-indigo-500/15 to-transparent"
-              : "bg-gradient-to-tr from-indigo-200/45 via-purple-100/35 to-transparent"
-            }`}
+          className={`absolute -top-32 left-1/2 -translate-x-1/2 w-[54rem] h-[36rem] rounded-full blur-[140px] pointer-events-none transition-colors duration-700 ${
+            isDark ? "bg-white/[0.025]" : "bg-neutral-950/[0.02]"
+          }`}
         />
       </div>
 
@@ -843,8 +830,8 @@ export default function App() {
           className={`max-w-5xl mx-auto rounded-full px-3.5 sm:px-5 py-2.5 flex items-center justify-between backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
         >
           {/* Brand & Status Indicator */}
-          <div className="flex items-center gap-2.5 pl-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.7)]" />
+          <div className="flex items-center gap-2 pl-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
             <span className="font-black text-sm tracking-tight">
               {PROFILE.shortName}
             </span>
@@ -896,7 +883,7 @@ export default function App() {
               className={`p-2 rounded-full transition-all ${buttonStyle}`}
               title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
             >
-              {isDark ? <Sun className="w-4 h-4 text-amber-300" /> : <Moon className="w-4 h-4 text-neutral-700" />}
+              {isDark ? <Sun className="w-4 h-4 text-neutral-300 hover:text-white" /> : <Moon className="w-4 h-4 text-neutral-700 hover:text-neutral-950" />}
             </motion.button>
             <motion.a
               whileHover={{ scale: 1.04 }}
@@ -930,7 +917,9 @@ export default function App() {
 
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
             <div className="max-w-2xl space-y-4">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border transition-colors ${
+                isDark ? "bg-white/[0.05] border-white/10 text-neutral-300" : "bg-neutral-100 border-neutral-200 text-neutral-700"
+              }`}>
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span>{PROFILE.status}</span>
               </div>
@@ -1019,7 +1008,7 @@ export default function App() {
                     }`}
                 >
                   <div className="flex items-center gap-2 mb-1.5">
-                    <Icon className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <Icon className={`w-4 h-4 shrink-0 ${isDark ? "text-neutral-300" : "text-neutral-700"}`} />
                     <h2 className={`text-xs font-black uppercase tracking-wider ${isDark ? "text-neutral-200" : "text-neutral-800"}`}>
                       {pillar.title}
                     </h2>
@@ -1095,7 +1084,7 @@ export default function App() {
           className={`rounded-[32px] p-7 sm:p-9 backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
         >
           <div className="mb-6">
-            <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-emerald-500">
+            <div className={`flex items-center gap-2 text-xs font-black uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
               <Cpu className="w-3.5 h-3.5" />
               <span>Technical Skills & Methodologies</span>
             </div>
@@ -1281,8 +1270,8 @@ export default function App() {
                         whileTap={{ scale: 0.95 }}
                         onClick={() => setModalImgIdx(i)}
                         className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 w-24 sm:w-28 h-16 bg-neutral-950 flex items-center justify-center p-1 ${modalImgIdx === i
-                            ? "border-emerald-500 scale-105 shadow-md"
-                            : "border-transparent opacity-60 hover:opacity-100"
+                            ? isDark ? "border-white scale-105 shadow-md" : "border-neutral-900 scale-105 shadow-md"
+                            : "border-transparent opacity-50 hover:opacity-100"
                           }`}
                       >
                         <img src={img.url} alt={img.caption} className="max-w-full max-h-full object-contain" />
@@ -1296,7 +1285,7 @@ export default function App() {
               <div className="space-y-4 text-xs sm:text-sm">
                 <div>
                   <div className={`text-xs font-black uppercase tracking-wider mb-2 flex items-center gap-1.5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                    <Layers className="w-3.5 h-3.5 text-emerald-500" />
+                    <Layers className={`w-3.5 h-3.5 ${isDark ? "text-neutral-300" : "text-neutral-700"}`} />
                     <span>System Architecture Flow</span>
                   </div>
                   <p
@@ -1309,7 +1298,7 @@ export default function App() {
 
                 <div>
                   <div className={`text-xs font-black uppercase tracking-wider mb-2 flex items-center gap-1.5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    <ShieldCheck className={`w-3.5 h-3.5 ${isDark ? "text-neutral-300" : "text-neutral-700"}`} />
                     <span>Key Engineering Deliverables</span>
                   </div>
                   <ul className={`space-y-2.5 font-medium ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
