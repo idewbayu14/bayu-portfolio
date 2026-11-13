@@ -829,13 +829,27 @@ export default function App() {
         <div
           className={`max-w-5xl mx-auto rounded-full px-3.5 sm:px-5 py-2.5 flex items-center justify-between backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
         >
-          {/* Brand & Status Indicator */}
-          <div className="flex items-center gap-2 pl-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="font-black text-sm tracking-tight">
-              {PROFILE.shortName}
-            </span>
-          </div>
+          {/* Brand Mark & Monogram Logo */}
+          <a href="#overview" className="flex items-center gap-2.5 pl-1.5 group/logo" aria-label="Bayu Satria Home">
+            <div className={`w-7 h-7 rounded-xl flex items-center justify-center p-1 border transition-all duration-300 ${
+              isDark ? "bg-white/[0.08] border-white/15 group-hover/logo:border-white/30" : "bg-neutral-900 border-neutral-800 shadow-xs"
+            }`}>
+              <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
+                <line x1="21" y1="16" x2="21" y2="51" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" />
+                <path d="M 21 16 H 32.5 C 37.194 16 41 19.806 41 24.5 C 41 29.194 37.194 33 32.5 33 H 21" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M 21 33 H 33.5 C 38.747 33 43 37.253 43 42.5 C 43 47.747 38.747 51 33.5 51 H 21" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="33" cy="33" r="2.2" fill="#FFFFFF" />
+              </svg>
+            </div>
+            <div className="flex flex-col">
+              <span className={`font-black text-sm tracking-tight leading-none ${isDark ? "text-white" : "text-neutral-950"}`}>
+                {PROFILE.shortName}
+              </span>
+              <span className={`text-[10px] font-mono font-bold leading-none mt-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+                ML Engineer
+              </span>
+            </div>
+          </a>
 
           {/* Segmented Filter Bar with Framer Motion Sliding Pill */}
           <div
