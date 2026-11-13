@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F172A" />
+      <stop offset="100%" stop-color="#020617" />
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="50%" stop-color="#06B6D4" />
+      <stop offset="100%" stop-color="#3B82F6" />
+    </linearGradient>
+  </defs>
+  <!-- Rounded squircle badge -->
+  <rect width="64" height="64" rx="16" fill="url(#bg)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+  <!-- Neural Machine Learning Network symbol -->
+  <g transform="translate(14, 14)">
+    <path d="M6 18 L18 8 L30 18 L18 28 Z" fill="none" stroke="url(#glow)" stroke-width="2.4" stroke-linejoin="round" />
+    <path d="M18 8 L18 28" stroke="url(#glow)" stroke-width="1.8" stroke-dasharray="2 2" />
+    <path d="M6 18 L30 18" stroke="url(#glow)" stroke-width="1.8" />
+    <!-- Outer nodes -->
+    <circle cx="18" cy="8" r="3.2" fill="#10B981" />
+    <circle cx="30" cy="18" r="3.2" fill="#06B6D4" />
+    <circle cx="18" cy="28" r="3.2" fill="#3B82F6" />
+    <circle cx="6" cy="18" r="3.2" fill="#10B981" />
+    <!-- Core intelligent center node -->
+    <circle cx="18" cy="18" r="4.2" fill="#FFFFFF" />
+    <circle cx="18" cy="18" r="2.2" fill="#10B981" />
+  </g>
+</svg>

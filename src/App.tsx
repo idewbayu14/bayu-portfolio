@@ -186,6 +186,14 @@ const PROJECTS: Project[] = [
         caption: "Interactive Nationwide Telemetry Map of Operational Solar Power Plants"
       },
       {
+        url: "/projects/bysense-correlation.jpg",
+        caption: "Dual-Axis Solar and PV Correlation Analytics with Open-Meteo Weather Telemetry"
+      },
+      {
+        url: "/projects/bysense-station-telemetry.jpg",
+        caption: "Station Detail View: Live PV Generation, Battery SoC, and Building Load Analytics"
+      },
+      {
         url: "/projects/bysense-metrics.jpg",
         caption: "Real-Time Generation Telemetry, Daily Yield, and Dynamic Energy Flow"
       },
