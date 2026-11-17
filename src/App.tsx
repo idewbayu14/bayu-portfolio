@@ -528,7 +528,7 @@ export default function App() {
       : PROJECTS.filter((p) => p.category === activeCategory);
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-300 relative pb-32 ${isDark
+    <div className={`min-h-screen font-sans transition-colors duration-300 relative pb-36 sm:pb-32 ${isDark
       ? "bg-[#060608] text-[#F5F5F7] selection:bg-white/20 selection:text-white"
       : "bg-[#F5F5F7] text-[#1D1D1F] selection:bg-black/10 selection:text-black"
       }`}>
