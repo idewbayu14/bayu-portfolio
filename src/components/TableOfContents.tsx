@@ -91,14 +91,14 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ isDark }) => {
                   isActive
                     ? isDark
                       ? "bg-white shadow-[0_0_14px_rgba(255,255,255,0.85)] scale-y-125"
-                      : "bg-zinc-950 shadow-[0_0_10px_rgba(0,0,0,0.35)] scale-y-125"
+                      : "bg-black shadow-[0_0_10px_rgba(0,0,0,0.4)] scale-y-125"
                     : isHovered
                     ? isDark
                       ? "bg-zinc-300"
-                      : "bg-zinc-600"
+                      : "bg-zinc-800"
                     : isDark
                     ? "bg-zinc-700/60 group-hover/item:bg-zinc-400"
-                    : "bg-zinc-300 group-hover/item:bg-zinc-400"
+                    : "bg-zinc-400/80 group-hover/item:bg-zinc-800"
                 }`}
               />
 
@@ -127,7 +127,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ isDark }) => {
 
       {/* Subtle Index Number at bottom */}
       <div className={`mt-3 pl-1 text-[10px] font-mono font-bold tracking-widest ${
-        isDark ? "text-zinc-600" : "text-zinc-400"
+        isDark ? "text-zinc-600" : "text-zinc-500"
       }`}>
         {String(TOC_ITEMS.findIndex((t) => t.id === activeId) + 1).padStart(2, "0")} / {String(TOC_ITEMS.length).padStart(2, "0")}
       </div>

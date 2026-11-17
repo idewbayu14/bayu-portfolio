@@ -1472,17 +1472,13 @@ export default function App() {
         </section>
       </main>
 
-      {/* FLOATING ACTION BOTTOM DOCK (Apple Crystalline Glass Style) */}
+      {/* FLOATING ACTION BOTTOM DOCK (Apple Dynamic Island Style) */}
       <aside aria-label="Quick Action Dock" className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-full backdrop-blur-2xl border shadow-2xl flex items-center gap-2 sm:gap-3 text-xs transition-colors duration-200 ${
         isDark
           ? "bg-zinc-900/90 border-white/15 text-zinc-200 shadow-black/80 shadow-specular-dark"
-          : "bg-white/95 border-black/10 text-zinc-800 shadow-zinc-300/60"
+          : "bg-[#18181B]/95 border-white/15 text-zinc-200 shadow-2xl shadow-zinc-950/30"
       }`}>
-        <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full hidden sm:inline ${
-          isDark
-            ? "text-zinc-300 bg-zinc-800 border border-white/10"
-            : "text-zinc-700 bg-zinc-100 border border-black/10"
-        }`}>
+        <span className="text-[11px] font-bold px-2 py-0.5 rounded-full hidden sm:inline text-zinc-300 bg-zinc-800 border border-white/10">
           FAST ACCESS
         </span>
 
@@ -1492,11 +1488,7 @@ export default function App() {
           rel="noopener noreferrer"
           onClick={() => sounds.playClick()}
           onMouseEnter={() => sounds.playHover()}
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors ${
-            isDark
-              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
-              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-800"
-          }`}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
         >
           <span>BySense</span>
           <ArrowUpRight className="w-3 h-3 text-zinc-400" />
@@ -1508,11 +1500,7 @@ export default function App() {
           rel="noopener noreferrer"
           onClick={() => sounds.playClick()}
           onMouseEnter={() => sounds.playHover()}
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors ${
-            isDark
-              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
-              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-800"
-          }`}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
         >
           <span>BRIN</span>
           <ArrowUpRight className="w-3 h-3 text-zinc-400" />
@@ -1524,11 +1512,7 @@ export default function App() {
           rel="noopener noreferrer"
           onClick={() => sounds.playClick()}
           onMouseEnter={() => sounds.playHover()}
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors ${
-            isDark
-              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
-              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-800"
-          }`}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
         >
           <span>NutriMood</span>
           <ArrowUpRight className="w-3 h-3 text-zinc-400" />
@@ -1540,28 +1524,18 @@ export default function App() {
           rel="noopener noreferrer"
           onClick={() => sounds.playClick()}
           onMouseEnter={() => sounds.playHover()}
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors ${
-            isDark
-              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
-              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-800"
-          }`}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
         >
           <span>CBI</span>
           <ArrowUpRight className="w-3 h-3 text-zinc-400" />
         </a>
 
-        <div className={`w-px h-4 mx-0.5 ${
-          isDark ? "bg-zinc-700" : "bg-zinc-300"
-        }`} />
+        <div className="w-px h-4 mx-0.5 bg-zinc-700" />
 
         <button
           onClick={handleCopyEmail}
           onMouseEnter={() => sounds.playHover()}
-          className={`flex items-center gap-1 px-3 py-1 rounded-full font-bold transition-all active:scale-95 ${
-            isDark
-              ? "bg-white hover:bg-zinc-200 text-black shadow-xs"
-              : "bg-zinc-900 hover:bg-black text-white shadow-xs"
-          }`}
+          className="flex items-center gap-1 px-3 py-1 rounded-full font-bold transition-all active:scale-95 bg-white hover:bg-zinc-200 text-black shadow-xs"
         >
           {copiedEmail ? <Check className="w-3 h-3 text-emerald-600" /> : <Mail className="w-3 h-3" />}
           <span>{copiedEmail ? "Copied" : "Email"}</span>
@@ -1572,11 +1546,7 @@ export default function App() {
           download="CV_Idew_Bayu.pdf"
           onClick={() => sounds.playClick()}
           onMouseEnter={() => sounds.playHover()}
-          className={`p-1.5 rounded-full transition-colors ${
-            isDark
-              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white"
-              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
-          }`}
+          className="p-1.5 rounded-full transition-colors bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white"
           title="Download CV (PDF)"
         >
           <FileDown className="w-3.5 h-3.5 text-zinc-400" />
@@ -1584,11 +1554,7 @@ export default function App() {
 
         <button
           onClick={handleToggleSound}
-          className={`p-1.5 rounded-full transition-colors ${
-            isDark
-              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white"
-              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
-          }`}
+          className="p-1.5 rounded-full transition-colors bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white"
           title={soundEnabled ? "Mute Interaction Sound" : "Enable Interaction Sound"}
         >
           {soundEnabled ? (
