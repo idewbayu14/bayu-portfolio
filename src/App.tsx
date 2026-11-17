@@ -468,8 +468,38 @@ export default function App() {
     project: Project;
     index: number;
   } | null>(null);
-  const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
+  const [selectedCredential, setSelectedCredential] = useState<{
+    url: string;
+    title: string;
+    subtitle: string;
+    badge: string;
+    caption: string;
+  } | null>(null);
   const [currentTime, setCurrentTime] = useState("");
+
+  // Lock background body scroll when any lightbox modal is open
+  useEffect(() => {
+    if (selectedImage || selectedCredential) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedImage, selectedCredential]);
+
+  // Handle escape key to dismiss modals
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedImage(null);
+        setSelectedCredential(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   useEffect(() => {
     if (isDark) {
@@ -537,10 +567,15 @@ export default function App() {
         }`} />
 
       {/* TOP NAVIGATION BAR (Apple Frosted Glass) */}
-      <header className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-colors duration-200 ${isDark
-        ? "bg-[#060608]/80 border-white/[0.08]"
-        : "bg-[#F5F5F7]/85 border-black/[0.08] shadow-xs"
-        }`}>
+      <motion.header
+        initial={{ opacity: 0, y: -16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-colors duration-200 ${isDark
+          ? "bg-[#060608]/80 border-white/[0.08]"
+          : "bg-[#F5F5F7]/85 border-black/[0.08] shadow-xs"
+          }`}
+      >
         <div className="max-w-6xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <a
             href="#"
@@ -681,7 +716,7 @@ export default function App() {
             </a>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* LEFT SIDE TABLE OF CONTENTS (Poor Charlie's Almanack / Stripe Press style) */}
       <TableOfContents isDark={isDark} />
@@ -690,7 +725,13 @@ export default function App() {
       <main className="relative z-10 max-w-5xl 2xl:max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 xl:pl-16 2xl:px-8 pt-8 sm:pt-14 space-y-20 sm:space-y-28">
 
         {/* HERO SECTION WITH 3D DATA LATTICE (Konsep 1) */}
-        <section id="overview" className="relative scroll-mt-28">
+        <motion.section
+          id="overview"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="relative scroll-mt-28"
+        >
           {/* Konsep 1: 3D Interactive Data Lattice Canvas Floating Behind Hero */}
           <div className="absolute top-0 right-0 w-[360px] h-[340px] sm:w-[500px] sm:h-[460px] lg:w-[620px] lg:h-[500px] pointer-events-none -z-10 opacity-70">
             <DataLattice3D isDark={isDark} className="w-full h-full" />
@@ -699,69 +740,85 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-8 space-y-6">
-              <div className={`inline-flex flex-wrap items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-2xl sm:rounded-full text-xs border backdrop-blur-md transition-colors ${
-                isDark
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.15 }}
+                className={`inline-flex flex-wrap items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-1.5 rounded-2xl sm:rounded-full text-xs border backdrop-blur-md transition-colors ${isDark
                   ? "bg-zinc-900/80 border-white/10 text-zinc-300 shadow-specular-dark"
                   : "bg-zinc-100/90 border-zinc-300/80 text-zinc-800 shadow-2xs"
-              }`}>
-                <span className={`flex items-center gap-1.5 font-bold ${
-                  isDark ? "text-white" : "text-zinc-900"
-                }`}>
+                  }`}
+              >
+                <span className={`flex items-center gap-1.5 font-bold ${isDark ? "text-white" : "text-zinc-900"
+                  }`}>
                   <ShieldCheck className={`w-3.5 h-3.5 ${isDark ? "text-zinc-400" : "text-zinc-700"}`} />
                   BNSP CADS Certified
                 </span>
                 <span className={isDark ? "text-zinc-600" : "text-zinc-400"}>|</span>
                 <span className={isDark ? "text-zinc-300" : "text-zinc-700 font-medium"}>Informatics Engineering (UNIKOM)</span>
                 <span className={isDark ? "text-zinc-600" : "text-zinc-400"}>|</span>
-                <span className={`flex items-center gap-1.5 font-bold ${
-                  isDark ? "text-emerald-400" : "text-emerald-700"
-                }`}>
-                  <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                    isDark ? "bg-emerald-400" : "bg-emerald-600"
-                  }`} />
+                <span className={`flex items-center gap-1.5 font-bold ${isDark ? "text-emerald-400" : "text-emerald-700"
+                  }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${isDark ? "bg-emerald-400" : "bg-emerald-600"
+                    }`} />
                   Available for Full-Time Roles
                 </span>
-              </div>
+              </motion.div>
 
               {/* Headline */}
-              <div className="space-y-2">
-                <h1 className={`text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight ${
-                  isDark ? "text-white" : "text-zinc-900"
-                }`}>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.25 }}
+                className="space-y-2"
+              >
+                <h1 className={`text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight ${isDark ? "text-white" : "text-zinc-900"
+                  }`}>
                   {PROFILE.name}
                 </h1>
-                <p className={`text-base sm:text-xl font-bold tracking-tight ${
-                  isDark ? "text-zinc-400" : "text-zinc-600"
-                }`}>
+                <p className={`text-base sm:text-xl font-bold tracking-tight ${isDark ? "text-zinc-400" : "text-zinc-600"
+                  }`}>
                   {PROFILE.role}
                 </p>
-              </div>
+              </motion.div>
 
               {/* The Core Value Proposition Hook */}
-              <p className={`text-base sm:text-lg font-medium leading-relaxed border-l-2 pl-4 py-0.5 ${
-                isDark
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.35 }}
+                className={`text-base sm:text-lg font-medium leading-relaxed border-l-2 pl-4 py-0.5 ${isDark
                   ? "text-zinc-200 border-zinc-500"
                   : "text-zinc-800 border-zinc-400"
-              }`}>
+                  }`}
+              >
                 "{PROFILE.valueHook}"
-              </p>
+              </motion.p>
 
               {/* Bio summary */}
-              <p className={`text-sm sm:text-base max-w-2xl leading-relaxed ${
-                isDark ? "text-zinc-400" : "text-zinc-600"
-              }`}>
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.42 }}
+                className={`text-sm sm:text-base max-w-2xl leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"
+                  }`}
+              >
                 Graduated with an Informatics Engineering degree from Universitas
                 Komputer Indonesia. Proven track record building real-time IoT
                 telemetry dashboards at Batari Energy, automated computer vision
                 OCR pipelines at Zoom Petcare, and deep learning sentiment
                 inference APIs at BRIN.
-              </p>
+              </motion.p>
 
               {/* Target Roles Pill List */}
-              <div className="pt-1">
-                <span className={`text-xs uppercase tracking-wider font-extrabold block mb-2.5 ${
-                  isDark ? "text-zinc-500" : "text-zinc-500"
-                }`}>
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.5 }}
+                className="pt-1"
+              >
+                <span className={`text-xs uppercase tracking-wider font-extrabold block mb-2.5 ${isDark ? "text-zinc-500" : "text-zinc-500"
+                  }`}>
                   Target Roles
                 </span>
                 <div className="flex flex-wrap gap-2">
@@ -769,29 +826,32 @@ export default function App() {
                     <span
                       key={role}
                       onMouseEnter={() => sounds.playHover()}
-                      className={`px-3 py-1 text-xs font-semibold rounded-full border transition-colors ${
-                        isDark
-                          ? "bg-zinc-900/80 text-zinc-300 border-white/10 hover:border-zinc-500 shadow-specular-dark"
-                          : "bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 border-zinc-200/90 shadow-2xs"
-                      }`}
+                      className={`px-3 py-1 text-xs font-semibold rounded-full border transition-colors ${isDark
+                        ? "bg-zinc-900/80 text-zinc-300 border-white/10 hover:border-zinc-500 shadow-specular-dark"
+                        : "bg-zinc-100 hover:bg-zinc-200/80 text-zinc-800 border-zinc-200/90 shadow-2xs"
+                        }`}
                     >
                       {role}
                     </span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Primary Call to Actions */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.58 }}
+                className="flex flex-wrap items-center gap-3 pt-2"
+              >
                 <a
                   href="#projects"
                   onClick={() => sounds.playClick()}
                   onMouseEnter={() => sounds.playHover()}
-                  className={`min-h-[44px] px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 flex items-center gap-2 active:scale-95 ${
-                    isDark
-                      ? "bg-white hover:bg-zinc-200 text-black shadow-lg shadow-white/5"
-                      : "bg-zinc-900 hover:bg-black text-white shadow-sm"
-                  }`}
+                  className={`min-h-[44px] px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 flex items-center gap-2 active:scale-95 ${isDark
+                    ? "bg-white hover:bg-zinc-200 text-black shadow-lg shadow-white/5"
+                    : "bg-zinc-900 hover:bg-black text-white shadow-sm"
+                    }`}
                 >
                   <span>Explore Featured Systems</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -802,11 +862,10 @@ export default function App() {
                   download="CV_Idew_Bayu.pdf"
                   onClick={() => sounds.playClick()}
                   onMouseEnter={() => sounds.playHover()}
-                  className={`min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 flex items-center gap-2 border ${
-                    isDark
-                      ? "bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 border-white/10 hover:border-zinc-500 shadow-specular-dark"
-                      : "bg-white hover:bg-zinc-50 text-zinc-900 border-zinc-300 hover:border-zinc-400 shadow-xs"
-                  }`}
+                  className={`min-h-[44px] px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 flex items-center gap-2 border ${isDark
+                    ? "bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 border-white/10 hover:border-zinc-500 shadow-specular-dark"
+                    : "bg-white hover:bg-zinc-50 text-zinc-900 border-zinc-300 hover:border-zinc-400 shadow-xs"
+                    }`}
                 >
                   <FileDown className={`w-4 h-4 ${isDark ? "text-zinc-400" : "text-zinc-700"}`} />
                   <span>Download CV</span>
@@ -819,11 +878,10 @@ export default function App() {
                     rel="noopener noreferrer"
                     onClick={() => sounds.playClick()}
                     onMouseEnter={() => sounds.playHover()}
-                    className={`min-h-[44px] min-w-[44px] flex items-center justify-center p-2.5 rounded-xl border transition-colors ${
-                      isDark
-                        ? "bg-zinc-900/90 border-white/10 hover:border-zinc-400 text-zinc-400 hover:text-white shadow-specular-dark"
-                        : "bg-white border-zinc-300 hover:border-zinc-500 text-zinc-700 hover:text-black shadow-xs"
-                    }`}
+                    className={`min-h-[44px] min-w-[44px] flex items-center justify-center p-2.5 rounded-xl border transition-colors ${isDark
+                      ? "bg-zinc-900/90 border-white/10 hover:border-zinc-400 text-zinc-400 hover:text-white shadow-specular-dark"
+                      : "bg-white border-zinc-300 hover:border-zinc-500 text-zinc-700 hover:text-black shadow-xs"
+                      }`}
                     title="GitHub Profile"
                   >
                     <GithubIcon className="w-4 h-4" />
@@ -834,21 +892,25 @@ export default function App() {
                     rel="noopener noreferrer"
                     onClick={() => sounds.playClick()}
                     onMouseEnter={() => sounds.playHover()}
-                    className={`min-h-[44px] min-w-[44px] flex items-center justify-center p-2.5 rounded-xl border transition-colors ${
-                      isDark
-                        ? "bg-zinc-900/90 border-white/10 hover:border-zinc-400 text-zinc-400 hover:text-white shadow-specular-dark"
-                        : "bg-white border-zinc-300 hover:border-zinc-500 text-zinc-700 hover:text-black shadow-xs"
-                    }`}
+                    className={`min-h-[44px] min-w-[44px] flex items-center justify-center p-2.5 rounded-xl border transition-colors ${isDark
+                      ? "bg-zinc-900/90 border-white/10 hover:border-zinc-400 text-zinc-400 hover:text-white shadow-specular-dark"
+                      : "bg-white border-zinc-300 hover:border-zinc-500 text-zinc-700 hover:text-black shadow-xs"
+                      }`}
                     title="LinkedIn Profile"
                   >
                     <LinkedinIcon className="w-4 h-4" />
                   </a>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Right Column: Konsep 2 (3D Perspective Tilt Card with Specular Glare) */}
-            <div className="lg:col-span-4 flex justify-center lg:justify-end">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="lg:col-span-4 flex justify-center lg:justify-end"
+            >
               <TiltCard
                 isDark={isDark}
                 maxTilt={9}
@@ -895,12 +957,19 @@ export default function App() {
                   </div>
                 </div>
               </TiltCard>
-            </div>
+            </motion.div>
           </div>
-        </section>
+        </motion.section>
 
         {/* SECTION: QUANTITATIVE IMPACT METRICS WITH 3D PERSPECTIVE TILT */}
-        <section id="impact" className="space-y-5 scroll-mt-28">
+        <motion.section
+          id="impact"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-5 scroll-mt-28"
+        >
           <div className={`flex items-center justify-between border-b pb-3 ${isDark ? "border-white/[0.08]" : "border-black/[0.08]"
             }`}>
             <div>
@@ -951,10 +1020,17 @@ export default function App() {
               </TiltCard>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* SECTION: FEATURED ENGINEERING PROJECTS */}
-        <section id="projects" className="space-y-6 scroll-mt-28">
+        <motion.section
+          id="projects"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-6 scroll-mt-28"
+        >
           <div className={`flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b pb-4 ${isDark ? "border-white/[0.08]" : "border-black/[0.08]"
             }`}>
             <div>
@@ -1230,10 +1306,17 @@ export default function App() {
               </div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* SECTION: SKILLS AND TOOLING */}
-        <section id="skills" className="space-y-6 scroll-mt-28">
+        <motion.section
+          id="skills"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-6 scroll-mt-28"
+        >
           <div className={`border-b pb-3 ${isDark ? "border-white/[0.08]" : "border-black/[0.08]"
             }`}>
             <span className="text-xs font-extrabold text-zinc-400 uppercase tracking-widest block">
@@ -1286,10 +1369,17 @@ export default function App() {
               </TiltCard>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* SECTION: EDUCATION AND CERTIFICATIONS */}
-        <section id="credentials" className="space-y-6 scroll-mt-28">
+        <motion.section
+          id="credentials"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-6 scroll-mt-28"
+        >
           <div className={`border-b pb-3 ${isDark ? "border-white/[0.08]" : "border-black/[0.08]"
             }`}>
             <span className="text-xs font-extrabold text-zinc-400 uppercase tracking-widest block">
@@ -1302,7 +1392,7 @@ export default function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
-            {/* Degree */}
+            {/* Degree with Graduation Convocation Photo */}
             <TiltCard isDark={isDark} maxTilt={4} className="h-full">
               <div className={`h-full rounded-2xl p-6 border backdrop-blur-md flex flex-col justify-between space-y-5 ${isDark
                 ? "bg-zinc-900/70 border-white/10 shadow-specular-dark"
@@ -1314,37 +1404,70 @@ export default function App() {
                       }`}>
                       Academic Degree
                     </span>
-                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${isDark ? "text-zinc-300 border-white/10" : "text-zinc-700 border-black/10"
-                      }`}>
-                      Graduated
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full text-amber-500 bg-amber-500/10 border border-amber-500/20 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                      Magna Cum Laude
                     </span>
                   </div>
+
                   <h3 className={`text-lg sm:text-xl font-extrabold tracking-tight ${isDark ? "text-white" : "text-zinc-900"
                     }`}>
                     Bachelor of Computer Science (S.Kom)
                   </h3>
+
                   <p className={`text-sm font-semibold ${isDark ? "text-zinc-300" : "text-zinc-700"
                     }`}>
                     Universitas Komputer Indonesia (UNIKOM) | Informatics Engineering
                   </p>
+
                   <p className={`text-xs leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"
                     }`}>
-                    Specialized in software systems engineering, distributed data pipelines, and applied machine learning architectures.
+                    Graduated with Magna Cum Laude academic distinction. Specialized in software systems engineering, data pipelines, and applied machine learning architectures.
                   </p>
                 </div>
 
-                <div className={`pt-4 border-t space-y-2 text-xs ${isDark ? "border-white/10" : "border-black/5"}`}>
-                  <div className="flex justify-between items-center">
-                    <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>Institution:</span>
-                    <span className={`font-semibold ${isDark ? "text-zinc-300" : "text-zinc-800"}`}>UNIKOM Bandung</span>
+                {/* Interactive Graduation Photo Thumbnail */}
+                <div
+                  onClick={() => {
+                    sounds.playChime(600, 840);
+                    setSelectedCredential({
+                      url: "/credentials/graduation-magna-cum-laude.jpg",
+                      title: "Bachelor of Computer Science (S.Kom) Convocation",
+                      subtitle: "Universitas Komputer Indonesia (UNIKOM) | Teknik Informatika",
+                      badge: "Magna Cum Laude",
+                      caption: "Informatics Engineering graduation convocation honored with Magna Cum Laude academic distinction."
+                    });
+                  }}
+                  onMouseEnter={() => sounds.playHover()}
+                  className={`group/grad cursor-pointer rounded-xl border overflow-hidden transition-all duration-300 relative ${isDark
+                    ? "bg-zinc-950 border-white/10 hover:border-white/30"
+                    : "bg-zinc-100 border-black/10 hover:border-black/30"
+                    }`}
+                >
+                  <div className="aspect-[16/9] overflow-hidden bg-black/10 relative flex items-center justify-center">
+                    <img
+                      src="/credentials/graduation-magna-cum-laude.jpg"
+                      alt="Bachelor of Computer Science (S.Kom) - Magna Cum Laude Convocation"
+                      className="w-full h-full object-cover object-center transition-transform duration-500 group-hover/grad:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/45 opacity-0 group-hover/grad:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="px-3.5 py-1.5 rounded-full bg-white text-black text-xs font-bold flex items-center gap-1.5 shadow-lg">
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Inspect Photo</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>Department:</span>
-                    <span className={`font-semibold ${isDark ? "text-zinc-300" : "text-zinc-800"}`}>Teknik Informatika</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>Core Competencies:</span>
-                    <span className={`font-semibold ${isDark ? "text-zinc-300" : "text-zinc-800"}`}>ML, OCR, Systems, IoT</span>
+
+                  <div className={`p-2.5 flex items-center justify-between text-xs font-bold border-t ${isDark ? "bg-zinc-950/80 border-white/5 text-zinc-300" : "bg-zinc-50 border-black/5 text-zinc-700"
+                    }`}>
+                    <div className="flex items-center gap-1.5 truncate">
+                      <ShieldCheck className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <span className="truncate">UNIKOM Convocation</span>
+                    </div>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${isDark ? "bg-zinc-800 text-zinc-300" : "bg-zinc-200/80 text-zinc-700"}`}>
+                      S.Kom (Informatika)
+                    </span>
                   </div>
                 </div>
               </div>
@@ -1388,7 +1511,13 @@ export default function App() {
                 <div
                   onClick={() => {
                     sounds.playChime(600, 840);
-                    setShowCertificateModal(true);
+                    setSelectedCredential({
+                      url: "/credentials/bnsp-cads-certificate.jpg",
+                      title: "Sertifikat Kompetensi Ilmuwan Data Madya",
+                      subtitle: "Badan Nasional Sertifikasi Profesi (BNSP) & LSP Informatika",
+                      badge: "BNSP CADS",
+                      caption: "No. Reg. TIK.317.00907 2026 | No. Sertifikat: 62015 2120 6 0038615 2026 | Valid 2026 - 2029"
+                    });
                   }}
                   onMouseEnter={() => sounds.playHover()}
                   className={`group/cert cursor-pointer rounded-xl border overflow-hidden transition-all duration-300 relative ${isDark
@@ -1425,7 +1554,7 @@ export default function App() {
               </div>
             </TiltCard>
           </div>
-        </section>
+        </motion.section>
 
         {/* FOOTER */}
         <section className={`pt-12 border-t text-xs ${isDark ? "border-white/[0.08] text-zinc-500" : "border-black/[0.08] text-zinc-500"
@@ -1470,11 +1599,17 @@ export default function App() {
       </main>
 
       {/* FLOATING ACTION BOTTOM DOCK (Apple Dynamic Island Style) */}
-      <aside aria-label="Quick Action Dock" className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-[calc(100vw-1.5rem)] overflow-x-auto no-scrollbar px-3 sm:px-3.5 py-2 rounded-full backdrop-blur-2xl border shadow-2xl flex items-center gap-2 sm:gap-3 text-xs transition-colors duration-200 ${
-        isDark
-          ? "bg-zinc-900/90 border-white/15 text-zinc-200 shadow-black/80 shadow-specular-dark"
-          : "bg-[#18181B]/95 border-white/15 text-zinc-200 shadow-2xl shadow-zinc-950/30"
-      }`}>
+      <motion.aside
+        aria-label="Quick Action Dock"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-[calc(100vw-1.5rem)] overflow-x-auto no-scrollbar px-3 sm:px-3.5 py-2 rounded-full backdrop-blur-2xl border shadow-2xl flex items-center gap-2 sm:gap-3 text-xs transition-colors duration-200 ${
+          isDark
+            ? "bg-zinc-900/90 border-white/15 text-zinc-200 shadow-black/80 shadow-specular-dark"
+            : "bg-[#18181B]/95 border-white/15 text-zinc-200 shadow-2xl shadow-zinc-950/30"
+        }`}
+      >
         <span className="text-[11px] font-bold px-2 py-0.5 rounded-full hidden sm:inline shrink-0 text-zinc-300 bg-zinc-800 border border-white/10">
           FAST ACCESS
         </span>
@@ -1565,7 +1700,7 @@ export default function App() {
             <VolumeX className="w-3.5 h-3.5 text-zinc-500" />
           )}
         </button>
-      </aside>
+      </motion.aside>
 
       {/* FULLSCREEN IMAGE LIGHTBOX MODAL */}
       <AnimatePresence>
@@ -1591,7 +1726,7 @@ export default function App() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Top Header */}
-              <div className={`flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 border-b ${isDark
+              <div className={`flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 border-b shrink-0 ${isDark
                 ? "bg-zinc-950 border-white/10"
                 : "bg-zinc-50 border-black/10"
                 }`}>
@@ -1629,11 +1764,11 @@ export default function App() {
               </div>
 
               {/* Modal Image Area */}
-              <div className="relative flex-1 bg-black flex items-center justify-center overflow-hidden min-h-[200px] sm:min-h-[350px] max-h-[55vh] sm:max-h-[65vh]">
+              <div className="relative flex-1 min-h-0 bg-black flex items-center justify-center overflow-hidden p-2 sm:p-4">
                 <img
                   src={selectedImage.project.images[selectedImage.index].url}
                   alt={selectedImage.project.images[selectedImage.index].title}
-                  className="max-h-full max-w-full object-contain"
+                  className="max-h-[58vh] sm:max-h-[68vh] w-auto max-w-full object-contain select-none"
                 />
 
                 {/* Left/Right Navigation Arrows */}
@@ -1678,7 +1813,7 @@ export default function App() {
               </div>
 
               {/* Modal Caption Footer */}
-              <div className={`p-3.5 sm:p-4 border-t text-xs leading-relaxed ${isDark
+              <div className={`p-3.5 sm:p-4 border-t text-xs leading-relaxed shrink-0 ${isDark
                 ? "bg-zinc-950 border-white/10 text-zinc-300"
                 : "bg-zinc-50 border-black/10 text-zinc-700"
                 }`}>
@@ -1693,9 +1828,9 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {/* BNSP CERTIFICATE LIGHTBOX MODAL */}
+      {/* BNSP CERTIFICATE & ACADEMIC CREDENTIALS LIGHTBOX MODAL */}
       <AnimatePresence>
-        {showCertificateModal && (
+        {selectedCredential && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -1703,74 +1838,73 @@ export default function App() {
             className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6"
             onClick={() => {
               sounds.playClick();
-              setShowCertificateModal(false);
+              setSelectedCredential(null);
             }}
           >
             <motion.div
               initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.96, opacity: 0 }}
-              className={`relative max-w-2xl w-full rounded-2xl border overflow-hidden shadow-2xl flex flex-col max-h-[92vh] ${isDark
+              className={`relative max-w-3xl w-full rounded-2xl border overflow-hidden shadow-2xl flex flex-col max-h-[92vh] ${isDark
                 ? "bg-zinc-900 border-white/15 shadow-specular-dark"
                 : "bg-white border-black/10"
                 }`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Top Header */}
-              <div className={`flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 border-b ${isDark
+              <div className={`flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 border-b shrink-0 ${isDark
                 ? "bg-zinc-950 border-white/10"
                 : "bg-zinc-50 border-black/10"
                 }`}>
                 <div className="flex items-center gap-2 truncate pr-2">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
-                    BNSP CADS
+                  <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                    {selectedCredential.badge}
                   </span>
                   <span className="text-zinc-500">|</span>
                   <span className={`text-xs sm:text-sm font-bold truncate ${isDark ? "text-white" : "text-zinc-900"
                     }`}>
-                    Sertifikat Kompetensi Ilmuwan Data Madya
+                    {selectedCredential.title}
                   </span>
                 </div>
 
                 <button
                   onClick={() => {
                     sounds.playClick();
-                    setShowCertificateModal(false);
+                    setSelectedCredential(null);
                   }}
                   onMouseEnter={() => sounds.playHover()}
                   className={`p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg transition-colors ${isDark
                     ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
                     : "text-zinc-500 hover:text-black hover:bg-zinc-200"
                     }`}
-                  aria-label="Close Certificate Preview"
+                  aria-label="Close Preview"
                 >
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              {/* Modal Certificate Image Area */}
-              <div className="relative flex-1 bg-zinc-950 flex items-center justify-center overflow-auto p-2 sm:p-4 min-h-[280px] max-h-[68vh]">
+              {/* Modal Image Area (Fits native aspect ratio with zero cut-off) */}
+              <div className="relative flex-1 min-h-0 bg-zinc-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
                 <img
-                  src="/credentials/bnsp-cads-certificate.jpg"
-                  alt="BNSP Certified Associate Data Scientist (CADS) - I Dewa Nyoman Bayu Satria Wibawa"
-                  className="max-h-full max-w-full object-contain rounded-lg shadow-xl"
+                  src={selectedCredential.url}
+                  alt={selectedCredential.title}
+                  className="max-h-[66vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-lg shadow-xl select-none"
                 />
               </div>
 
               {/* Modal Caption Footer */}
-              <div className={`p-3.5 sm:p-4 border-t text-xs leading-relaxed ${isDark
+              <div className={`p-3.5 sm:p-4 border-t text-xs leading-relaxed shrink-0 ${isDark
                 ? "bg-zinc-950 border-white/10 text-zinc-300"
                 : "bg-zinc-50 border-black/10 text-zinc-700"
                 }`}>
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <div>
+                  <div className="truncate font-medium">
                     <span className={`font-bold mr-1 ${isDark ? "text-white" : "text-zinc-900"}`}>
-                      Lembaga Sertifikasi:
+                      {selectedCredential.subtitle}
                     </span>
-                    Badan Nasional Sertifikasi Profesi (BNSP) & LSP Informatika
                   </div>
-                  <div className={`font-mono text-[11px] ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
-                    No. Reg. TIK.317.00907 2026
+                  <div className={`font-mono text-[11px] shrink-0 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+                    {selectedCredential.caption}
                   </div>
                 </div>
               </div>
