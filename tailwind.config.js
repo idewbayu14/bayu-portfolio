@@ -9,30 +9,42 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["'Plus Jakarta Sans'", "Nunito", "sans-serif"],
+        sans: ["Nunito", "sans-serif"],
       },
       colors: {
-        onyx: {
-          900: "#0F141E",
-          950: "#070A0F",
-          card: "#0C1017",
-          hover: "#131924",
-          border: "#1E2738",
+        obsidian: {
+          950: "#050507", // Deepest Apple Black
+          900: "#09090B", // Dark Space Gray Card Base
+          850: "#111114", // Frosted Glass Card
+          800: "#18181B", // Elevated Surface
+          700: "#27272A", // Titanium Border
+          600: "#3F3F46",
+          500: "#52525B",
+          400: "#71717A",
+          300: "#A1A1AA",
+          200: "#E4E4E7",
+          100: "#F4F4F5",
         },
-        solar: {
-          400: "#FBBF24",
-          500: "#F59E0B",
-          600: "#D97706",
+        titanium: {
+          50: "#FAFAFA",
+          100: "#F5F5F7", // Apple Anodized Aluminum White
+          200: "#E5E5EA",
+          300: "#D1D1D6",
+          400: "#A1A1A6", // Apple Mid Titanium Gray
+          500: "#86868B", // Apple Subtitle Text
+          600: "#636366",
+          700: "#48484A",
+          800: "#2C2C2E",
+          900: "#1C1C1E", // Dark Apple System Gray
         },
       },
       boxShadow: {
-        "2xs": "0 1px 2px 0 rgba(0, 0, 0, 0.04)",
-        "xs": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
-        "solar-glow": "0 0 25px -5px rgba(245, 158, 11, 0.15)",
-        "card-glow": "0 0 30px -10px rgba(15, 23, 42, 0.6)",
+        "crystal": "0 0 40px -10px rgba(255, 255, 255, 0.07)",
+        "crystal-light": "0 10px 30px -5px rgba(0, 0, 0, 0.05)",
+        "specular-dark": "inset 0 1px 0 0 rgba(255, 255, 255, 0.12)",
+        "specular-light": "inset 0 1px 0 0 rgba(255, 255, 255, 0.8)",
       },
     },
   },
   plugins: [],
 };
-

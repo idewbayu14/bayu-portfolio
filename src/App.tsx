@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Globe,
   Mail,
   Copy,
   Check,
@@ -10,23 +9,28 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  ExternalLink,
-  Cpu,
-  Layers,
-  Database,
-  Terminal,
-  Activity,
-  Zap,
-  BarChart2,
-  Workflow,
-  Sparkle,
-  Shield,
-  Smartphone,
   Eye,
   MapPin,
   Clock,
-  Code2
+  Sun,
+  Moon,
+  Volume2,
+  VolumeX,
+  Activity,
+  ShieldCheck
 } from 'lucide-react';
+
+import { sounds } from './utils/audio';
+import { DataLattice3D } from './components/DataLattice3D';
+import { TiltCard } from './components/TiltCard';
+import { TableOfContents } from './components/TableOfContents';
+import {
+  BySenseLogo,
+  ZoomPetcareLogo,
+  BrinLogo,
+  NutriMoodLogo,
+  CbiLogo
+} from './components/ProjectLogos';
 
 const GithubIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   <svg
@@ -82,21 +86,21 @@ interface Project {
 
 const PROFILE = {
   name: "I Dewa Nyoman Bayu Satria Wibawa",
-  shortName: "Bayu Satria",
-  role: "Machine Learning & Software Systems Engineer",
+  shortName: "Idew Bayu",
+  role: "Machine Learning and Software Systems Engineer",
   education: "Informatics Engineering Graduate",
   institution: "Universitas Komputer Indonesia (UNIKOM)",
   certification: "BNSP Certified Associate Data Scientist (CADS)",
   valueHook: "I build machine learning models, automation scripts, and web or mobile apps that cut down repetitive manual work.",
-  bio: "Informatics Engineering graduate from UNIKOM with BNSP Associate Data Scientist certification. Experienced in engineering end-to-end ML classification pipelines, IoT solar telemetry networks, and OCR automation that deliver measurable operational efficiency. Driven by practical engineering that turns complex data pipelines into production-ready software.",
+  bio: "Informatics Engineering graduate from UNIKOM with BNSP Associate Data Scientist certification. Experienced in engineering end-to-end ML classification pipelines, IoT solar telemetry networks, and OCR automation that deliver measurable operational efficiency. Driven by practical engineering that turns complex data pipelines into reliable, production software.",
   email: "idewanyomanbayusw@gmail.com",
   linkedin: "https://linkedin.com/in/idewanyomanbayusw",
   github: "https://github.com/idewbayu14",
-  resumePdf: "/Bayu_Satria_Portfolio.pdf",
-  avatar: "/profile/bayu.jpg",
-  location: "Bandung, Indonesia (UTC+7)",
+  resumePdf: "/CV_Idew_Bayu.pdf",
+  avatar: "/profile/idew-bayu.jpg",
+  location: "Bandung, Indonesia",
   openRoles: [
-    "AI & Machine Learning Engineer",
+    "AI and Machine Learning Engineer",
     "Data Scientist",
     "Data Analyst",
     "Software Engineer"
@@ -107,26 +111,26 @@ const IMPACT_STATS = [
   {
     value: "~80%",
     label: "Logging Time Saved",
-    context: "Batari Energy • BySense IoT",
+    context: "Batari Energy | BySense IoT",
     desc: "Automated periodic solar generation recording across national installations"
   },
   {
     value: "~75%",
     label: "Bookkeeping Reduced",
-    context: "Zoom Petcare • Financial OCR",
+    context: "Zoom Petcare | Financial OCR",
     desc: "Automated grooming receipt data extraction and ledger synchronization"
   },
   {
     value: "600+",
     label: "SKUs Indexed",
-    context: "Multi-Marketplace Automation",
+    context: "Multi-Marketplace Catalog",
     desc: "Batch photo indexing across Shopee, Tokopedia, and TikTok Shop"
   },
   {
     value: "94.2%",
     label: "Neural Model Accuracy",
-    context: "BRIN • Autonomous Vehicles",
-    desc: "In-house deep learning text classification operating with <50ms latency"
+    context: "BRIN | Autonomous Vehicles",
+    desc: "In-house deep learning text classification operating with under 50ms latency"
   }
 ];
 
@@ -134,24 +138,24 @@ const PROJECTS: Project[] = [
   {
     id: "batari-bysense",
     number: "01",
-    title: "BySense: Photovoltaic Telemetry & Solar IoT Monitoring",
+    title: "BySense: Photovoltaic Telemetry and Solar IoT Monitoring",
     organization: "PT Batari Energy",
-    role: "Full-Stack & IoT Systems Engineer",
+    role: "Full-Stack and IoT Systems Engineer",
     category: "energy",
-    categoryLabel: "Industrial IoT & CleanTech",
+    categoryLabel: "Industrial CleanTech Telemetry",
     impactMetric: "80% Time Saved",
     impactLabel: "Manual Admin Logging Reduced",
     summary:
       "Architected the BySense web and mobile monitoring applications for both internal administrators and commercial solar clients across Indonesia.",
     challenge:
-      "Commercial solar sites required manual on-site meter readings and weekly spreadsheets. Field technicians struggled to detect panel degradation or soiling without real-time irradiance benchmarks, leading to delayed maintenance and lost energy yield.",
+      "Commercial solar installations required manual on-site meter readings and weekly spreadsheet entry. Field operators lacked real-time sunlight irradiance benchmarks to verify panel performance, leading to delayed maintenance and undetected energy yield drops.",
     solution:
-      "Engineered continuous 5-second telemetry ingestion connecting inverter gateways and battery storage systems to an interactive GIS map. Built an early fault detection engine comparing pyranometer solar irradiance (W/m²) directly with electrical yield (kW), plus a one-click automated PDF report generator.",
+      "Engineered high-frequency 5-second telemetry ingestion connecting inverter gateways and battery storage systems to an interactive GIS map. Built an early fault detection engine comparing pyranometer solar irradiance (W/m²) directly with electrical yield (kW), coupled with a one-click automated PDF reporting engine.",
     highlights: [
       "Automated weekly, monthly, and annual solar panel logs, cutting manual admin recording time by around 80%.",
-      "Built real-time early fault detection comparing live sunlight intensity against actual panel kilowatt output.",
+      "Built real-time early fault detection by comparing live sunlight intensity against actual panel kilowatt output.",
       "Engineered a one-click automated PDF report generator that turned hours of client presentation prep into seconds.",
-      "Designed the telemetry architecture to track total installed capacity, ready for Batari's upcoming proprietary hardware."
+      "Designed the telemetry architecture to track total installed capacity and prepare for Batari's upcoming proprietary hardware."
     ],
     stack: [
       "React",
@@ -183,16 +187,16 @@ const PROJECTS: Project[] = [
       {
         url: "/projects/bysense-power.png",
         title: "Diurnal Photovoltaic Generation Curve",
-        caption: "Continuous daylight generation tracking showing early-morning solar ramp-up, midday peak yield, and inverter operational thresholds."
+        caption: "Continuous daylight generation tracking showing early morning solar ramp-up, midday peak yield, and inverter operational thresholds."
       },
       {
         url: "/projects/bysense-cloud.png",
         title: "Meteorological Weather Synchronization",
-        caption: "Real-time integration of ambient temperature and cloud cover via Open-Meteo API, preventing false maintenance dispatches during overcast weather."
+        caption: "Real-time integration of ambient temperature and cloud cover via Open-Meteo API, preventing false maintenance alerts during overcast weather."
       },
       {
         url: "/projects/bysense-metrics.jpg",
-        title: "Operational Performance & PR Indices",
+        title: "Operational Performance and PR Indices",
         caption: "Summary view of cumulative kilowatt-hours generated, system performance ratio (PR), grid export balance, and operational stability."
       }
     ]
@@ -200,22 +204,22 @@ const PROJECTS: Project[] = [
   {
     id: "zoom-petcare",
     number: "02",
-    title: "E-Commerce Catalog Automation & Financial OCR Pipeline",
+    title: "E-Commerce Catalog Automation and Financial OCR Pipeline",
     organization: "Zoom Petcare",
-    role: "Automation & Data Systems Engineer",
+    role: "Automation and Data Systems Engineer",
     category: "automation",
-    categoryLabel: "Workflow Automation & OCR",
+    categoryLabel: "Computer Vision and Retail OCR",
     impactMetric: "75% Bookkeeping Cut",
     impactLabel: "Over 600 SKUs Indexed",
     summary:
-      "Designed high-throughput product catalog indexing scripts and an automated OCR-to-Excel bookkeeping pipeline to eliminate manual retail bottlenecks.",
+      "Designed high-throughput product catalog indexing scripts and an automated computer vision receipt processing pipeline to eliminate manual retail bottlenecks and accelerate online store expansion.",
     challenge:
-      "Launching hundreds of inventory items across three distinct e-commerce marketplaces required days of manual photo cropping, SKU renaming, and metadata entry. Simultaneously, daily handwritten and printed grooming receipts caused extensive bookkeeping delays each week.",
+      "Launching hundreds of inventory items across three distinct e-commerce marketplaces required days of manual image cropping, SKU renaming, and metadata entry. Simultaneously, daily handwritten and printed grooming receipts caused extensive bookkeeping delays each week.",
     solution:
       "Developed a Python-powered image processing script to standardize and index 600+ SKU photo assets for instant multi-channel upload. Built a computer vision OCR pipeline using Tesseract and Pandas that scans physical receipts, extracts service amounts, dates, and tiers, and populates formatted Excel accounting ledgers automatically.",
     highlights: [
       "Sped up product photo indexing to launch over 600 SKUs across Shopee, Tokopedia, and TikTok Shop to drive online sales.",
-      "Engineered an automated OCR-to-Excel script that cut grooming receipt bookkeeping time by roughly 75%.",
+      "Engineered an automated OCR to Excel script that cut grooming receipt bookkeeping time by roughly 75%.",
       "Eliminated repetitive manual transcription errors and established instant reconciliation for daily store revenue."
     ],
     stack: [
@@ -236,33 +240,56 @@ const PROJECTS: Project[] = [
     organization: "National Research and Innovation Agency (BRIN)",
     role: "Machine Learning Engineer",
     category: "ml",
-    categoryLabel: "Applied Deep Learning & NLP",
+    categoryLabel: "Deep Learning NLP Inference",
     impactMetric: "94.2% Test Accuracy",
-    impactLabel: "Real-Time <50ms Classification",
+    impactLabel: "92.1% F1-Score with Bi-LSTM",
     summary:
-      "Engineered an automated sentiment analysis pipeline and public research portal for BRIN to evaluate public perception toward Level 2 autonomous electric vehicles in Indonesia.",
+      "Architected an end-to-end NLP sentiment inference pipeline and research web platform for the National Research and Innovation Agency (BRIN) to evaluate public perception toward Level 2 autonomous electric vehicles in Indonesia.",
     challenge:
-      "Public opinion datasets in Indonesia showed severe class imbalance: safety-critical skepticism and enthusiastic adopters represented sparse edge cases compared to neutral comments. Researchers previously performed manual batch surveys with slow turnaround times.",
+      "Public discourse scraped across Reddit and YouTube contained severe class imbalance across 16,994 raw comments with subtle contextual nuances, sarcasm, and domain-specific terminology that baseline RNNs failed to capture accurately.",
     solution:
-      "Curated an independent corpus of 2,000+ public discourse samples and applied ADASYN and SMOTE synthetic resampling along decision boundaries. Trained an in-house deep learning neural network on token embeddings, then containerized the pipeline into an asynchronous FastAPI service with sub-50ms inference latencies.",
+      "Implemented multi-platform data mining (PRAW for Reddit and YouTube Data API v3), yielding 7,206 filtered training comments with maxlen=100. Applied hybrid sentiment labeling (VADER, TextBlob, keyword matching) and trained a Bidirectional LSTM (Bi-LSTM) network initialized with 100-dimensional GloVe embeddings and class-weighted loss, outperforming Simple RNN, LSTM, and GRU baselines.",
     highlights: [
-      "Built an automated web scraper and deep learning inference API for Level 2 autonomous vehicle sentiment analysis.",
-      "Moved text classification from manual batch review to real-time tracking.",
-      "Curated 2,000+ corpus samples and eliminated severe class imbalance using ADASYN & SMOTE resampling.",
-      "Achieved 94.2% test accuracy and 0.93 F1-score without relying on expensive third-party commercial APIs."
+      "Engineered automated data collection scraping 16,994 comments across Reddit (3,994 via PRAW) and YouTube (13,000 via Data API v3).",
+      "Curated 7,206 training comments with hybrid sentiment labeling combining VADER, TextBlob, and domain-specific keyword rules.",
+      "Benchmarked Simple RNN, LSTM, GRU, and Bidirectional LSTM (Bi-LSTM) architectures using 100D GloVe word embeddings.",
+      "Achieved 94.2% peak test accuracy and 92.1% balanced F1-score with real-time inference latency under 50ms."
     ],
     stack: [
       "Python",
       "PyTorch",
-      "ADASYN / SMOTE",
+      "Bi-LSTM",
+      "100D GloVe",
+      "PRAW API",
+      "YouTube Data API v3",
+      "VADER / TextBlob",
       "FastAPI",
       "Next.js",
-      "Tailwind CSS",
-      "Vercel Edge"
+      "Tailwind CSS"
     ],
     liveUrl: "https://brin-project-kp.vercel.app/",
     liveLabel: "brin-project-kp.vercel.app",
     images: [
+      {
+        url: "/projects/brin-model-performance.png",
+        title: "Bi-LSTM Model Benchmark and Evaluation",
+        caption: "Performance metrics showing Bidirectional LSTM achieving peak 94.2% test accuracy and 92.1% balanced F1-score with 100D GloVe embeddings."
+      },
+      {
+        url: "/projects/brin-data-collection.png",
+        title: "Multi-Platform Data Mining (16,994 Comments)",
+        caption: "Automated web scraping pipeline across Reddit (PRAW API, 23.5%) and YouTube (Data API v3, 76.5%) targeting autonomous vehicle discourse."
+      },
+      {
+        url: "/projects/brin-methodology.png",
+        title: "NLP Preprocessing and RNN Architecture Benchmark",
+        caption: "Text cleaning, tokenization, and comparative evaluation of Simple RNN, LSTM, GRU, and Bi-LSTM models using hybrid sentiment labeling."
+      },
+      {
+        url: "/projects/brin-sentiment-distribution.png",
+        title: "Class Imbalance Mitigation and Sentiment Distribution",
+        caption: "Distribution of 7,206 curated training comments (56.56% positive, 27.38% negative, 16.06% neutral) with class-weighted loss optimization."
+      },
       {
         url: "/projects/brin-hero.png",
         title: "BRIN Research Portal Interface",
@@ -279,23 +306,23 @@ const PROJECTS: Project[] = [
     id: "nutrimood-recommender",
     number: "04",
     title: "NutriMood: Personalized Nutrition Decision Support",
-    organization: "DBS Foundation / Dicoding Capstone",
-    role: "Machine Learning & Full-Stack Developer",
+    organization: "DBS Foundation and Dicoding Capstone",
+    role: "Machine Learning and Full-Stack Developer",
     category: "health",
-    categoryLabel: "HealthTech & Recommenders",
-    impactMetric: "1,200+ Food Items",
-    impactLabel: "Used in Community Health Checks",
+    categoryLabel: "Algorithmic Health Decision Support",
+    impactMetric: "1,289 Food Profiles",
+    impactLabel: "Personalized Nutrition Recommender",
     summary:
       "Developed an algorithmic nutrition recommendation web app tailored to user psychological mood states and metabolic constraints, actively utilized by field healthcare workers.",
     challenge:
-      "Standard nutritional apps neglect localized Indonesian diets and psychological emotional eating patterns, making them impractical for community healthcare screenings where rapid dietary guidance is required.",
+      "Standard nutritional applications overlook localized Indonesian diets and psychological emotional eating patterns, making them impractical for community healthcare screenings where rapid dietary guidance is required.",
     solution:
-      "Constructed a multi-criteria hybrid filtering engine operating over a curated relational database of 1,200+ Indonesian culinary items. The app factors in caloric caps, macronutrient targets, and mood states to generate actionable, culturally aligned meal recommendations.",
+      "Constructed a multi-criteria hybrid filtering engine operating over a curated relational database of 1,289 authentic Indonesian culinary items. The app factors in caloric caps, macronutrient targets, and psychological mood states to generate actionable, culturally aligned meal recommendations.",
     highlights: [
-      "Developed a nutrition recommendation web app based on user mood and health conditions.",
-      "Actively used by field health workers during community health checks (Posyandu / public screenings).",
-      "Awarded Distinction in the DBS Foundation Coding Camp (Dicoding Indonesia).",
-      "Structured 1,200+ local food nutritional profiles with complete macronutrient distributions."
+      "Engineered a 3-step recommendation workflow mapping mood states (energizing, relaxing, focusing, neutral) to tailored Indonesian meals.",
+      "Structured 1,289 authentic Indonesian food profiles with complete macronutrient distributions and recipes.",
+      "Integrated health constraint filters supporting clinical conditions including diabetes, hypertension, and custom dietary needs.",
+      "Awarded Distinction in the DBS Foundation Coding Camp (Dicoding Indonesia) and used in community health screenings."
     ],
     stack: [
       "Python",
@@ -305,9 +332,19 @@ const PROJECTS: Project[] = [
       "Tailwind CSS",
       "Vercel"
     ],
-    liveUrl: "https://nutrimood.vercel.app/",
-    liveLabel: "nutrimood.vercel.app",
+    liveUrl: "https://nutrimoodv.vercel.app/",
+    liveLabel: "nutrimoodv.vercel.app",
     images: [
+      {
+        url: "/projects/nutrimood-workflow.jpg",
+        title: "Algorithmic 3-Step Recommendation Workflow",
+        caption: "Workflow illustrating mood selection, machine learning feature extraction, and personalized curation of 5 Indonesian dishes tailored to health profiles."
+      },
+      {
+        url: "/projects/nutrimood-features.png",
+        title: "NutriMood Core Platform Architecture",
+        caption: "Six modular capabilities including AI mood prediction, 1,289 authentic food profiles, temporal nutrition analytics, and clinical dietary constraint filters."
+      },
       {
         url: "/projects/nutrimood-hero.jpg",
         title: "NutriMood Application Landing",
@@ -319,12 +356,56 @@ const PROJECTS: Project[] = [
         caption: "Interactive recommendation output presenting matched culinary selections, caloric breakdowns, and multi-criteria constraint scoring."
       }
     ]
+  },
+  {
+    id: "cimahi-battery",
+    number: "05",
+    title: "Cimahi Battery: Industrial Commercial Web Platform",
+    organization: "PT Cimahi Battery Indonesia (CBI)",
+    role: "Frontend and Web Systems Engineer",
+    category: "automation",
+    categoryLabel: "Industrial Energy Storage Platform",
+    impactMetric: "100+ Cell SKUs",
+    impactLabel: "Parametric Filtering Engine",
+    summary:
+      "Architected the enterprise web platform for PT Cimahi Battery Indonesia, an industrial manufacturer of lithium iron phosphate (LiFePO4) battery packs. Implemented a parametric specification filter enabling commercial engineers to query prismatic cells by voltage, capacity, and discharge rates.",
+    challenge:
+      "Industrial energy clients required detailed technical cell datasheets, cycle life graphs, and custom battery pack sizing for commercial solar and EV applications, but previous product catalogs were distributed via static disconnected PDFs.",
+    solution:
+      "Engineered a high-performance parametric web platform featuring dynamic search filtering across 100+ industrial battery SKUs, automated specification comparisons, and responsive inquiries for commercial energy storage integration.",
+    highlights: [
+      "Engineered the enterprise web platform for PT Cimahi Battery Indonesia with structured parametric product filtering.",
+      "Streamlined commercial battery specification discovery across voltage, capacity, cycle life, and discharge rates.",
+      "Integrated responsive technical request pipelines to accelerate industrial B2B client inquiries."
+    ],
+    stack: [
+      "React",
+      "Tailwind CSS",
+      "TypeScript",
+      "Parametric Query Engine",
+      "Responsive UI",
+      "Vercel"
+    ],
+    liveUrl: "https://cimahibattery.com/",
+    liveLabel: "cimahibattery.com",
+    images: [
+      {
+        url: "/projects/cimahi-hero.jpg",
+        title: "Cimahi Battery Platform Landing",
+        caption: "Official corporate portal highlighting commercial energy storage systems, battery chemistry, and engineering certifications."
+      },
+      {
+        url: "/projects/cimahi-catalog.jpg",
+        title: "Prismatic Cell Directory and Specification Filter",
+        caption: "Interactive catalog enabling parametric technical filtering by voltage, capacity, cycle life, and industrial form factor."
+      }
+    ]
   }
 ];
 
 const SKILL_GROUPS = [
   {
-    title: "Machine Learning & Data Intelligence",
+    title: "Machine Learning and Data Intelligence",
     description: "Model development, algorithmic resampling, and statistical analysis",
     tools: [
       "Python",
@@ -340,7 +421,7 @@ const SKILL_GROUPS = [
     ]
   },
   {
-    title: "Full-Stack & Mobile Development",
+    title: "Full-Stack and Mobile Development",
     description: "Interactive client applications, responsive frontends, and cross-platform apps",
     tools: [
       "React",
@@ -355,12 +436,12 @@ const SKILL_GROUPS = [
     ]
   },
   {
-    title: "Data Pipelines, Cloud & Automation",
+    title: "Data Pipelines, Cloud and Automation",
     description: "Automated report engines, web scraping, and production edge deployment",
     tools: [
       "Web Scraping (Selenium / BS4)",
       "Automated PDF Generators",
-      "Git & GitHub",
+      "Git and GitHub",
       "Vercel Edge Network",
       "Docker Containers",
       "Open-Meteo REST API",
@@ -370,6 +451,16 @@ const SKILL_GROUPS = [
 ];
 
 export default function App() {
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('theme');
+      if (saved) return saved === 'dark';
+      return true; // Apple Dark Minimalist Default
+    }
+    return true;
+  });
+
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(() => sounds.enabled);
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [selectedImage, setSelectedImage] = useState<{
     project: Project;
@@ -377,6 +468,24 @@ export default function App() {
   } | null>(null);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      sounds.playScrollTick();
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   useEffect(() => {
     const updateWIBTime = () => {
@@ -397,9 +506,20 @@ export default function App() {
 
   const handleCopyEmail = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
+    sounds.playClick();
     navigator.clipboard.writeText(PROFILE.email);
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2500);
+  };
+
+  const handleToggleTheme = () => {
+    sounds.playChime(isDark ? 880 : 540, isDark ? 660 : 780);
+    setIsDark(!isDark);
+  };
+
+  const handleToggleSound = () => {
+    const next = sounds.toggle();
+    setSoundEnabled(next);
   };
 
   const filteredProjects =
@@ -408,79 +528,174 @@ export default function App() {
       : PROJECTS.filter((p) => p.category === activeCategory);
 
   return (
-    <div className="min-h-screen bg-[#070A0F] text-[#F8FAFC] selection:bg-amber-500/20 selection:text-amber-300 relative pb-28">
+    <div className={`min-h-screen font-sans transition-colors duration-300 relative pb-32 ${
+      isDark
+        ? "bg-[#060608] text-[#F5F5F7] selection:bg-white/20 selection:text-white"
+        : "bg-[#F5F5F7] text-[#1D1D1F] selection:bg-black/10 selection:text-black"
+    }`}>
       {/* Background Subtle Ambient Grid */}
-      <div className="fixed inset-0 pointer-events-none grid-pattern opacity-60 z-0" />
-      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-amber-500/5 via-sky-500/5 to-transparent blur-3xl pointer-events-none z-0" />
+      <div className={`fixed inset-0 pointer-events-none opacity-50 z-0 ${
+        isDark ? "grid-pattern-dark" : "grid-pattern-light"
+      }`} />
+      
+      {/* Apple-style Crystalline Ambient Glow */}
+      <div className={`fixed top-0 left-1/2 -translate-x-1/2 w-[900px] h-[380px] blur-[120px] pointer-events-none z-0 ${
+        isDark
+          ? "bg-gradient-to-b from-white/[0.06] via-zinc-800/[0.03] to-transparent"
+          : "bg-gradient-to-b from-white/90 via-slate-200/40 to-transparent"
+      }`} />
 
-      {/* TOP NAVIGATION BAR */}
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#070A0F]/85 border-b border-[#1E2738]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      {/* TOP NAVIGATION BAR (Apple Frosted Glass) */}
+      <header className={`sticky top-0 z-40 backdrop-blur-xl border-b transition-colors duration-200 ${
+        isDark
+          ? "bg-[#060608]/80 border-white/[0.08]"
+          : "bg-[#F5F5F7]/85 border-black/[0.08] shadow-xs"
+      }`}>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <a
             href="#"
-            className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg p-1"
+            onClick={() => sounds.playClick()}
+            onMouseEnter={() => sounds.playHover()}
+            className="flex items-center gap-3 group focus:outline-none rounded-lg p-1"
           >
-            <div className="w-9 h-9 rounded-md bg-[#0F141E] border border-amber-500/30 flex items-center justify-center font-bold text-amber-400 group-hover:border-amber-400 group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] transition-all">
-              B
+            <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-xs tracking-tight transition-all duration-300 ${
+              isDark
+                ? "bg-zinc-900 border border-white/15 text-white group-hover:border-white/40 shadow-specular-dark"
+                : "bg-white border border-black/10 text-zinc-900 group-hover:border-black/30 shadow-xs"
+            }`}>
+              IB
             </div>
             <div className="flex flex-col">
-              <span className="font-bold text-sm tracking-tight text-white group-hover:text-amber-300 transition-colors">
+              <span className={`font-bold text-sm tracking-tight transition-colors ${
+                isDark ? "text-white group-hover:text-zinc-200" : "text-zinc-900 group-hover:text-black"
+              }`}>
                 {PROFILE.shortName}
               </span>
-              <span className="text-[11px] text-slate-400 font-mono">
-                CADS • ML & Systems
+              <span className={`text-[11px] ${
+                isDark ? "text-zinc-400" : "text-zinc-500"
+              }`}>
+                CADS | ML and Systems
               </span>
             </div>
           </a>
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+          {/* Navigation Links - Hidden on desktop (xl+) to prevent double navbar with left TOC */}
+          <nav className={`hidden md:flex xl:hidden items-center gap-7 text-xs uppercase tracking-wider font-bold ${
+            isDark ? "text-zinc-400" : "text-zinc-600"
+          }`}>
             <a
-              href="#projects"
-              className="hover:text-amber-400 transition-colors"
+              href="#overview"
+              onClick={() => sounds.playClick()}
+              onMouseEnter={() => sounds.playHover()}
+              className="hover:text-white transition-colors"
             >
-              Projects
+              About Me
             </a>
             <a
               href="#impact"
-              className="hover:text-amber-400 transition-colors"
+              onClick={() => sounds.playClick()}
+              onMouseEnter={() => sounds.playHover()}
+              className="hover:text-white transition-colors"
             >
               Impact
             </a>
             <a
-              href="#skills"
-              className="hover:text-amber-400 transition-colors"
+              href="#projects"
+              onClick={() => sounds.playClick()}
+              onMouseEnter={() => sounds.playHover()}
+              className="hover:text-white transition-colors"
             >
-              Skills & Stack
+              Projects
             </a>
-            <a href="#about" className="hover:text-amber-400 transition-colors">
-              About
+            <a
+              href="#skills"
+              onClick={() => sounds.playClick()}
+              onMouseEnter={() => sounds.playHover()}
+              className="hover:text-white transition-colors"
+            >
+              Skills
+            </a>
+            <a
+              href="#credentials"
+              onClick={() => sounds.playClick()}
+              onMouseEnter={() => sounds.playHover()}
+              className="hover:text-white transition-colors"
+            >
+              Credentials
             </a>
           </nav>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2.5">
+          {/* Action Controls: Sound Toggle, Theme Switcher, PDF, Contact */}
+          <div className="flex items-center gap-2 sm:gap-2.5">
+            {/* Audio Feedback Toggle with Equalizer Visualizer */}
+            <button
+              onClick={handleToggleSound}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl transition-all duration-200 ${
+                isDark
+                  ? "bg-zinc-900/90 hover:bg-zinc-800 text-zinc-300 border border-white/10 shadow-specular-dark"
+                  : "bg-white hover:bg-zinc-100 text-zinc-700 border border-black/10 shadow-xs"
+              }`}
+              title={soundEnabled ? "Mute Interaction Sound" : "Enable Interaction Sound"}
+            >
+              {soundEnabled ? (
+                <>
+                  <Volume2 className="w-4 h-4 text-emerald-400" />
+                  <span className="hidden lg:flex items-end gap-0.5 h-3">
+                    <span className="w-0.5 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                    <span className="w-0.5 h-3 bg-emerald-400 rounded-full animate-bounce" />
+                    <span className="w-0.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                  </span>
+                </>
+              ) : (
+                <VolumeX className="w-4 h-4 text-zinc-500" />
+              )}
+            </button>
+
+            {/* Theme Toggle Button */}
+            <button
+              onClick={handleToggleTheme}
+              className={`p-2 rounded-xl transition-all duration-200 ${
+                isDark
+                  ? "bg-zinc-900/90 hover:bg-zinc-800 text-amber-400 border border-white/10 shadow-specular-dark"
+                  : "bg-white hover:bg-zinc-100 text-zinc-800 border border-black/10 shadow-xs"
+              }`}
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+            >
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+
             <a
               href={PROFILE.resumePdf}
-              download="Bayu_Satria_Portfolio.pdf"
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-[#0F141E] hover:bg-[#151C2A] text-slate-200 hover:text-white border border-[#1E2738] hover:border-slate-600 transition-all shadow-sm"
+              download="CV_Idew_Bayu.pdf"
+              onClick={() => sounds.playClick()}
+              onMouseEnter={() => sounds.playHover()}
+              className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 ${
+                isDark
+                  ? "bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 border border-white/10 shadow-specular-dark"
+                  : "bg-white hover:bg-zinc-100 text-zinc-800 border border-black/10 shadow-xs"
+              }`}
             >
-              <FileDown className="w-3.5 h-3.5 text-amber-400" />
-              <span>Dossier PDF</span>
+              <FileDown className="w-3.5 h-3.5 text-zinc-400" />
+              <span>Download CV</span>
             </a>
 
             <button
               onClick={handleCopyEmail}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all shadow-sm active:scale-95"
+              onMouseEnter={() => sounds.playHover()}
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 active:scale-95 ${
+                isDark
+                  ? "bg-white hover:bg-zinc-200 text-black shadow-lg shadow-white/5"
+                  : "bg-zinc-900 hover:bg-black text-white shadow-sm"
+              }`}
             >
               {copiedEmail ? (
                 <>
-                  <Check className="w-3.5 h-3.5 text-slate-950" />
-                  <span>Email Copied!</span>
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Copied</span>
                 </>
               ) : (
                 <>
-                  <Mail className="w-3.5 h-3.5 text-slate-950" />
+                  <Mail className="w-3.5 h-3.5" />
                   <span>Get in Touch</span>
                 </>
               )}
@@ -489,22 +704,35 @@ export default function App() {
         </div>
       </header>
 
+      {/* LEFT SIDE TABLE OF CONTENTS (Poor Charlie's Almanack / Stripe Press style) */}
+      <TableOfContents isDark={isDark} />
+
       {/* MAIN CONTAINER */}
-      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 space-y-16 sm:space-y-24">
-        {/* HERO SECTION */}
-        <section className="relative">
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-14 space-y-20 sm:space-y-28">
+        
+        {/* HERO SECTION WITH 3D DATA LATTICE (Konsep 1) */}
+        <section id="overview" className="relative scroll-mt-28">
+          {/* Konsep 1: 3D Interactive Data Lattice Canvas Floating Behind Hero */}
+          <div className="absolute top-0 right-0 w-[360px] h-[340px] sm:w-[500px] sm:h-[460px] lg:w-[620px] lg:h-[500px] pointer-events-none -z-10 opacity-70">
+            <DataLattice3D isDark={isDark} className="w-full h-full" />
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
-            <div className="lg:col-span-8 space-y-5">
-              {/* Credentials / Status Tag */}
-              <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-md bg-[#0F141E] border border-[#1E2738] text-xs text-slate-300">
-                <span className="font-semibold text-amber-400">
+            <div className="lg:col-span-8 space-y-6">
+              <div className={`inline-flex flex-wrap items-center gap-2.5 px-3.5 py-1.5 rounded-full text-xs border backdrop-blur-md transition-colors ${
+                isDark
+                  ? "bg-zinc-900/80 border-white/10 text-zinc-300 shadow-specular-dark"
+                  : "bg-white/90 border-black/10 text-zinc-700 shadow-xs"
+              }`}>
+                <span className="flex items-center gap-1.5 font-bold text-zinc-100 dark:text-white">
+                  <ShieldCheck className="w-3.5 h-3.5 text-zinc-400" />
                   BNSP CADS Certified
                 </span>
-                <span className="text-slate-600">•</span>
+                <span className="text-zinc-500">|</span>
                 <span>Informatics Engineering (UNIKOM)</span>
-                <span className="text-slate-600">•</span>
-                <span className="text-emerald-400 flex items-center gap-1.5">
+                <span className="text-zinc-500">|</span>
+                <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Available for Full-Time Roles
                 </span>
@@ -512,21 +740,31 @@ export default function App() {
 
               {/* Headline */}
               <div className="space-y-2">
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight ${
+                  isDark ? "text-white" : "text-zinc-900"
+                }`}>
                   {PROFILE.name}
                 </h1>
-                <p className="text-lg sm:text-xl font-semibold text-slate-300">
+                <p className={`text-base sm:text-xl font-bold tracking-tight ${
+                  isDark ? "text-zinc-400" : "text-zinc-600"
+                }`}>
                   {PROFILE.role}
                 </p>
               </div>
 
               {/* The Core Value Proposition Hook */}
-              <p className="text-base sm:text-lg text-slate-300 max-w-2xl font-medium leading-relaxed border-l-2 border-amber-500/80 pl-4 py-0.5">
+              <p className={`text-base sm:text-lg font-medium leading-relaxed border-l-2 pl-4 py-0.5 ${
+                isDark
+                  ? "text-zinc-200 border-zinc-500"
+                  : "text-zinc-800 border-zinc-400"
+              }`}>
                 "{PROFILE.valueHook}"
               </p>
 
               {/* Bio summary */}
-              <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
+              <p className={`text-sm sm:text-base max-w-2xl leading-relaxed ${
+                isDark ? "text-zinc-400" : "text-zinc-600"
+              }`}>
                 Graduated with an Informatics Engineering degree from Universitas
                 Komputer Indonesia. Proven track record building real-time IoT
                 telemetry dashboards at Batari Energy, automated computer vision
@@ -536,14 +774,21 @@ export default function App() {
 
               {/* Target Roles Pill List */}
               <div className="pt-1">
-                <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold block mb-2 font-mono">
+                <span className={`text-xs uppercase tracking-wider font-extrabold block mb-2.5 ${
+                  isDark ? "text-zinc-500" : "text-zinc-400"
+                }`}>
                   Target Roles
                 </span>
                 <div className="flex flex-wrap gap-2">
                   {PROFILE.openRoles.map((role) => (
                     <span
                       key={role}
-                      className="px-2.5 py-1 text-xs rounded bg-[#0F141E] text-slate-300 border border-[#1E2738]"
+                      onMouseEnter={() => sounds.playHover()}
+                      className={`px-3 py-1 text-xs font-semibold rounded-full border transition-colors ${
+                        isDark
+                          ? "bg-zinc-900/80 text-zinc-300 border-white/10 hover:border-zinc-500 shadow-specular-dark"
+                          : "bg-white text-zinc-700 border-black/10 hover:border-zinc-400 shadow-2xs"
+                      }`}
                     >
                       {role}
                     </span>
@@ -552,10 +797,16 @@ export default function App() {
               </div>
 
               {/* Primary Call to Actions */}
-              <div className="flex flex-wrap items-center gap-3 pt-3">
+              <div className="flex flex-wrap items-center gap-3 pt-2">
                 <a
                   href="#projects"
-                  className="px-5 py-2.5 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)] flex items-center gap-2 active:scale-95"
+                  onClick={() => sounds.playClick()}
+                  onMouseEnter={() => sounds.playHover()}
+                  className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 flex items-center gap-2 active:scale-95 ${
+                    isDark
+                      ? "bg-white hover:bg-zinc-200 text-black shadow-lg shadow-white/5"
+                      : "bg-zinc-900 hover:bg-black text-white shadow-sm"
+                  }`}
                 >
                   <span>Explore Featured Systems</span>
                   <ArrowUpRight className="w-4 h-4" />
@@ -563,19 +814,31 @@ export default function App() {
 
                 <a
                   href={PROFILE.resumePdf}
-                  download="Bayu_Satria_Portfolio.pdf"
-                  className="px-4 py-2.5 rounded-md bg-[#0F141E] hover:bg-[#151C2A] text-slate-200 border border-[#1E2738] hover:border-slate-600 font-semibold text-sm transition-all flex items-center gap-2"
+                  download="CV_Idew_Bayu.pdf"
+                  onClick={() => sounds.playClick()}
+                  onMouseEnter={() => sounds.playHover()}
+                  className={`px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-200 flex items-center gap-2 border ${
+                    isDark
+                      ? "bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 border-white/10 hover:border-zinc-500 shadow-specular-dark"
+                      : "bg-white hover:bg-zinc-100 text-zinc-800 border-black/10 hover:border-zinc-400 shadow-2xs"
+                  }`}
                 >
-                  <FileDown className="w-4 h-4 text-amber-400" />
-                  <span>Download Dossier PDF</span>
+                  <FileDown className="w-4 h-4 text-zinc-400" />
+                  <span>Download CV</span>
                 </a>
 
-                <div className="flex items-center gap-2 pl-2">
+                <div className="flex items-center gap-2 pl-1">
                   <a
                     href={PROFILE.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 rounded-md bg-[#0F141E] border border-[#1E2738] hover:border-slate-500 text-slate-400 hover:text-white transition-colors"
+                    onClick={() => sounds.playClick()}
+                    onMouseEnter={() => sounds.playHover()}
+                    className={`p-2.5 rounded-xl border transition-colors ${
+                      isDark
+                        ? "bg-zinc-900/90 border-white/10 hover:border-zinc-400 text-zinc-400 hover:text-white shadow-specular-dark"
+                        : "bg-white border-black/10 hover:border-zinc-400 text-zinc-600 hover:text-black shadow-2xs"
+                    }`}
                     title="GitHub Profile"
                   >
                     <GithubIcon className="w-4 h-4" />
@@ -584,7 +847,13 @@ export default function App() {
                     href={PROFILE.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2.5 rounded-md bg-[#0F141E] border border-[#1E2738] hover:border-slate-500 text-slate-400 hover:text-white transition-colors"
+                    onClick={() => sounds.playClick()}
+                    onMouseEnter={() => sounds.playHover()}
+                    className={`p-2.5 rounded-xl border transition-colors ${
+                      isDark
+                        ? "bg-zinc-900/90 border-white/10 hover:border-zinc-400 text-zinc-400 hover:text-white shadow-specular-dark"
+                        : "bg-white border-black/10 hover:border-zinc-400 text-zinc-600 hover:text-black shadow-2xs"
+                    }`}
                     title="LinkedIn Profile"
                   >
                     <LinkedinIcon className="w-4 h-4" />
@@ -593,104 +862,160 @@ export default function App() {
               </div>
             </div>
 
-            {/* Right: Studio Portrait in Industrial Frame */}
+            {/* Right Column: Konsep 2 (3D Perspective Tilt Card with Specular Glare) */}
             <div className="lg:col-span-4 flex justify-center lg:justify-end">
-              <div className="relative group">
-                <div className="w-64 sm:w-72 rounded-xl bg-[#0F141E] p-2 border border-[#1E2738] shadow-2xl relative overflow-hidden">
-                  <div className="aspect-[4/5] rounded-lg overflow-hidden bg-slate-950 relative">
+              <TiltCard
+                isDark={isDark}
+                maxTilt={9}
+                className="w-64 sm:w-72"
+              >
+                <div className={`rounded-2xl p-2.5 border backdrop-blur-xl shadow-2xl transition-all duration-300 ${
+                  isDark
+                    ? "bg-zinc-900/80 border-white/15 shadow-black/80 shadow-specular-dark"
+                    : "bg-white border-black/10 shadow-zinc-300/50"
+                }`}>
+                  <div className="aspect-[4/5] rounded-xl overflow-hidden bg-zinc-950 relative group">
                     <img
                       src={PROFILE.avatar}
                       alt={PROFILE.name}
-                      className="w-full h-full object-cover object-top filter grayscale contrast-105 group-hover:grayscale-0 transition-all duration-500"
+                      className="w-full h-full object-cover object-center contrast-[1.03] group-hover:scale-105 transition-all duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#070A0F] via-transparent to-transparent opacity-60" />
+                    {/* Crystalline Vignette */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 pointer-events-none" />
                   </div>
                   <div className="p-3 text-left space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-white">
+                      <span className={`text-xs font-bold ${
+                        isDark ? "text-white" : "text-zinc-900"
+                      }`}>
                         {PROFILE.shortName}
                       </span>
-                      <span className="text-[10px] font-mono text-amber-400 font-semibold px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
+                        isDark
+                          ? "text-zinc-200 bg-zinc-800 border-white/15"
+                          : "text-zinc-800 bg-zinc-100 border-black/10"
+                      }`}>
                         BNSP CADS
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 truncate">
+                    <p className={`text-[11px] truncate ${
+                      isDark ? "text-zinc-400" : "text-zinc-500"
+                    }`}>
                       {PROFILE.institution}
                     </p>
                   </div>
                 </div>
-              </div>
+              </TiltCard>
             </div>
           </div>
         </section>
 
-        {/* SECTION: QUANTITATIVE IMPACT METRICS */}
-        <section id="impact" className="space-y-4">
-          <div className="flex items-center justify-between border-b border-[#1E2738] pb-3">
+        {/* SECTION: QUANTITATIVE IMPACT METRICS WITH 3D PERSPECTIVE TILT */}
+        <section id="impact" className="space-y-5 scroll-mt-28">
+          <div className={`flex items-center justify-between border-b pb-3 ${
+            isDark ? "border-white/[0.08]" : "border-black/[0.08]"
+          }`}>
             <div>
-              <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider">
-                Measurable Value
+              <span className="text-xs font-extrabold text-zinc-400 uppercase tracking-widest block">
+                Quantifiable Impact
               </span>
-              <h2 className="text-xl sm:text-2xl font-bold text-white">
+              <h2 className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
+                isDark ? "text-white" : "text-zinc-900"
+              }`}>
                 Engineering Impact at a Glance
               </h2>
             </div>
-            <span className="text-xs text-slate-400 font-mono hidden sm:inline">
-              Production Verified
-            </span>
+            <div className={`text-xs flex items-center gap-1.5 ${
+              isDark ? "text-zinc-400" : "text-zinc-500"
+            }`}>
+              <Activity className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Production Verified</span>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {IMPACT_STATS.map((stat, idx) => (
-              <div
+              <TiltCard
                 key={idx}
-                className="rounded-lg bg-[#0C1017] border border-[#1E2738] p-4 sm:p-5 hover:border-slate-600 transition-all relative overflow-hidden group"
+                isDark={isDark}
+                maxTilt={6}
+                className="h-full"
               >
-                <div className="text-2xl sm:text-3xl font-extrabold text-amber-400 tracking-tight mb-1 font-mono">
-                  {stat.value}
+                <div className={`h-full rounded-2xl p-5 border backdrop-blur-md transition-all duration-300 relative overflow-hidden group ${
+                  isDark
+                    ? "bg-zinc-900/70 border-white/10 hover:border-white/25 shadow-specular-dark"
+                    : "bg-white border-black/10 hover:border-black/25 shadow-xs"
+                }`}>
+                  <div className={`text-2xl sm:text-3xl font-extrabold tracking-tight mb-1 transition-colors ${
+                    isDark ? "text-white group-hover:text-zinc-200" : "text-zinc-900"
+                  }`}>
+                    {stat.value}
+                  </div>
+                  <div className={`text-sm font-bold mb-1.5 ${
+                    isDark ? "text-zinc-200" : "text-zinc-800"
+                  }`}>
+                    {stat.label}
+                  </div>
+                  <div className={`text-xs font-semibold mb-2 ${
+                    isDark ? "text-zinc-400" : "text-zinc-500"
+                  }`}>
+                    {stat.context}
+                  </div>
+                  <p className={`text-xs leading-relaxed ${
+                    isDark ? "text-zinc-400" : "text-zinc-600"
+                  }`}>
+                    {stat.desc}
+                  </p>
                 </div>
-                <div className="text-sm font-bold text-white mb-1.5">
-                  {stat.label}
-                </div>
-                <div className="text-xs text-slate-400 leading-snug">
-                  {stat.desc}
-                </div>
-                <div className="mt-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-400">
-                  {stat.context}
-                </div>
-              </div>
+              </TiltCard>
             ))}
           </div>
         </section>
 
-        {/* SECTION: FEATURED CASE STUDIES */}
-        <section id="projects" className="space-y-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1E2738] pb-4">
+        {/* SECTION: FEATURED ENGINEERING PROJECTS */}
+        <section id="projects" className="space-y-6 scroll-mt-28">
+          <div className={`flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b pb-4 ${
+            isDark ? "border-white/[0.08]" : "border-black/[0.08]"
+          }`}>
             <div>
-              <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider">
-                Production Case Studies
+              <span className="text-xs font-extrabold text-zinc-400 uppercase tracking-widest block">
+                Selected Work
               </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white">
-                What I Have Built & Improved
+              <h2 className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
+                isDark ? "text-white" : "text-zinc-900"
+              }`}>
+                Featured Systems and Case Studies
               </h2>
             </div>
 
-            {/* Category Filter Pills */}
-            <div className="flex flex-wrap gap-1.5 bg-[#0F141E] p-1 rounded-lg border border-[#1E2738]">
+            {/* Filter Tabs */}
+            <div className={`inline-flex p-1 rounded-xl border backdrop-blur-md self-start sm:self-auto ${
+              isDark
+                ? "bg-zinc-900/90 border-white/10 shadow-specular-dark"
+                : "bg-zinc-100 border-black/10"
+            }`}>
               {[
-                { id: "all", label: "All Systems (4)" },
-                { id: "energy", label: "IoT & Energy" },
-                { id: "automation", label: "Automation & OCR" },
-                { id: "ml", label: "Applied NLP & DL" },
-                { id: "health", label: "Health Recommender" }
+                { id: "all", label: "All Projects" },
+                { id: "energy", label: "CleanTech" },
+                { id: "automation", label: "Automation" },
+                { id: "ml", label: "Machine Learning" },
+                { id: "health", label: "HealthTech" }
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveCategory(tab.id)}
-                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                  onClick={() => {
+                    sounds.playClick();
+                    setActiveCategory(tab.id);
+                  }}
+                  onMouseEnter={() => sounds.playHover()}
+                  className={`px-3 py-1 text-xs font-bold rounded-lg transition-all duration-200 ${
                     activeCategory === tab.id
-                      ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
-                      : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                      ? isDark
+                        ? "bg-white text-black shadow-sm"
+                        : "bg-white text-zinc-900 shadow-xs"
+                      : isDark
+                      ? "text-zinc-400 hover:text-white"
+                      : "text-zinc-600 hover:text-zinc-900"
                   }`}
                 >
                   {tab.label}
@@ -699,332 +1024,435 @@ export default function App() {
             </div>
           </div>
 
-          {/* PROJECT LIST */}
+          {/* PROJECT LIST: 3D TILT CARDS + DYNAMIC PROJECT LOGOS */}
           <div className="space-y-12">
             {filteredProjects.map((project) => (
-              <article
-                key={project.id}
-                className="rounded-xl bg-[#0C1017] border border-[#1E2738] p-6 sm:p-8 hover:border-slate-700 transition-all space-y-6"
-              >
-                {/* Project Header Row */}
-                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 border-b border-[#1E2738] pb-5">
-                  <div className="space-y-2">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                        PROJECT {project.number}
-                      </span>
-                      <span className="text-xs text-slate-400 font-medium">
-                        {project.organization}
-                      </span>
-                      <span className="text-slate-600">•</span>
-                      <span className="text-xs text-slate-400">
-                        {project.role}
-                      </span>
+              <div key={project.id} id={project.id} className="scroll-mt-24">
+                <TiltCard
+                  isDark={isDark}
+                  maxTilt={4}
+                  className="w-full"
+                >
+                <article
+                  className={`rounded-2xl border p-6 sm:p-8 backdrop-blur-xl transition-all duration-300 space-y-7 ${
+                    isDark
+                      ? "bg-zinc-900/80 border-white/10 hover:border-white/20 shadow-specular-dark"
+                      : "bg-white border-black/10 hover:border-black/20 shadow-sm"
+                  }`}
+                >
+                  {/* Project Header Row with Custom Animated Logo */}
+                  <div className={`flex flex-col lg:flex-row lg:items-start justify-between gap-5 border-b pb-6 ${
+                    isDark ? "border-white/[0.08]" : "border-black/[0.06]"
+                  }`}>
+                    <div className="flex items-start gap-4">
+                      {/* Project Logo Component with Micro-Animation */}
+                      <div className="shrink-0 mt-0.5">
+                        {project.id === "batari-bysense" && (
+                          <BySenseLogo isDark={isDark} className="w-12 h-12" />
+                        )}
+                        {project.id === "zoom-petcare" && (
+                          <ZoomPetcareLogo isDark={isDark} className="w-12 h-12" />
+                        )}
+                        {project.id === "brin-autonomous" && (
+                          <BrinLogo isDark={isDark} className="w-12 h-12" />
+                        )}
+                        {project.id === "nutrimood-recommender" && (
+                          <NutriMoodLogo isDark={isDark} className="w-12 h-12" />
+                        )}
+                        {project.id === "cimahi-battery" && (
+                          <CbiLogo isDark={isDark} className="w-14 h-12" />
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
+                            isDark
+                              ? "bg-zinc-800 text-zinc-300 border-white/10"
+                              : "bg-zinc-100 text-zinc-700 border-black/10"
+                          }`}>
+                            {project.number}
+                          </span>
+                          <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${
+                            isDark
+                              ? "text-zinc-300 bg-zinc-800/60 border-white/10"
+                              : "text-zinc-700 bg-zinc-50 border-black/10"
+                          }`}>
+                            {project.categoryLabel}
+                          </span>
+                          <span className={`text-xs ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>•</span>
+                          <span className={`text-xs font-medium ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+                            {project.organization}
+                          </span>
+                        </div>
+
+                        <h3 className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
+                          isDark ? "text-white" : "text-zinc-900"
+                        }`}>
+                          {project.title}
+                        </h3>
+
+                        <p className={`text-xs font-bold uppercase tracking-wider ${
+                          isDark ? "text-zinc-400" : "text-zinc-500"
+                        }`}>
+                          Role: {project.role}
+                        </p>
+                      </div>
                     </div>
 
-                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                      {project.title}
-                    </h3>
-                  </div>
+                    {/* Impact Metric Badge & Direct Link */}
+                    <div className="flex flex-wrap lg:flex-col lg:items-end gap-2.5">
+                      <div className={`px-3 py-1.5 rounded-xl border text-left lg:text-right ${
+                        isDark
+                          ? "bg-zinc-800/90 border-white/10 text-white shadow-specular-dark"
+                          : "bg-zinc-100 border-black/10 text-zinc-900 shadow-2xs"
+                      }`}>
+                        <div className="text-sm font-extrabold tracking-tight">
+                          {project.impactMetric}
+                        </div>
+                        <div className={`text-[11px] ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+                          {project.impactLabel}
+                        </div>
+                      </div>
 
-                  {/* Impact Metric & External Link */}
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="px-3 py-1.5 rounded-md bg-[#0F141E] border border-amber-500/30 text-right">
-                      <span className="block text-xs font-mono text-amber-400 font-bold">
-                        {project.impactMetric}
-                      </span>
-                      <span className="block text-[11px] text-slate-400">
-                        {project.impactLabel}
-                      </span>
-                    </div>
-
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-sm active:scale-95"
-                      >
-                        <span>Visit Live Platform</span>
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                {/* Problem & Solution Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
-                  <div className="rounded-lg bg-[#0F141E] p-4 border border-[#1E2738]/80 space-y-1.5">
-                    <span className="text-xs font-mono text-amber-400 uppercase font-semibold">
-                      The Challenge / Problem
-                    </span>
-                    <p className="text-slate-300 leading-relaxed text-[13px]">
-                      {project.challenge}
-                    </p>
-                  </div>
-                  <div className="rounded-lg bg-[#0F141E] p-4 border border-[#1E2738]/80 space-y-1.5">
-                    <span className="text-xs font-mono text-sky-400 uppercase font-semibold">
-                      The Engineering Solution
-                    </span>
-                    <p className="text-slate-300 leading-relaxed text-[13px]">
-                      {project.solution}
-                    </p>
-                  </div>
-                </div>
-
-                {/* What Was Built & Key Improvements */}
-                <div className="space-y-2">
-                  <span className="text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider">
-                    Key Deliverables & Concrete Results
-                  </span>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
-                    {project.highlights.map((item, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-2.5 text-xs sm:text-[13px] text-slate-300 leading-snug"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Screenshots Gallery (If Present) */}
-                {project.images.length > 0 && (
-                  <div className="space-y-3 pt-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-                        <Eye className="w-3.5 h-3.5 text-amber-400" />
-                        System Telemetry & Interface Previews ({project.images.length})
-                      </span>
-                      <span className="text-[11px] text-slate-500 font-mono">
-                        Click to view high-res capture
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
-                      {project.images.map((img, imgIdx) => (
-                        <div
-                          key={imgIdx}
-                          onClick={() =>
-                            setSelectedImage({
-                              project,
-                              index: imgIdx
-                            })
-                          }
-                          className="group relative rounded-lg overflow-hidden border border-[#1E2738] bg-[#0F141E] cursor-pointer hover:border-amber-400/50 transition-all"
+                      {project.liveUrl && (
+                        <a
+                          href={project.liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => sounds.playClick()}
+                          onMouseEnter={() => sounds.playHover()}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 active:scale-95 ${
+                            isDark
+                              ? "bg-white hover:bg-zinc-200 text-black shadow-md shadow-white/5"
+                              : "bg-zinc-900 hover:bg-black text-white shadow-xs"
+                          }`}
                         >
-                          <div className="aspect-[16/10] overflow-hidden bg-slate-950">
-                            <img
-                              src={img.url}
-                              alt={img.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              loading="lazy"
-                            />
-                          </div>
-                          <div className="p-2 text-left">
-                            <div className="text-[11px] font-semibold text-slate-200 group-hover:text-amber-300 transition-colors truncate">
-                              {img.title}
+                          <span>Visit Live Platform</span>
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Narrative Flow */}
+                  <div className="space-y-4">
+                    <p className={`text-sm sm:text-base leading-relaxed ${
+                      isDark ? "text-zinc-200" : "text-zinc-800"
+                    }`}>
+                      {project.summary}
+                    </p>
+
+                    <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 pt-1 text-xs sm:text-sm leading-relaxed p-4 rounded-xl border ${
+                      isDark
+                        ? "bg-zinc-950/50 border-white/5 text-zinc-300"
+                        : "bg-zinc-50 border-black/5 text-zinc-700"
+                    }`}>
+                      <div>
+                        <span className={`font-bold block mb-1 text-xs uppercase tracking-wider ${
+                          isDark ? "text-zinc-400" : "text-zinc-500"
+                        }`}>
+                          Context and Challenge
+                        </span>
+                        <p>{project.challenge}</p>
+                      </div>
+                      <div>
+                        <span className={`font-bold block mb-1 text-xs uppercase tracking-wider ${
+                          isDark ? "text-zinc-400" : "text-zinc-500"
+                        }`}>
+                          Engineered Solution
+                        </span>
+                        <p>{project.solution}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Key Highlights Bulleted Narrative */}
+                  <div className="space-y-2">
+                    <span className={`text-xs uppercase tracking-wider font-extrabold block ${
+                      isDark ? "text-zinc-400" : "text-zinc-500"
+                    }`}>
+                      Key Deliverables and Outcomes
+                    </span>
+                    <ul className="space-y-2">
+                      {project.highlights.map((h, i) => (
+                        <li
+                          key={i}
+                          className={`text-xs sm:text-sm flex items-start gap-2.5 ${
+                            isDark ? "text-zinc-300" : "text-zinc-700"
+                          }`}
+                        >
+                          <span className={`w-1.5 h-1.5 rounded-full mt-2 shrink-0 ${
+                            isDark ? "bg-zinc-400" : "bg-zinc-500"
+                          }`} />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Image Gallery Showcase */}
+                  {project.images.length > 0 && (
+                    <div className="space-y-2.5 pt-2">
+                      <div className="flex items-center justify-between">
+                        <span className={`text-xs uppercase tracking-wider font-extrabold ${
+                          isDark ? "text-zinc-400" : "text-zinc-500"
+                        }`}>
+                          Production Interface Snapshots ({project.images.length})
+                        </span>
+                        <span className={`text-[11px] ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
+                          Click snapshot to expand full resolution
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {project.images.map((img, idx) => (
+                          <div
+                            key={idx}
+                            onClick={() => {
+                              sounds.playChime(600, 840);
+                              setSelectedImage({ project, index: idx });
+                            }}
+                            onMouseEnter={() => sounds.playHover()}
+                            className={`group/thumb cursor-pointer rounded-xl border overflow-hidden transition-all duration-300 relative ${
+                              isDark
+                                ? "bg-zinc-950 border-white/10 hover:border-white/30"
+                                : "bg-zinc-100 border-black/10 hover:border-black/30"
+                            }`}
+                          >
+                            <div className="aspect-[16/10] overflow-hidden bg-black relative">
+                              <img
+                                src={img.url}
+                                alt={img.title}
+                                className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/thumb:scale-105"
+                                loading="lazy"
+                              />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center">
+                                <div className="px-3 py-1 rounded-full bg-white/90 text-black text-xs font-bold flex items-center gap-1.5 shadow-md">
+                                  <Eye className="w-3.5 h-3.5" />
+                                  <span>Inspect</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="p-2.5 text-left">
+                              <p className={`text-xs font-bold truncate ${
+                                isDark ? "text-zinc-200" : "text-zinc-800"
+                              }`}>
+                                {img.title}
+                              </p>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
+                  )}
+
+                  {/* Tech Stack Pills */}
+                  <div className={`pt-4 border-t flex flex-wrap items-center gap-1.5 ${
+                    isDark ? "border-white/[0.08]" : "border-black/[0.06]"
+                  }`}>
+                    <span className={`text-xs font-bold mr-2 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
+                      Stack:
+                    </span>
+                    {project.stack.map((tech) => (
+                      <span
+                        key={tech}
+                        onMouseEnter={() => sounds.playHover()}
+                        className={`px-2.5 py-0.5 rounded-md text-xs font-semibold border transition-colors ${
+                          isDark
+                            ? "bg-zinc-950/60 text-zinc-300 border-white/5 hover:border-white/20"
+                            : "bg-zinc-100 text-zinc-700 border-black/5 hover:border-black/20"
+                        }`}
+                      >
+                        {tech}
+                      </span>
+                    ))}
                   </div>
-                )}
+                </article>
+              </TiltCard>
+            </div>
+          ))}
+        </div>
+      </section>
 
-                {/* Tech Stack Pills */}
-                <div className="flex flex-wrap items-center gap-1.5 pt-3 border-t border-[#1E2738]/60">
-                  <span className="text-[11px] font-mono text-slate-400 mr-2">
-                    Stack:
-                  </span>
-                  {project.stack.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#0F141E] text-slate-300 border border-[#1E2738]"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION: SKILLS & TECHNICAL COMPETENCIES */}
-        <section id="skills" className="space-y-6">
-          <div className="border-b border-[#1E2738] pb-3">
-            <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider">
-              Tooling & Capabilities
+      {/* SECTION: SKILLS AND TOOLING */}
+      <section id="skills" className="space-y-6 scroll-mt-28">
+          <div className={`border-b pb-3 ${
+            isDark ? "border-white/[0.08]" : "border-black/[0.08]"
+          }`}>
+            <span className="text-xs font-extrabold text-zinc-400 uppercase tracking-widest block">
+              Core Capabilities
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              Core Technical Competencies
+            <h2 className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
+              isDark ? "text-white" : "text-zinc-900"
+            }`}>
+              Technical Tooling and Engineering Stack
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {SKILL_GROUPS.map((group, idx) => (
-              <div
+              <TiltCard
                 key={idx}
-                className="rounded-xl bg-[#0C1017] border border-[#1E2738] p-6 space-y-4 hover:border-slate-700 transition-all"
+                isDark={isDark}
+                maxTilt={5}
+                className="h-full"
               >
-                <div className="space-y-1">
-                  <h3 className="text-base font-bold text-white flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-amber-400" />
-                    <span>{group.title}</span>
-                  </h3>
-                  <p className="text-xs text-slate-400">
-                    {group.description}
-                  </p>
-                </div>
+                <div className={`h-full rounded-2xl p-6 border backdrop-blur-md transition-all duration-300 flex flex-col justify-between ${
+                  isDark
+                    ? "bg-zinc-900/70 border-white/10 hover:border-white/20 shadow-specular-dark"
+                    : "bg-white border-black/10 hover:border-black/20 shadow-xs"
+                }`}>
+                  <div className="space-y-2">
+                    <h3 className={`text-base font-extrabold ${
+                      isDark ? "text-white" : "text-zinc-900"
+                    }`}>
+                      {group.title}
+                    </h3>
+                    <p className={`text-xs leading-relaxed ${
+                      isDark ? "text-zinc-400" : "text-zinc-600"
+                    }`}>
+                      {group.description}
+                    </p>
+                  </div>
 
-                <div className="flex flex-wrap gap-1.5 pt-2">
-                  {group.tools.map((tool) => (
-                    <span
-                      key={tool}
-                      className="px-2.5 py-1 text-xs rounded-md bg-[#0F141E] text-slate-300 border border-[#1E2738] hover:border-amber-400/40 transition-colors font-mono"
-                    >
-                      {tool}
-                    </span>
-                  ))}
+                  <div className="flex flex-wrap gap-1.5 pt-5">
+                    {group.tools.map((tool) => (
+                      <span
+                        key={tool}
+                        onMouseEnter={() => sounds.playHover()}
+                        className={`px-2.5 py-1 text-xs font-semibold rounded-lg border transition-colors ${
+                          isDark
+                            ? "bg-zinc-950/70 text-zinc-300 border-white/5 hover:border-zinc-500"
+                            : "bg-zinc-100 text-zinc-700 border-black/5 hover:border-zinc-400"
+                        }`}
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </TiltCard>
             ))}
           </div>
         </section>
 
-        {/* SECTION: EDUCATION & CERTIFICATION */}
-        <section id="about" className="space-y-6">
-          <div className="border-b border-[#1E2738] pb-3">
-            <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider">
-              Background & Credentials
+        {/* SECTION: EDUCATION AND CERTIFICATIONS */}
+        <section id="credentials" className="space-y-6 scroll-mt-28">
+          <div className={`border-b pb-3 ${
+            isDark ? "border-white/[0.08]" : "border-black/[0.08]"
+          }`}>
+            <span className="text-xs font-extrabold text-zinc-400 uppercase tracking-widest block">
+              Qualifications
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white">
-              Education & Professional Certification
+            <h2 className={`text-xl sm:text-2xl font-extrabold tracking-tight ${
+              isDark ? "text-white" : "text-zinc-900"
+            }`}>
+              Education and Certified Credentials
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Education Card */}
-            <div className="rounded-xl bg-[#0C1017] border border-[#1E2738] p-6 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-semibold text-slate-400 uppercase">
-                  Higher Education
-                </span>
-                <span className="text-xs font-mono text-amber-400">
-                  Graduate
-                </span>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {/* Degree */}
+            <TiltCard isDark={isDark} maxTilt={5}>
+              <div className={`rounded-2xl p-6 border backdrop-blur-md space-y-3 ${
+                isDark
+                  ? "bg-zinc-900/70 border-white/10 shadow-specular-dark"
+                  : "bg-white border-black/10 shadow-xs"
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-bold uppercase tracking-wider ${
+                    isDark ? "text-zinc-400" : "text-zinc-500"
+                  }`}>
+                    Academic Degree
+                  </span>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${
+                    isDark ? "text-zinc-300 border-white/10" : "text-zinc-700 border-black/10"
+                  }`}>
+                    Graduated
+                  </span>
+                </div>
+                <h3 className={`text-lg font-bold ${
+                  isDark ? "text-white" : "text-zinc-900"
+                }`}>
+                  Bachelor of Computer Science (S.Kom)
+                </h3>
+                <p className={`text-sm ${
+                  isDark ? "text-zinc-300" : "text-zinc-700"
+                }`}>
+                  Universitas Komputer Indonesia (UNIKOM) | Informatics Engineering
+                </p>
+                <p className={`text-xs leading-relaxed ${
+                  isDark ? "text-zinc-400" : "text-zinc-600"
+                }`}>
+                  Specialized in software systems engineering, data pipelines, and
+                  machine learning architectures.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white">
-                Bachelor of Computer Science (S.Kom)
-              </h3>
-              <p className="text-sm font-semibold text-slate-300">
-                Informatics Engineering • Universitas Komputer Indonesia (UNIKOM)
-              </p>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Focused on machine learning, deep learning text classification,
-                data structures, algorithms, and distributed software engineering.
-              </p>
-            </div>
+            </TiltCard>
 
-            {/* Certification Card */}
-            <div className="rounded-xl bg-[#0C1017] border border-[#1E2738] p-6 space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-semibold text-slate-400 uppercase">
-                  National Certification
-                </span>
-                <span className="text-xs font-mono text-amber-400">
-                  BNSP CADS
-                </span>
+            {/* Certification (CADS) */}
+            <TiltCard isDark={isDark} maxTilt={5}>
+              <div className={`rounded-2xl p-6 border backdrop-blur-md space-y-3 ${
+                isDark
+                  ? "bg-zinc-900/70 border-white/10 shadow-specular-dark"
+                  : "bg-white border-black/10 shadow-xs"
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-bold uppercase tracking-wider ${
+                    isDark ? "text-zinc-400" : "text-zinc-500"
+                  }`}>
+                    National Certification
+                  </span>
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+                    Verified CADS
+                  </span>
+                </div>
+                <h3 className={`text-lg font-bold ${
+                  isDark ? "text-white" : "text-zinc-900"
+                }`}>
+                  Certified Associate Data Scientist (CADS)
+                </h3>
+                <p className={`text-sm ${
+                  isDark ? "text-zinc-300" : "text-zinc-700"
+                }`}>
+                  Badan Nasional Sertifikasi Profesi (BNSP)
+                </p>
+                <p className={`text-xs leading-relaxed ${
+                  isDark ? "text-zinc-400" : "text-zinc-600"
+                }`}>
+                  Officially assessed and verified in data preprocessing, statistical
+                  modeling, predictive pipelines, and production machine learning.
+                </p>
               </div>
-              <h3 className="text-lg font-bold text-white">
-                Certified Associate Data Scientist (CADS)
-              </h3>
-              <p className="text-sm font-semibold text-slate-300">
-                Badan Nasional Sertifikasi Profesi (BNSP)
-              </p>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                Formally assessed and certified in core data science competencies:
-                data collection, statistical preprocessing, exploratory data
-                analysis, predictive modeling, and model evaluation.
-              </p>
-            </div>
+            </TiltCard>
           </div>
         </section>
 
-        {/* SECTION: GET IN TOUCH / FOOTER */}
-        <section id="contact" className="rounded-2xl bg-[#0C1017] border border-[#1E2738] p-8 sm:p-12 text-center space-y-6 relative overflow-hidden">
-          <div className="max-w-xl mx-auto space-y-3">
-            <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
-              Let's Build Something Together
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Open to Engineering Opportunities
-            </h2>
-            <p className="text-sm text-slate-300 leading-relaxed">
-              Available for full-time roles in AI, Machine Learning, Data Science,
-              Data Analysis, and Software Engineering. Let's discuss how my
-              systems background can add value to your team.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <button
-              onClick={handleCopyEmail}
-              className="px-5 py-2.5 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition-all flex items-center gap-2 active:scale-95 shadow-lg shadow-amber-500/20"
-            >
-              {copiedEmail ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  <span>Email Copied to Clipboard</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4 h-4" />
-                  <span>Copy idewanyomanbayusw@gmail.com</span>
-                </>
-              )}
-            </button>
-
-            <a
-              href={`mailto:${PROFILE.email}`}
-              className="px-4 py-2.5 rounded-md bg-[#0F141E] hover:bg-[#151C2A] text-slate-200 border border-[#1E2738] hover:border-slate-500 font-semibold text-sm transition-all flex items-center gap-2"
-            >
-              <Mail className="w-4 h-4 text-amber-400" />
-              <span>Send Direct Email</span>
-            </a>
-
-            <a
-              href={PROFILE.resumePdf}
-              download="Bayu_Satria_Portfolio.pdf"
-              className="px-4 py-2.5 rounded-md bg-[#0F141E] hover:bg-[#151C2A] text-slate-200 border border-[#1E2738] hover:border-slate-500 font-semibold text-sm transition-all flex items-center gap-2"
-            >
-              <FileDown className="w-4 h-4 text-amber-400" />
-              <span>Download Dossier PDF</span>
-            </a>
-          </div>
-
-          <div className="pt-8 border-t border-[#1E2738] flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
+        {/* FOOTER */}
+        <section className={`pt-12 border-t text-xs ${
+          isDark ? "border-white/[0.08] text-zinc-500" : "border-black/[0.08] text-zinc-500"
+        }`}>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <span>© {new Date().getFullYear()} {PROFILE.name}</span>
-              <span className="text-slate-600">•</span>
-              <span className="flex items-center gap-1.5 text-slate-300">
-                <MapPin className="w-3.5 h-3.5 text-amber-400" />
-                <span>Bandung, West Java, Indonesia</span>
+              <span className={`font-bold ${isDark ? "text-zinc-300" : "text-zinc-800"}`}>
+                {PROFILE.name}
               </span>
+              <span>•</span>
+              <span>{PROFILE.location}</span>
             </div>
 
-            <div className="flex items-center gap-4 text-slate-400">
-              <span className="flex items-center gap-1.5 font-mono text-[11px]">
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
-                <span>WIB (UTC+7): {currentTime || "13:45:00"}</span>
+            <div className="flex items-center gap-6">
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-zinc-400" />
+                <span>WIB (UTC+7): {currentTime || "14:00:00"}</span>
               </span>
               <a
                 href={PROFILE.github}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => sounds.playClick()}
+                onMouseEnter={() => sounds.playHover()}
                 className="hover:text-white transition-colors"
               >
                 GitHub
@@ -1033,6 +1461,8 @@ export default function App() {
                 href={PROFILE.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => sounds.playClick()}
+                onMouseEnter={() => sounds.playHover()}
                 className="hover:text-white transition-colors"
               >
                 LinkedIn
@@ -1042,9 +1472,17 @@ export default function App() {
         </section>
       </main>
 
-      {/* FLOATING ACTION BOTTOM DOCK */}
-      <aside aria-label="Quick Action Dock" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 px-3 py-2 rounded-full bg-[#0F141E]/90 backdrop-blur-md border border-[#1E2738] shadow-2xl flex items-center gap-2 sm:gap-3 text-xs">
-        <span className="text-[11px] font-mono font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 hidden sm:inline">
+      {/* FLOATING ACTION BOTTOM DOCK (Apple Crystalline Glass Style) */}
+      <aside aria-label="Quick Action Dock" className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-40 px-3.5 py-2 rounded-full backdrop-blur-2xl border shadow-2xl flex items-center gap-2 sm:gap-3 text-xs transition-colors duration-200 ${
+        isDark
+          ? "bg-zinc-900/90 border-white/15 text-zinc-200 shadow-black/80 shadow-specular-dark"
+          : "bg-white/95 border-black/10 text-zinc-800 shadow-zinc-300/60"
+      }`}>
+        <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full hidden sm:inline ${
+          isDark
+            ? "text-zinc-300 bg-zinc-800 border border-white/10"
+            : "text-zinc-700 bg-zinc-100 border border-black/10"
+        }`}>
           FAST ACCESS
         </span>
 
@@ -1052,50 +1490,113 @@ export default function App() {
           href="https://bysense.batarienergy.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#151C2A] hover:bg-slate-800 text-slate-200 hover:text-white transition-colors"
+          onClick={() => sounds.playClick()}
+          onMouseEnter={() => sounds.playHover()}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors ${
+            isDark
+              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
+              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-800"
+          }`}
         >
           <span>BySense</span>
-          <ArrowUpRight className="w-3 h-3 text-amber-400" />
+          <ArrowUpRight className="w-3 h-3 text-zinc-400" />
         </a>
 
         <a
           href="https://brin-project-kp.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#151C2A] hover:bg-slate-800 text-slate-200 hover:text-white transition-colors"
+          onClick={() => sounds.playClick()}
+          onMouseEnter={() => sounds.playHover()}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors ${
+            isDark
+              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
+              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-800"
+          }`}
         >
           <span>BRIN</span>
-          <ArrowUpRight className="w-3 h-3 text-amber-400" />
+          <ArrowUpRight className="w-3 h-3 text-zinc-400" />
         </a>
 
         <a
-          href="https://nutrimood.vercel.app/"
+          href="https://nutrimoodv.vercel.app/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#151C2A] hover:bg-slate-800 text-slate-200 hover:text-white transition-colors"
+          onClick={() => sounds.playClick()}
+          onMouseEnter={() => sounds.playHover()}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors ${
+            isDark
+              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
+              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-800"
+          }`}
         >
           <span>NutriMood</span>
-          <ArrowUpRight className="w-3 h-3 text-amber-400" />
+          <ArrowUpRight className="w-3 h-3 text-zinc-400" />
         </a>
 
-        <div className="w-px h-4 bg-slate-700 mx-0.5" />
+        <a
+          href="https://cimahibattery.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => sounds.playClick()}
+          onMouseEnter={() => sounds.playHover()}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors ${
+            isDark
+              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
+              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-800"
+          }`}
+        >
+          <span>CBI</span>
+          <ArrowUpRight className="w-3 h-3 text-zinc-400" />
+        </a>
+
+        <div className={`w-px h-4 mx-0.5 ${
+          isDark ? "bg-zinc-700" : "bg-zinc-300"
+        }`} />
 
         <button
           onClick={handleCopyEmail}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition-all"
+          onMouseEnter={() => sounds.playHover()}
+          className={`flex items-center gap-1 px-3 py-1 rounded-full font-bold transition-all active:scale-95 ${
+            isDark
+              ? "bg-white hover:bg-zinc-200 text-black shadow-xs"
+              : "bg-zinc-900 hover:bg-black text-white shadow-xs"
+          }`}
         >
-          {copiedEmail ? <Check className="w-3 h-3" /> : <Mail className="w-3 h-3" />}
+          {copiedEmail ? <Check className="w-3 h-3 text-emerald-600" /> : <Mail className="w-3 h-3" />}
           <span>{copiedEmail ? "Copied" : "Email"}</span>
         </button>
 
         <a
           href={PROFILE.resumePdf}
-          download="Bayu_Satria_Portfolio.pdf"
-          className="p-1.5 rounded-full bg-[#151C2A] hover:bg-slate-800 text-slate-200 hover:text-white transition-colors"
-          title="Download PDF Dossier"
+          download="CV_Idew_Bayu.pdf"
+          onClick={() => sounds.playClick()}
+          onMouseEnter={() => sounds.playHover()}
+          className={`p-1.5 rounded-full transition-colors ${
+            isDark
+              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white"
+              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
+          }`}
+          title="Download CV (PDF)"
         >
-          <FileDown className="w-3.5 h-3.5 text-amber-400" />
+          <FileDown className="w-3.5 h-3.5 text-zinc-400" />
         </a>
+
+        <button
+          onClick={handleToggleSound}
+          className={`p-1.5 rounded-full transition-colors ${
+            isDark
+              ? "bg-zinc-800/80 hover:bg-zinc-700 text-zinc-300 hover:text-white"
+              : "bg-zinc-100 hover:bg-zinc-200 text-zinc-700"
+          }`}
+          title={soundEnabled ? "Mute Interaction Sound" : "Enable Interaction Sound"}
+        >
+          {soundEnabled ? (
+            <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+          ) : (
+            <VolumeX className="w-3.5 h-3.5 text-zinc-500" />
+          )}
+        </button>
       </aside>
 
       {/* FULLSCREEN IMAGE LIGHTBOX MODAL */}
@@ -1105,36 +1606,59 @@ export default function App() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
-            onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6"
+            onClick={() => {
+              sounds.playClick();
+              setSelectedImage(null);
+            }}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
+              initial={{ scale: 0.96, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative max-w-5xl w-full bg-[#0C1017] rounded-xl border border-[#1E2738] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+              exit={{ scale: 0.96, opacity: 0 }}
+              className={`relative max-w-5xl w-full rounded-2xl border overflow-hidden shadow-2xl flex flex-col max-h-[90vh] ${
+                isDark
+                  ? "bg-zinc-900 border-white/15 shadow-specular-dark"
+                  : "bg-white border-black/10"
+              }`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Modal Top Header */}
-              <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#1E2738] bg-[#0F141E]">
+              <div className={`flex items-center justify-between px-5 py-3.5 border-b ${
+                isDark
+                  ? "bg-zinc-950 border-white/10"
+                  : "bg-zinc-50 border-black/10"
+              }`}>
                 <div className="flex items-center gap-2 truncate">
-                  <span className="font-mono text-xs text-amber-400 font-bold">
+                  <span className={`text-xs font-bold ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
                     {selectedImage.project.number}
                   </span>
-                  <span className="text-slate-500">•</span>
-                  <span className="text-sm font-bold text-white truncate">
+                  <span className="text-zinc-500">|</span>
+                  <span className={`text-sm font-bold truncate ${
+                    isDark ? "text-white" : "text-zinc-900"
+                  }`}>
                     {selectedImage.project.images[selectedImage.index].title}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono text-slate-400">
+                <div className="flex items-center gap-3">
+                  <span className={`text-xs ${
+                    isDark ? "text-zinc-400" : "text-zinc-500"
+                  }`}>
                     {selectedImage.index + 1} /{" "}
                     {selectedImage.project.images.length}
                   </span>
                   <button
-                    onClick={() => setSelectedImage(null)}
-                    className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                    onClick={() => {
+                      sounds.playClick();
+                      setSelectedImage(null);
+                    }}
+                    onMouseEnter={() => sounds.playHover()}
+                    className={`p-1.5 rounded-lg transition-colors ${
+                      isDark
+                        ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                        : "text-zinc-500 hover:text-black hover:bg-zinc-200"
+                    }`}
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -1155,6 +1679,7 @@ export default function App() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
+                        sounds.playClick();
                         setSelectedImage({
                           ...selectedImage,
                           index:
@@ -1164,13 +1689,15 @@ export default function App() {
                             selectedImage.project.images.length
                         });
                       }}
-                      className="absolute left-3 p-2 rounded-full bg-black/60 hover:bg-black/80 text-white border border-slate-700 transition-colors"
+                      onMouseEnter={() => sounds.playHover()}
+                      className="absolute left-3 p-2 rounded-full bg-black/70 hover:bg-black text-white border border-zinc-700 transition-colors"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
+                        sounds.playClick();
                         setSelectedImage({
                           ...selectedImage,
                           index:
@@ -1178,7 +1705,8 @@ export default function App() {
                             selectedImage.project.images.length
                         });
                       }}
-                      className="absolute right-3 p-2 rounded-full bg-black/60 hover:bg-black/80 text-white border border-slate-700 transition-colors"
+                      onMouseEnter={() => sounds.playHover()}
+                      className="absolute right-3 p-2 rounded-full bg-black/70 hover:bg-black text-white border border-zinc-700 transition-colors"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </button>
@@ -1187,8 +1715,14 @@ export default function App() {
               </div>
 
               {/* Modal Caption Footer */}
-              <div className="p-4 bg-[#0F141E] border-t border-[#1E2738] text-xs text-slate-300 leading-relaxed">
-                <span className="font-semibold text-white mr-1">
+              <div className={`p-4 border-t text-xs leading-relaxed ${
+                isDark
+                  ? "bg-zinc-950 border-white/10 text-zinc-300"
+                  : "bg-zinc-50 border-black/10 text-zinc-700"
+              }`}>
+                <span className={`font-bold mr-1 ${
+                  isDark ? "text-white" : "text-zinc-900"
+                }`}>
                   Figure Details:
                 </span>
                 {selectedImage.project.images[selectedImage.index].caption}
