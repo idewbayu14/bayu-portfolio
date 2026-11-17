@@ -1599,11 +1599,8 @@ export default function App() {
       </main>
 
       {/* FLOATING ACTION BOTTOM DOCK (Apple Dynamic Island Style) */}
-      <motion.aside
+      <aside
         aria-label="Quick Action Dock"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.65, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-[calc(100vw-1.5rem)] overflow-x-auto no-scrollbar px-3 sm:px-3.5 py-2 rounded-full backdrop-blur-2xl border shadow-2xl flex items-center gap-2 sm:gap-3 text-xs transition-colors duration-200 ${
           isDark
             ? "bg-zinc-900/90 border-white/15 text-zinc-200 shadow-black/80 shadow-specular-dark"
@@ -1700,7 +1697,7 @@ export default function App() {
             <VolumeX className="w-3.5 h-3.5 text-zinc-500" />
           )}
         </button>
-      </motion.aside>
+      </aside>
 
       {/* FULLSCREEN IMAGE LIGHTBOX MODAL */}
       <AnimatePresence>

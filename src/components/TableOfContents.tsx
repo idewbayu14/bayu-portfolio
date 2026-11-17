@@ -91,11 +91,8 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ isDark }) => {
   return (
     <>
       {/* 1. DESKTOP LEFT RAIL (Poor Charlie's Almanack / Stripe Press style) */}
-      <motion.aside
+      <aside
         aria-label="Table of Contents"
-        initial={{ opacity: 0, x: -24 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
         className="fixed left-5 xl:left-8 2xl:left-12 top-1/2 -translate-y-1/2 z-30 hidden xl:flex flex-col items-start select-none"
       >
         <nav className="flex flex-col gap-2.5 items-start py-2">
@@ -162,15 +159,10 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ isDark }) => {
           }`}>
           {String(activeIndex + 1).padStart(2, "0")} / {String(TOC_ITEMS.length).padStart(2, "0")}
         </div>
-      </motion.aside>
+      </aside>
 
       {/* 2. MOBILE & TABLET FLOATING CHAPTER CAPSULE (Screens < 1280px) */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.45, ease: [0.16, 1, 0.3, 1] }}
-        className="xl:hidden fixed bottom-[4.25rem] left-1/2 -translate-x-1/2 z-40 select-none"
-      >
+      <div className="xl:hidden fixed bottom-[4.25rem] left-1/2 -translate-x-1/2 z-40 select-none">
         <button
           onClick={() => {
             sounds.playClick();
@@ -203,7 +195,7 @@ export const TableOfContents: React.FC<TableOfContentsProps> = ({ isDark }) => {
 
           <ChevronUp className={`w-3.5 h-3.5 ${isDark ? "text-zinc-400" : "text-zinc-500"}`} />
         </button>
-      </motion.div>
+      </div>
 
       {/* 3. MOBILE & TABLET SLIDE-UP BOTTOM SHEET DRAWER */}
       <AnimatePresence>
