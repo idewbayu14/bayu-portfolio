@@ -1,28 +1,62 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import {
-  Layers,
-  Copy,
-  Check,
-  Sun,
-  Moon,
-  X,
-  Maximize2,
-  Terminal,
-  Cpu,
   Globe,
   Mail,
-  ShieldCheck,
+  Copy,
+  Check,
+  FileDown,
   ArrowUpRight,
-  Database,
-  BarChart3,
-  Network,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  X,
+  ExternalLink,
+  Cpu,
+  Layers,
+  Database,
+  Terminal,
+  Activity,
+  Zap,
+  BarChart2,
+  Workflow,
+  Sparkle,
+  Shield,
+  Smartphone,
+  Eye,
+  MapPin,
+  Clock,
+  Code2
 } from 'lucide-react';
+
+const GithubIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path
+      fillRule="evenodd"
+      d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+const LinkedinIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+  </svg>
+);
 
 interface ProjectImage {
   url: string;
+  title: string;
   caption: string;
 }
 
@@ -30,1353 +64,1139 @@ interface Project {
   id: string;
   number: string;
   title: string;
-  context: string;
-  year: string;
-  category: 'ml' | 'web';
-  badge: string;
-  featured: boolean;
-  liveUrl?: string;
-  domain?: string;
+  organization: string;
+  role: string;
+  category: 'energy' | 'automation' | 'ml' | 'health';
+  categoryLabel: string;
+  impactMetric: string;
+  impactLabel: string;
   summary: string;
-  deliverables: string[];
-  architecture: string;
+  challenge: string;
+  solution: string;
+  highlights: string[];
   stack: string[];
+  liveUrl?: string;
+  liveLabel?: string;
   images: ProjectImage[];
 }
 
 const PROFILE = {
   name: "I Dewa Nyoman Bayu Satria Wibawa",
-  shortName: "Idew Bayu",
-  role: "Machine Learning & Software Engineer",
-  status: "Available for Machine Learning & Software Engineering Roles",
-  tagline:
-    "Machine Learning Engineer specializing in Natural Language Processing, text classification pipelines, and production inference systems. Experienced in end-to-end model development at BRIN, algorithmic resampling research, and real-time telemetry dashboards.",
+  shortName: "Bayu Satria",
+  role: "Machine Learning & Software Systems Engineer",
+  education: "Informatics Engineering Graduate",
+  institution: "Universitas Komputer Indonesia (UNIKOM)",
+  certification: "BNSP Certified Associate Data Scientist (CADS)",
+  valueHook: "I build machine learning models, automation scripts, and web or mobile apps that cut down repetitive manual work.",
+  bio: "Informatics Engineering graduate from UNIKOM with BNSP Associate Data Scientist certification. Experienced in engineering end-to-end ML classification pipelines, IoT solar telemetry networks, and OCR automation that deliver measurable operational efficiency. Driven by practical engineering that turns complex data pipelines into production-ready software.",
   email: "idewanyomanbayusw@gmail.com",
-  linkedin: "https://www.linkedin.com/in/idewanyomanbayu",
+  linkedin: "https://linkedin.com/in/idewanyomanbayusw",
   github: "https://github.com/idewbayu14",
-  avatar: "/profile/bayu.jpg"
+  resumePdf: "/Bayu_Satria_Portfolio.pdf",
+  avatar: "/profile/bayu.jpg",
+  location: "Bandung, Indonesia (UTC+7)",
+  openRoles: [
+    "AI & Machine Learning Engineer",
+    "Data Scientist",
+    "Data Analyst",
+    "Software Engineer"
+  ]
 };
 
-const ML_PILLARS = [
+const IMPACT_STATS = [
   {
-    title: "NLP & Text Classification",
-    desc: "Sentiment analysis, deep learning text classification, tokenization, and social opinion tracking",
-    icon: Network
+    value: "~80%",
+    label: "Logging Time Saved",
+    context: "Batari Energy • BySense IoT",
+    desc: "Automated periodic solar generation recording across national installations"
   },
   {
-    title: "Intelligent Recommender Systems",
-    desc: "Multi-criteria constraint mapping, hybrid feature matching, and user state evaluation",
-    icon: Database
+    value: "~75%",
+    label: "Bookkeeping Reduced",
+    context: "Zoom Petcare • Financial OCR",
+    desc: "Automated grooming receipt data extraction and ledger synchronization"
   },
   {
-    title: "Production Inference & Telemetry",
-    desc: "PyTorch model serving, low-latency REST APIs, and live telemetry web interfaces",
-    icon: BarChart3
-  }
-];
-
-const SKILL_GROUPS = [
-  {
-    category: "Machine Learning & Deep Learning",
-    icon: Cpu,
-    skills: ["Python", "PyTorch", "NLP", "Scikit-Learn", "Transformers", "Recommender Systems", "Deep Learning", "Sentiment Analysis", "Data Mining"]
+    value: "600+",
+    label: "SKUs Indexed",
+    context: "Multi-Marketplace Automation",
+    desc: "Batch photo indexing across Shopee, Tokopedia, and TikTok Shop"
   },
   {
-    category: "Data Pipelines & Feature Engineering",
-    icon: Database,
-    skills: ["Pandas", "NumPy", "TF-IDF Vectorization", "Tokenization & Lemmatization", "Web Scraping", "Data Preprocessing", "ROC-AUC Evaluation"]
-  },
-  {
-    category: "Production, Systems & Cloud",
-    icon: Terminal,
-    skills: ["FastAPI", "RESTful APIs", "React", "Next.js", "TypeScript", "Tailwind CSS", "Docker", "Git & GitHub", "Vercel", "Linux Shell"]
+    value: "94.2%",
+    label: "Neural Model Accuracy",
+    context: "BRIN • Autonomous Vehicles",
+    desc: "In-house deep learning text classification operating with <50ms latency"
   }
 ];
 
 const PROJECTS: Project[] = [
   {
-    id: "brin",
+    id: "batari-bysense",
     number: "01",
-    title: "Autonomous Vehicle Sentiment Analysis Platform",
-    context: "National Research and Innovation Agency (BRIN)",
-    year: "2026",
-    category: "ml",
-    badge: "Machine Learning & NLP",
-    featured: true,
-    liveUrl: "https://brin-project-kp.vercel.app/",
-    domain: "brin-project-kp.vercel.app",
+    title: "BySense: Photovoltaic Telemetry & Solar IoT Monitoring",
+    organization: "PT Batari Energy",
+    role: "Full-Stack & IoT Systems Engineer",
+    category: "energy",
+    categoryLabel: "Industrial IoT & CleanTech",
+    impactMetric: "80% Time Saved",
+    impactLabel: "Manual Admin Logging Reduced",
     summary:
-      "End-to-end deep learning NLP platform analyzing public discussions on Level 2 autonomous vehicle adoption. Powered by an independently curated research dataset and a custom-trained multi-class neural classification model, deployed live on a dedicated web application.",
-    deliverables: [
-      "Independently collected, curated, and preprocessed multi-source public discussions, implementing domain-specific Indonesian text normalization.",
-      "Engineered and trained a multi-class deep learning NLP classification model from scratch achieving 94.2% accuracy without external black-box models.",
-      "Architected and deployed the real-time inference pipeline and interactive research telemetry web platform (brin-project-kp.vercel.app)."
+      "Architected the BySense web and mobile monitoring applications for both internal administrators and commercial solar clients across Indonesia.",
+    challenge:
+      "Commercial solar sites required manual on-site meter readings and weekly spreadsheets. Field technicians struggled to detect panel degradation or soiling without real-time irradiance benchmarks, leading to delayed maintenance and lost energy yield.",
+    solution:
+      "Engineered continuous 5-second telemetry ingestion connecting inverter gateways and battery storage systems to an interactive GIS map. Built an early fault detection engine comparing pyranometer solar irradiance (W/m²) directly with electrical yield (kW), plus a one-click automated PDF report generator.",
+    highlights: [
+      "Automated weekly, monthly, and annual solar panel logs, cutting manual admin recording time by around 80%.",
+      "Built real-time early fault detection comparing live sunlight intensity against actual panel kilowatt output.",
+      "Engineered a one-click automated PDF report generator that turned hours of client presentation prep into seconds.",
+      "Designed the telemetry architecture to track total installed capacity, ready for Batari's upcoming proprietary hardware."
     ],
-    architecture:
-      "Proprietary end-to-end pipeline: independent raw text ingestion, custom tokenization and preprocessing, self-trained deep learning inference engine, served to a responsive live web application.",
-    stack: ["Python", "Deep Learning", "NLP", "Custom Dataset", "PyTorch", "REST API", "React"],
-    images: [
-      {
-        url: "/projects/brin-hero.png",
-        caption: "Research Portal and In-House Deep Learning Sentiment Classification Architecture"
-      },
-      {
-        url: "/projects/brin-analyzer.png",
-        caption: "Live Interactive Real-Time Sentiment Analyzer Running on Custom-Trained Model"
-      }
-    ]
-  },
-  {
-    id: "nutrimood",
-    number: "02",
-    title: "NutriMood: Personalized Dietary Recommender",
-    context: "Dicoding & DBS Foundation Capstone",
-    year: "2025",
-    category: "ml",
-    badge: "Machine Learning & AI",
-    featured: true,
-    liveUrl: "https://nutrimoodv.vercel.app/",
-    domain: "nutrimoodv.vercel.app",
-    summary:
-      "Intelligent dietary recommendation web application translating user emotional states and personal medical restrictions into tailored daily meal recommendations.",
-    deliverables: [
-      "Engineered a multi-criteria personalized recommendation algorithm mapping psychological mood states to nutritional requirements.",
-      "Constructed end-to-end data preprocessing and nutritional feature-matching pipelines across 1,200+ curated culinary profiles.",
-      "Packaged and deployed the trained model as a cloud REST API integrated into a responsive web application."
+    stack: [
+      "React",
+      "TypeScript",
+      "React Native",
+      "Leaflet GIS",
+      "Open-Meteo API",
+      "Chart.js",
+      "Tailwind CSS"
     ],
-    architecture:
-      "User emotional states and medical constraint vectors processed through a hybrid machine learning feature-matching engine, delivered via cloud microservices to a web client.",
-    stack: ["Machine Learning", "Recommender System", "Python", "Data Preprocessing", "REST API", "Web App"],
-    images: [
-      {
-        url: "/projects/nutrimood-hero.jpg",
-        caption: "NutriMood Homepage with AI Driven Meal Recommendations"
-      },
-      {
-        url: "/projects/nutrimood-demo.jpg",
-        caption: "Interactive Mood and Health Constraint Evaluation"
-      }
-    ]
-  },
-  {
-    id: "bysense",
-    number: "03",
-    title: "BySense: Photovoltaic and Solar IoT Telemetry",
-    context: "Batari Energy R&D Engineering",
-    year: "2026",
-    category: "web",
-    badge: "IoT & Full Stack System",
-    featured: false,
     liveUrl: "https://bysense.batarienergy.com/",
-    domain: "bysense.batarienergy.com",
-    summary:
-      "Cross-platform IoT telemetry platform monitoring real-time photovoltaic power generation, solar radiation forecasts, and energy flow across nationwide commercial installations.",
-    deliverables: [
-      "Developed the responsive full-stack web dashboard and mobile application from scratch with interactive power yield curves.",
-      "Integrated solar irradiance streams and inverter APIs for anomaly detection, energy forecasting, and performance analytics.",
-      "Completed rigorous mobile performance optimization, debugging, and production release to the Google Play Store."
-    ],
-    architecture:
-      "On-site solar inverters and environmental radiation feeds aggregated via modular REST APIs, visualized through real-time telemetry dashboards on web and Android.",
-    stack: ["React", "Next.js", "React Native", "REST API", "IoT Telemetry", "Data Visualization"],
+    liveLabel: "bysense.batarienergy.com",
     images: [
       {
         url: "/projects/bysense-map.jpg",
-        caption: "Interactive Nationwide Telemetry Map of Operational Solar Power Plants"
-      },
-      {
-        url: "/projects/bysense-correlation.jpg",
-        caption: "Dual-Axis Solar and PV Correlation Analytics with Open-Meteo Weather Telemetry"
+        title: "Nationwide Solar Telemetry Map",
+        caption: "Centralized GIS monitoring view displaying geographical station pins, operational health indicators, and active generation outputs across Indonesia."
       },
       {
         url: "/projects/bysense-station-telemetry.jpg",
-        caption: "Station Detail View: Live PV Generation, Battery SoC, and Building Load Analytics"
+        title: "Station Telemetry Dashboard",
+        caption: "High-frequency instrument view tracking 10.97 kW instantaneous solar output, 65% battery state-of-charge, building load, and daily energy total."
       },
       {
-        url: "/projects/bysense-metrics.jpg",
-        caption: "Real-Time Generation Telemetry, Daily Yield, and Dynamic Energy Flow"
-      },
-      {
-        url: "/projects/bysense-cloud.png",
-        caption: "Centralized Multi-Plant Cloud Telemetry Portfolio with Fleet Status Monitoring"
+        url: "/projects/bysense-correlation.jpg",
+        title: "Irradiance vs. Generation Fault Detection",
+        caption: "Analytical regression model correlating pyranometer sunlight intensity (W/m²) with kilowatt output to automatically detect panel soiling and hardware clipping."
       },
       {
         url: "/projects/bysense-power.png",
-        caption: "Comprehensive Power Profile Analytics with PV, Grid, and Battery Flow"
+        title: "Diurnal Photovoltaic Generation Curve",
+        caption: "Continuous daylight generation tracking showing early-morning solar ramp-up, midday peak yield, and inverter operational thresholds."
+      },
+      {
+        url: "/projects/bysense-cloud.png",
+        title: "Meteorological Weather Synchronization",
+        caption: "Real-time integration of ambient temperature and cloud cover via Open-Meteo API, preventing false maintenance dispatches during overcast weather."
+      },
+      {
+        url: "/projects/bysense-metrics.jpg",
+        title: "Operational Performance & PR Indices",
+        caption: "Summary view of cumulative kilowatt-hours generated, system performance ratio (PR), grid export balance, and operational stability."
       }
     ]
   },
   {
-    id: "cimahi",
-    number: "04",
-    title: "Cimahi Battery Commercial Web Platform",
-    context: "Production Web Deployment",
-    year: "2026",
-    category: "web",
-    badge: "Commercial Web Platform",
-    featured: false,
-    liveUrl: "https://cimahibattery.com/",
-    domain: "cimahibattery.com",
+    id: "zoom-petcare",
+    number: "02",
+    title: "E-Commerce Catalog Automation & Financial OCR Pipeline",
+    organization: "Zoom Petcare",
+    role: "Automation & Data Systems Engineer",
+    category: "automation",
+    categoryLabel: "Workflow Automation & OCR",
+    impactMetric: "75% Bookkeeping Cut",
+    impactLabel: "Over 600 SKUs Indexed",
     summary:
-      "High-performance commercial web platform built for industrial lithium battery manufacturers, featuring structured prismatic cell catalogs and active energy material indexes.",
-    deliverables: [
-      "Designed and deployed a responsive commercial platform featuring structured battery pack categorization and fast search filtering.",
-      "Optimized Core Web Vitals, accessibility compliance, and search engine visibility for national industrial energy procurement."
+      "Designed high-throughput product catalog indexing scripts and an automated OCR-to-Excel bookkeeping pipeline to eliminate manual retail bottlenecks.",
+    challenge:
+      "Launching hundreds of inventory items across three distinct e-commerce marketplaces required days of manual photo cropping, SKU renaming, and metadata entry. Simultaneously, daily handwritten and printed grooming receipts caused extensive bookkeeping delays each week.",
+    solution:
+      "Developed a Python-powered image processing script to standardize and index 600+ SKU photo assets for instant multi-channel upload. Built a computer vision OCR pipeline using Tesseract and Pandas that scans physical receipts, extracts service amounts, dates, and tiers, and populates formatted Excel accounting ledgers automatically.",
+    highlights: [
+      "Sped up product photo indexing to launch over 600 SKUs across Shopee, Tokopedia, and TikTok Shop to drive online sales.",
+      "Engineered an automated OCR-to-Excel script that cut grooming receipt bookkeeping time by roughly 75%.",
+      "Eliminated repetitive manual transcription errors and established instant reconciliation for daily store revenue."
     ],
-    architecture:
-      "Modern responsive frontend architecture with structured catalog indexing, optimized asset delivery, and custom domain production hosting.",
-    stack: ["Web Development", "Responsive UI", "Frontend Architecture", "SEO Optimization", "Production Hosting"],
+    stack: [
+      "Python",
+      "Tesseract OCR",
+      "OpenCV",
+      "Pandas",
+      "OpenPyXL",
+      "Excel Automation",
+      "Regex"
+    ],
+    images: []
+  },
+  {
+    id: "brin-autonomous",
+    number: "03",
+    title: "Autonomous Vehicle Sentiment Analysis Platform",
+    organization: "National Research and Innovation Agency (BRIN)",
+    role: "Machine Learning Engineer",
+    category: "ml",
+    categoryLabel: "Applied Deep Learning & NLP",
+    impactMetric: "94.2% Test Accuracy",
+    impactLabel: "Real-Time <50ms Classification",
+    summary:
+      "Engineered an automated sentiment analysis pipeline and public research portal for BRIN to evaluate public perception toward Level 2 autonomous electric vehicles in Indonesia.",
+    challenge:
+      "Public opinion datasets in Indonesia showed severe class imbalance: safety-critical skepticism and enthusiastic adopters represented sparse edge cases compared to neutral comments. Researchers previously performed manual batch surveys with slow turnaround times.",
+    solution:
+      "Curated an independent corpus of 2,000+ public discourse samples and applied ADASYN and SMOTE synthetic resampling along decision boundaries. Trained an in-house deep learning neural network on token embeddings, then containerized the pipeline into an asynchronous FastAPI service with sub-50ms inference latencies.",
+    highlights: [
+      "Built an automated web scraper and deep learning inference API for Level 2 autonomous vehicle sentiment analysis.",
+      "Moved text classification from manual batch review to real-time tracking.",
+      "Curated 2,000+ corpus samples and eliminated severe class imbalance using ADASYN & SMOTE resampling.",
+      "Achieved 94.2% test accuracy and 0.93 F1-score without relying on expensive third-party commercial APIs."
+    ],
+    stack: [
+      "Python",
+      "PyTorch",
+      "ADASYN / SMOTE",
+      "FastAPI",
+      "Next.js",
+      "Tailwind CSS",
+      "Vercel Edge"
+    ],
+    liveUrl: "https://brin-project-kp.vercel.app/",
+    liveLabel: "brin-project-kp.vercel.app",
     images: [
       {
-        url: "/projects/cimahi-hero.jpg",
-        caption: "Official Homepage of PT Cimahi Battery Industry"
+        url: "/projects/brin-hero.png",
+        title: "BRIN Research Portal Interface",
+        caption: "Web portal showing public discourse corpus navigation, dataset annotation distributions, and sentiment research documentation."
       },
       {
-        url: "/projects/cimahi-catalog.jpg",
-        caption: "Structured Prismatic Battery and Active Energy Material Catalog"
+        url: "/projects/brin-analyzer.png",
+        title: "Real-Time Sentiment Analyzer",
+        caption: "Interactive neural inference dashboard demonstrating sentence-level classification, sentiment polarity probabilities, and confidence scoring."
+      }
+    ]
+  },
+  {
+    id: "nutrimood-recommender",
+    number: "04",
+    title: "NutriMood: Personalized Nutrition Decision Support",
+    organization: "DBS Foundation / Dicoding Capstone",
+    role: "Machine Learning & Full-Stack Developer",
+    category: "health",
+    categoryLabel: "HealthTech & Recommenders",
+    impactMetric: "1,200+ Food Items",
+    impactLabel: "Used in Community Health Checks",
+    summary:
+      "Developed an algorithmic nutrition recommendation web app tailored to user psychological mood states and metabolic constraints, actively utilized by field healthcare workers.",
+    challenge:
+      "Standard nutritional apps neglect localized Indonesian diets and psychological emotional eating patterns, making them impractical for community healthcare screenings where rapid dietary guidance is required.",
+    solution:
+      "Constructed a multi-criteria hybrid filtering engine operating over a curated relational database of 1,200+ Indonesian culinary items. The app factors in caloric caps, macronutrient targets, and mood states to generate actionable, culturally aligned meal recommendations.",
+    highlights: [
+      "Developed a nutrition recommendation web app based on user mood and health conditions.",
+      "Actively used by field health workers during community health checks (Posyandu / public screenings).",
+      "Awarded Distinction in the DBS Foundation Coding Camp (Dicoding Indonesia).",
+      "Structured 1,200+ local food nutritional profiles with complete macronutrient distributions."
+    ],
+    stack: [
+      "Python",
+      "Scikit-Learn",
+      "React",
+      "REST APIs",
+      "Tailwind CSS",
+      "Vercel"
+    ],
+    liveUrl: "https://nutrimood.vercel.app/",
+    liveLabel: "nutrimood.vercel.app",
+    images: [
+      {
+        url: "/projects/nutrimood-hero.jpg",
+        title: "NutriMood Application Landing",
+        caption: "Health profiling, wellness onboarding, and objective configuration interface optimized for mobile and desktop."
+      },
+      {
+        url: "/projects/nutrimood-demo.jpg",
+        title: "Nutritional Recommendation Evaluation",
+        caption: "Interactive recommendation output presenting matched culinary selections, caloric breakdowns, and multi-criteria constraint scoring."
       }
     ]
   }
 ];
 
-function GithubIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
-  return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-      <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-    </svg>
-  );
-}
-
-function LinkedinIcon({ className = "w-3.5 h-3.5" }: { className?: string }) {
-  return (
-    <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-      <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.64 1.64 0 1 0 0-3.28 1.64 1.64 0 0 0 0 3.28M5.07 18.5h2.78v-8.37H5.07v8.37z" />
-    </svg>
-  );
-}
-
-// Interactive Spotlight Project Card with Proximity Specular Glow & Butter-Smooth Spring Lift
-function ProjectCard({
-  project,
-  isDark,
-  onOpenModal,
-  onCopy,
-  copiedId
-}: {
-  project: Project;
-  isDark: boolean;
-  onOpenModal: (project: Project, imageIndex?: number) => void;
-  onCopy: (text: string, id: string) => void;
-  copiedId: string | null;
-}) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [activeImgIdx, setActiveImgIdx] = useState(0);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    cardRef.current.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
-    cardRef.current.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
-  };
-
-  const currentImage = project.images[activeImgIdx] || project.images[0];
-
-  const cardBg = isDark
-    ? "bg-neutral-900/60 border border-white/[0.14] shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.15)] hover:border-white/[0.28]"
-    : "bg-white/85 border border-white/90 shadow-[0_20px_50px_rgba(15,23,42,0.06),inset_0_1px_2px_rgba(255,255,255,0.95)] hover:border-neutral-300";
-
-  const buttonStyle = isDark
-    ? "bg-white/[0.08] hover:bg-white/[0.16] border border-white/[0.16] text-neutral-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
-    : "bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 text-neutral-900 shadow-2xs font-bold";
-
-  return (
-    <motion.article
-      ref={cardRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      whileHover={{ y: -6 }}
-      transition={{
-        y: { type: "spring", stiffness: 350, damping: 25 },
-        opacity: { duration: 0.25 }
-      }}
-      onMouseMove={handleMouseMove}
-      className={`group relative rounded-[32px] p-6 sm:p-8 backdrop-blur-3xl flex flex-col justify-between overflow-hidden transition-colors duration-300 ${cardBg}`}
-    >
-      {/* Specular Spotlight Proximity Radial Glow */}
-      <div
-        className="pointer-events-none absolute -inset-px rounded-[32px] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background: `radial-gradient(650px circle at var(--mouse-x, -1000px) var(--mouse-y, -1000px), ${
-            isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.035)'
-          }, transparent 65%)`
-        }}
-      />
-
-      <div className="relative z-10">
-        {/* Header Badges */}
-        <div className="flex items-center justify-between gap-2 mb-5">
-          <div className="flex items-center gap-2">
-            <span
-              className={`px-3 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider ${project.featured
-                  ? isDark
-                    ? "bg-white text-neutral-950 font-black shadow-xs"
-                    : "bg-neutral-900 text-white font-black shadow-xs"
-                  : isDark
-                    ? "bg-white/[0.1] text-neutral-200 border border-white/15"
-                    : "bg-black/[0.06] text-neutral-800"
-                }`}
-            >
-              {project.badge}
-            </span>
-            <span className={`text-xs font-bold ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-              {project.year}
-            </span>
-          </div>
-
-          <span className={`text-xs font-black tracking-widest ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-            {project.number}
-          </span>
-        </div>
-
-        {/* Project Context & Title */}
-        <div className="space-y-1.5 mb-5">
-          <p className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
-            {project.context}
-          </p>
-          <h3 className={`text-xl sm:text-2xl font-black tracking-tight leading-snug ${isDark ? "text-white" : "text-neutral-900"}`}>
-            {project.title}
-          </h3>
-        </div>
-
-        {/* Realistic Browser/Artifact Mockup Frame */}
-        <div className="relative mb-6 rounded-2xl overflow-hidden border border-neutral-500/20 group/preview shadow-md transition-shadow group-hover:shadow-xl">
-          {/* Mockup Header Bar */}
-          <div
-            className={`px-4 py-2.5 flex items-center justify-between text-xs border-b border-neutral-500/15 ${isDark ? "bg-neutral-950/80" : "bg-neutral-100/90"
-              }`}
-          >
-            <div className="flex items-center gap-1.5">
-              <span className={`w-2.5 h-2.5 rounded-full inline-block ${isDark ? "bg-white/20" : "bg-neutral-300"}`} />
-              <span className={`w-2.5 h-2.5 rounded-full inline-block ${isDark ? "bg-white/20" : "bg-neutral-300"}`} />
-              <span className={`w-2.5 h-2.5 rounded-full inline-block ${isDark ? "bg-white/20" : "bg-neutral-300"}`} />
-            </div>
-
-            <div
-              className={`px-3 py-0.5 rounded-md text-[11px] font-mono tracking-tight max-w-[220px] truncate ${isDark ? "bg-white/[0.06] text-neutral-300" : "bg-white text-neutral-600 shadow-2xs"
-                }`}
-            >
-              {project.domain || "research.unikom.ac.id"}
-            </div>
-
-            <motion.button
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={() => onOpenModal(project, activeImgIdx)}
-              title="Expand Full Preview"
-              className={`p-1 rounded transition-colors ${isDark ? "text-neutral-400 hover:text-white" : "text-neutral-500 hover:text-neutral-900"}`}
-            >
-              <Maximize2 className="w-3.5 h-3.5" />
-            </motion.button>
-          </div>
-
-          {/* Screenshot Display */}
-          <div
-            onClick={() => onOpenModal(project, activeImgIdx)}
-            className="relative cursor-pointer aspect-[16/10] overflow-hidden bg-neutral-950/30 flex items-center justify-center p-2"
-          >
-            <motion.img
-              key={currentImage.url}
-              src={currentImage.url}
-              alt={currentImage.caption}
-              initial={{ opacity: 0.7, scale: 1 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="max-w-full max-h-full w-auto h-auto object-contain rounded-lg transition-transform duration-500 group-hover/preview:scale-[1.03]"
-            />
-
-            {/* Hover Expand Overlay */}
-            <div className="absolute inset-0 bg-neutral-950/40 opacity-0 group-hover/preview:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-2 pointer-events-none">
-              <motion.span
-                initial={{ y: 8, opacity: 0 }}
-                whileHover={{ scale: 1.05 }}
-                className="px-4 py-2 rounded-full text-xs font-black bg-white/95 text-neutral-950 shadow-xl flex items-center gap-2 backdrop-blur-md"
-              >
-                <Maximize2 className="w-3.5 h-3.5" />
-                <span>View Full-Screen</span>
-              </motion.span>
-            </div>
-
-            {/* Carousel Navigation Arrow Controls */}
-            {project.images.length > 1 && (
-              <>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveImgIdx((prev) => (prev - 1 + project.images.length) % project.images.length);
-                  }}
-                  className={`absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all duration-200 backdrop-blur-md shadow-md ${
-                    isDark
-                      ? "bg-neutral-900/80 hover:bg-neutral-800 text-white border border-white/15"
-                      : "bg-white/90 hover:bg-white text-neutral-900 border border-neutral-200 shadow-sm"
-                  }`}
-                  title="Previous image"
-                  aria-label="Previous image"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveImgIdx((prev) => (prev + 1) % project.images.length);
-                  }}
-                  className={`absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full flex items-center justify-center opacity-0 group-hover/preview:opacity-100 transition-all duration-200 backdrop-blur-md shadow-md ${
-                    isDark
-                      ? "bg-neutral-900/80 hover:bg-neutral-800 text-white border border-white/15"
-                      : "bg-white/90 hover:bg-white text-neutral-900 border border-neutral-200 shadow-sm"
-                  }`}
-                  title="Next image"
-                  aria-label="Next image"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </motion.button>
-              </>
-            )}
-          </div>
-
-          {/* Multi-Screenshot Indicator Bar */}
-          {project.images.length > 1 && (
-            <div
-              className={`px-3.5 py-2 flex items-center justify-between text-[11px] font-medium border-t border-neutral-500/15 ${isDark ? "bg-neutral-950/85 text-neutral-300" : "bg-white/95 text-neutral-700"
-                }`}
-            >
-              <span className="text-[11px] text-neutral-400 truncate max-w-[70%]">
-                {currentImage.caption}
-              </span>
-              <div className="flex items-center gap-1.5 shrink-0">
-                {project.images.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveImgIdx(idx);
-                    }}
-                    className={`h-2 rounded-full transition-all duration-300 ${activeImgIdx === idx
-                        ? isDark
-                          ? "w-6 bg-white"
-                          : "w-6 bg-neutral-900"
-                        : "w-2 bg-neutral-500/30 hover:bg-neutral-500/60"
-                      }`}
-                    title={`Slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Project Summary */}
-        <p className={`text-sm font-medium leading-relaxed mb-6 ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
-          {project.summary}
-        </p>
-
-        {/* Key Deliverables Highlights */}
-        <ul className={`space-y-2.5 text-xs sm:text-sm font-medium mb-7 ${isDark ? "text-neutral-300" : "text-neutral-800"}`}>
-          {project.deliverables.slice(0, 2).map((item, i) => (
-            <li key={i} className="flex items-start gap-2.5">
-              <span
-                className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${isDark ? "bg-neutral-400" : "bg-neutral-700"
-                  }`}
-              />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Card Footer: Tech Tags & Action CTAs */}
-      <div className="relative z-10 pt-5 border-t border-neutral-500/15 space-y-4">
-        <div className="flex flex-wrap gap-1.5">
-          {project.stack.map((tech) => (
-            <motion.span
-              key={tech}
-              whileHover={{ scale: 1.05 }}
-              className={`px-3 py-1 rounded-full text-[11px] font-bold transition-all cursor-default ${isDark
-                  ? "bg-white/[0.06] text-neutral-300 border border-white/[0.1] hover:border-white/30"
-                  : "bg-white/85 text-neutral-700 border border-neutral-200/80 shadow-2xs hover:border-neutral-400"
-                }`}
-            >
-              {tech}
-            </motion.span>
-          ))}
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-          {project.liveUrl ? (
-            <motion.a
-              href={project.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.96 }}
-              className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${isDark
-                  ? "bg-white text-neutral-950 hover:bg-neutral-200"
-                  : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
-                }`}
-            >
-              <span>Launch App</span>
-              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-            </motion.a>
-          ) : (
-            <motion.button
-              onClick={() => onOpenModal(project, 0)}
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.96 }}
-              className={`group/btn inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all ${isDark
-                  ? "bg-white text-neutral-950 hover:bg-neutral-200"
-                  : "bg-neutral-900 text-white hover:bg-neutral-800 shadow-sm"
-                }`}
-            >
-              <span>View Research Details</span>
-              <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-            </motion.button>
-          )}
-
-          <div className="flex items-center gap-1.5">
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={() => onOpenModal(project, activeImgIdx)}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>Architecture</span>
-            </motion.button>
-            {project.liveUrl && (
-              <motion.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.92 }}
-                onClick={() => onCopy(project.liveUrl!, project.id)}
-                className={`p-2 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
-                title="Copy Project Link"
-              >
-                {copiedId === project.id ? (
-                  <Check className={`w-3.5 h-3.5 ${isDark ? "text-white" : "text-neutral-950"}`} />
-                ) : (
-                  <Copy className="w-3.5 h-3.5" />
-                )}
-              </motion.button>
-            )}
-          </div>
-        </div>
-      </div>
-    </motion.article>
-  );
-}
-
-
-// Floating Action Dock at bottom center
-function FloatingDock({
-  isDark,
-  onToggleTheme,
-  onCopyEmail,
-  activeSection
-}: {
-  isDark: boolean;
-  onToggleTheme: () => void;
-  onCopyEmail: () => void;
-  activeSection: string;
-}) {
-  return (
-    <motion.aside
-      initial={{ y: 50, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 0.3, type: "spring", stiffness: 300, damping: 25 }}
-      className="fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 max-w-[95vw]"
-      aria-label="Quick Action Dock"
-    >
-      <div
-        className={`px-3 py-2 rounded-full flex items-center gap-1.5 sm:gap-2.5 shadow-2xl backdrop-blur-2xl border transition-all duration-300 ${
-          isDark
-            ? "bg-neutral-950/85 border-white/[0.14] text-neutral-200 shadow-black/70"
-            : "bg-white/90 border-neutral-200 text-neutral-800 shadow-neutral-950/15"
-        }`}
-      >
-        <a
-          href="#overview"
-          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
-            activeSection === 'overview'
-              ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
-              : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
-          }`}
-        >
-          Overview
-        </a>
-
-        <a
-          href="#projects"
-          className={`px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
-            activeSection === 'projects'
-              ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
-              : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
-          }`}
-        >
-          Projects
-        </a>
-
-        <a
-          href="#skills"
-          className={`hidden xs:inline-block px-3 py-1.5 rounded-full text-xs font-bold transition-colors ${
-            activeSection === 'skills'
-              ? isDark ? "bg-white/15 text-white" : "bg-neutral-900 text-white"
-              : isDark ? "hover:bg-white/10 text-neutral-300" : "hover:bg-neutral-100 text-neutral-600"
-          }`}
-        >
-          Skills
-        </a>
-
-        <div className={`w-[1px] h-4 ${isDark ? "bg-white/15" : "bg-neutral-200"}`} />
-
-        <button
-          onClick={onCopyEmail}
-          className={`px-3.5 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 transition-colors ${
-            isDark
-              ? "bg-white/10 hover:bg-white/20 text-white"
-              : "bg-neutral-100 hover:bg-neutral-200 text-neutral-900"
-          }`}
-          title="Copy email to clipboard"
-        >
-          <Mail className="w-3.5 h-3.5" />
-          <span>Copy Email</span>
-        </button>
-
-        <button
-          onClick={onToggleTheme}
-          className={`p-1.5 rounded-full transition-colors ${
-            isDark
-              ? "hover:bg-white/15 text-neutral-300 hover:text-white"
-              : "hover:bg-neutral-200 text-neutral-700 hover:text-neutral-950"
-          }`}
-          title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-        >
-          {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
-      </div>
-    </motion.aside>
-  );
-}
-
-// Floating Toast Notification
-function ToastNotification({
-  message,
-  isDark
-}: {
-  message: string | null;
-  isDark: boolean;
-}) {
-  return (
-    <AnimatePresence>
-      {message && (
-        <motion.div
-          initial={{ opacity: 0, y: 16, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 12, scale: 0.95 }}
-          transition={{ type: "spring", stiffness: 450, damping: 30 }}
-          className="fixed bottom-20 sm:bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none max-w-[90vw]"
-        >
-          <div
-            className={`px-4 py-2 rounded-full shadow-2xl border flex items-center gap-2.5 backdrop-blur-2xl ${isDark
-                ? "bg-neutral-950/95 border-white/20 text-white shadow-black/80"
-                : "bg-white/95 border-neutral-200 text-neutral-900 shadow-neutral-950/20"
-              }`}
-          >
-            <span className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${isDark ? "bg-white/10 text-white" : "bg-neutral-900 text-white"}`}>
-              <Check className="w-3.5 h-3.5 stroke-[3]" />
-            </span>
-            <span className="text-xs font-bold tracking-tight whitespace-nowrap">{message}</span>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
+const SKILL_GROUPS = [
+  {
+    title: "Machine Learning & Data Intelligence",
+    description: "Model development, algorithmic resampling, and statistical analysis",
+    tools: [
+      "Python",
+      "TensorFlow",
+      "Scikit-Learn",
+      "PyTorch",
+      "Tesseract OCR",
+      "Pandas",
+      "NumPy",
+      "SQL",
+      "ADASYN / SMOTE",
+      "NLP Classification"
+    ]
+  },
+  {
+    title: "Full-Stack & Mobile Development",
+    description: "Interactive client applications, responsive frontends, and cross-platform apps",
+    tools: [
+      "React",
+      "React Native (Android)",
+      "Next.js",
+      "TypeScript",
+      "JavaScript",
+      "REST APIs",
+      "Tailwind CSS",
+      "Leaflet GIS",
+      "HTML5 / CSS3"
+    ]
+  },
+  {
+    title: "Data Pipelines, Cloud & Automation",
+    description: "Automated report engines, web scraping, and production edge deployment",
+    tools: [
+      "Web Scraping (Selenium / BS4)",
+      "Automated PDF Generators",
+      "Git & GitHub",
+      "Vercel Edge Network",
+      "Docker Containers",
+      "Open-Meteo REST API",
+      "Linux / Shell Automation"
+    ]
+  }
+];
 
 export default function App() {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    if (typeof window !== 'undefined') {
-      return (localStorage.getItem('portfolio_theme') as 'light' | 'dark') || 'dark';
-    }
-    return 'dark';
-  });
-  const isDark = theme === 'dark';
-
-  const toggleTheme = () => {
-    const next = isDark ? 'light' : 'dark';
-    setTheme(next);
-    localStorage.setItem('portfolio_theme', next);
-  };
-
-  const [activeFilter, setActiveFilter] = useState<'all' | 'ml' | 'web'>('all');
-  const [activeModal, setActiveModal] = useState<Project | null>(null);
-  const [modalImgIdx, setModalImgIdx] = useState(0);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [activeSection, setActiveSection] = useState<'overview' | 'projects' | 'skills'>('overview');
-  const toastTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const visibleProjects =
-    activeFilter === 'all'
-      ? PROJECTS
-      : PROJECTS.filter((item) => item.category === activeFilter);
-
-  const handleCopy = (text: string, label: string) => {
-    if (navigator?.clipboard) {
-      navigator.clipboard.writeText(text);
-      setCopiedId(label);
-      setToastMessage(`${label} copied to clipboard`);
-      if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
-      toastTimeoutRef.current = setTimeout(() => {
-        setToastMessage(null);
-        setCopiedId(null);
-      }, 2400);
-    }
-  };
-
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 120,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  const handleOpenModal = (project: Project, imageIndex: number = 0) => {
-    setActiveModal(project);
-    setModalImgIdx(imageIndex);
-  };
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const [selectedImage, setSelectedImage] = useState<{
+    project: Project;
+    index: number;
+  } | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setActiveModal(null);
-      }
-      if (activeModal && activeModal.images.length > 1) {
-        if (e.key === 'ArrowRight') {
-          setModalImgIdx((prev) => (prev + 1) % activeModal.images.length);
-        } else if (e.key === 'ArrowLeft') {
-          setModalImgIdx((prev) => (prev - 1 + activeModal.images.length) % activeModal.images.length);
-        }
-      }
+    const updateWIBTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        timeZone: "Asia/Jakarta",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false
+      };
+      setCurrentTime(now.toLocaleTimeString("en-GB", options));
     };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [activeModal]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const projectsEl = document.getElementById('projects');
-      const skillsEl = document.getElementById('skills');
-
-      if (skillsEl && scrollY >= skillsEl.offsetTop - 240) {
-        setActiveSection('skills');
-      } else if (projectsEl && scrollY >= projectsEl.offsetTop - 240) {
-        setActiveSection('projects');
-      } else {
-        setActiveSection('overview');
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    updateWIBTime();
+    const interval = setInterval(updateWIBTime, 1000);
+    return () => clearInterval(interval);
   }, []);
 
-  const glassPill = isDark
-    ? "bg-neutral-900/60 border border-white/[0.15] text-neutral-100 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.16)] backdrop-blur-3xl"
-    : "bg-white/75 border border-white/85 text-neutral-900 shadow-[0_20px_50px_rgba(15,23,42,0.06),inset_0_1px_2px_rgba(255,255,255,0.95)] backdrop-blur-3xl";
+  const handleCopyEmail = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    navigator.clipboard.writeText(PROFILE.email);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
+  };
 
-  const buttonStyle = isDark
-    ? "bg-white/[0.08] hover:bg-white/[0.16] border border-white/[0.16] text-neutral-100 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]"
-    : "bg-white/90 hover:bg-white border border-neutral-200 text-neutral-900 shadow-xs";
+  const filteredProjects =
+    activeCategory === "all"
+      ? PROJECTS
+      : PROJECTS.filter((p) => p.category === activeCategory);
 
   return (
-    <div
-      className={`min-h-screen relative overflow-x-hidden transition-colors duration-500 font-sans ${isDark ? "bg-[#09090b] text-neutral-100" : "bg-[#f8f9fa] text-neutral-900"
-        }`}
-    >
-      {/* Minimalist Scroll Depth Progress Bar */}
-      <motion.div
-        style={{ scaleX }}
-        className={`fixed top-0 left-0 right-0 h-[2px] origin-left z-50 pointer-events-none ${
-          isDark ? "bg-white/85" : "bg-neutral-900"
-        }`}
-      />
+    <div className="min-h-screen bg-[#070A0F] text-[#F8FAFC] selection:bg-amber-500/20 selection:text-amber-300 relative pb-28">
+      {/* Background Subtle Ambient Grid */}
+      <div className="fixed inset-0 pointer-events-none grid-pattern opacity-60 z-0" />
+      <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-amber-500/5 via-sky-500/5 to-transparent blur-3xl pointer-events-none z-0" />
 
-      {/* Minimalist Subtle Ambient Vignette (Zero Rainbow, Zero Gradients) */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden select-none">
-        <div
-          className={`absolute -top-32 left-1/2 -translate-x-1/2 w-[54rem] h-[36rem] rounded-full blur-[140px] pointer-events-none transition-colors duration-700 ${
-            isDark ? "bg-white/[0.025]" : "bg-neutral-950/[0.02]"
-          }`}
-        />
-      </div>
-
-      {/* Floating Header Capsule */}
-      <header className="sticky top-4 z-40 px-4 sm:px-6">
-        <div
-          className={`max-w-5xl mx-auto rounded-full px-3.5 sm:px-5 py-2.5 flex items-center justify-between backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
-        >
-          {/* Brand Mark & Monogram Logo */}
-          <a href="#overview" className="flex items-center gap-2.5 pl-1.5 group/logo" aria-label="Bayu Satria Home">
-            <div className={`w-7 h-7 rounded-xl flex items-center justify-center p-1 border transition-all duration-300 ${
-              isDark ? "bg-white/[0.08] border-white/15 group-hover/logo:border-white/30" : "bg-neutral-900 border-neutral-800 shadow-xs"
-            }`}>
-              <svg viewBox="0 0 64 64" className="w-full h-full" fill="none">
-                <line x1="21" y1="16" x2="21" y2="51" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" />
-                <path d="M 21 16 H 32.5 C 37.194 16 41 19.806 41 24.5 C 41 29.194 37.194 33 32.5 33 H 21" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M 21 33 H 33.5 C 38.747 33 43 37.253 43 42.5 C 43 47.747 38.747 51 33.5 51 H 21" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx="33" cy="33" r="2.2" fill="#FFFFFF" />
-              </svg>
+      {/* TOP NAVIGATION BAR */}
+      <header className="sticky top-0 z-40 backdrop-blur-md bg-[#070A0F]/85 border-b border-[#1E2738]">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+          <a
+            href="#"
+            className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-lg p-1"
+          >
+            <div className="w-9 h-9 rounded-md bg-[#0F141E] border border-amber-500/30 flex items-center justify-center font-bold text-amber-400 group-hover:border-amber-400 group-hover:shadow-[0_0_15px_rgba(245,158,11,0.2)] transition-all">
+              B
             </div>
             <div className="flex flex-col">
-              <span className={`font-black text-sm tracking-tight leading-none ${isDark ? "text-white" : "text-neutral-950"}`}>
+              <span className="font-bold text-sm tracking-tight text-white group-hover:text-amber-300 transition-colors">
                 {PROFILE.shortName}
               </span>
-              <span className={`text-[10px] font-mono font-bold leading-none mt-1 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                ML Engineer
+              <span className="text-[11px] text-slate-400 font-mono">
+                CADS • ML & Systems
               </span>
             </div>
           </a>
 
-          {/* Segmented Filter Bar with Framer Motion Sliding Pill */}
-          <div
-            className={`hidden md:inline-flex p-1 rounded-full relative ${isDark ? "bg-white/[0.06]" : "bg-black/[0.05]"
-              }`}
-          >
-            {[
-              { id: 'all', label: 'All Projects (4)' },
-              { id: 'ml', label: 'Machine Learning (2)' },
-              { id: 'web', label: 'Web & IoT Systems (2)' }
-            ].map((tab) => {
-              const active = activeFilter === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveFilter(tab.id as 'all' | 'ml' | 'web')}
-                  className={`relative px-4 py-1.5 rounded-full text-xs font-black transition-colors z-10 ${active
-                      ? isDark ? "text-neutral-950 font-black" : "text-white font-black"
-                      : isDark
-                        ? "text-neutral-400 hover:text-white"
-                        : "text-neutral-600 hover:text-neutral-900"
-                    }`}
-                >
-                  {active && (
-                    <motion.div
-                      layoutId="activeFilterPill"
-                      className={`absolute inset-0 rounded-full shadow-xs z-[-1] ${
-                        isDark ? "bg-white" : "bg-neutral-900 shadow-sm"
-                      }`}
-                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                    />
-                  )}
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
+          {/* Navigation Links */}
+          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-300">
+            <a
+              href="#projects"
+              className="hover:text-amber-400 transition-colors"
+            >
+              Projects
+            </a>
+            <a
+              href="#impact"
+              className="hover:text-amber-400 transition-colors"
+            >
+              Impact
+            </a>
+            <a
+              href="#skills"
+              className="hover:text-amber-400 transition-colors"
+            >
+              Skills & Stack
+            </a>
+            <a href="#about" className="hover:text-amber-400 transition-colors">
+              About
+            </a>
+          </nav>
 
-          {/* Right Action Controls */}
-          <div className="flex items-center gap-2">
-            <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
-              onClick={toggleTheme}
-              className={`p-2 rounded-full transition-all ${buttonStyle}`}
-              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2.5">
+            <a
+              href={PROFILE.resumePdf}
+              download="Bayu_Satria_Portfolio.pdf"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-[#0F141E] hover:bg-[#151C2A] text-slate-200 hover:text-white border border-[#1E2738] hover:border-slate-600 transition-all shadow-sm"
             >
-              {isDark ? <Sun className="w-4 h-4 text-neutral-300 hover:text-white" /> : <Moon className="w-4 h-4 text-neutral-700 hover:text-neutral-950" />}
-            </motion.button>
-            <motion.a
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              href={`mailto:${PROFILE.email}`}
-              className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-black transition-all ${
-                isDark
-                  ? "bg-white text-neutral-950 hover:bg-neutral-200"
-                  : "bg-neutral-900 text-white hover:bg-neutral-800"
-              }`}
+              <FileDown className="w-3.5 h-3.5 text-amber-400" />
+              <span>Dossier PDF</span>
+            </a>
+
+            <button
+              onClick={handleCopyEmail}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 transition-all shadow-sm active:scale-95"
             >
-              <span>Get in Touch</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
-            </motion.a>
+              {copiedEmail ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-slate-950" />
+                  <span>Email Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Mail className="w-3.5 h-3.5 text-slate-950" />
+                  <span>Get in Touch</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       </header>
 
-      {/* Main Content Showcase */}
-      <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-7 pb-20 space-y-10">
-        {/* Creative Hero Banner with Clean White Studio Portrait */}
-        <section
-          id="overview"
-          className={`rounded-[36px] p-7 sm:p-11 relative overflow-hidden backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
-        >
-          {/* Subtle top edge specular highlight */}
-          <div
-            className={`pointer-events-none absolute inset-x-12 top-0 h-[1px] bg-gradient-to-r from-transparent ${isDark ? "via-white/40" : "via-neutral-900/20"
-              } to-transparent`}
-          />
-
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            <div className="max-w-2xl space-y-4">
-              <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold border transition-colors ${
-                isDark ? "bg-white/[0.05] border-white/10 text-neutral-300" : "bg-neutral-100 border-neutral-200 text-neutral-700"
-              }`}>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>{PROFILE.status}</span>
+      {/* MAIN CONTAINER */}
+      <main className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-10 sm:pt-14 space-y-16 sm:space-y-24">
+        {/* HERO SECTION */}
+        <section className="relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            {/* Left Content */}
+            <div className="lg:col-span-8 space-y-5">
+              {/* Credentials / Status Tag */}
+              <div className="inline-flex flex-wrap items-center gap-2 px-3 py-1 rounded-md bg-[#0F141E] border border-[#1E2738] text-xs text-slate-300">
+                <span className="font-semibold text-amber-400">
+                  BNSP CADS Certified
+                </span>
+                <span className="text-slate-600">•</span>
+                <span>Informatics Engineering (UNIKOM)</span>
+                <span className="text-slate-600">•</span>
+                <span className="text-emerald-400 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Available for Full-Time Roles
+                </span>
               </div>
 
-              <h1 className={`text-3xl sm:text-5xl font-black tracking-tight leading-[1.15] ${isDark ? "text-white" : "text-neutral-950"}`}>
-                {PROFILE.name}
-              </h1>
+              {/* Headline */}
+              <div className="space-y-2">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                  {PROFILE.name}
+                </h1>
+                <p className="text-lg sm:text-xl font-semibold text-slate-300">
+                  {PROFILE.role}
+                </p>
+              </div>
 
-              <p className={`text-base sm:text-lg font-medium leading-relaxed ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
-                {PROFILE.tagline}
+              {/* The Core Value Proposition Hook */}
+              <p className="text-base sm:text-lg text-slate-300 max-w-2xl font-medium leading-relaxed border-l-2 border-amber-500/80 pl-4 py-0.5">
+                "{PROFILE.valueHook}"
               </p>
 
-              {/* Social CTA Action Links */}
-              <div className="pt-2 flex flex-wrap items-center gap-2.5">
-                <motion.a
-                  whileHover={{ scale: 1.04, y: -1 }}
-                  whileTap={{ scale: 0.96 }}
-                  href={PROFILE.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all ${buttonStyle}`}
+              {/* Bio summary */}
+              <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
+                Graduated with an Informatics Engineering degree from Universitas
+                Komputer Indonesia. Proven track record building real-time IoT
+                telemetry dashboards at Batari Energy, automated computer vision
+                OCR pipelines at Zoom Petcare, and deep learning sentiment
+                inference APIs at BRIN.
+              </p>
+
+              {/* Target Roles Pill List */}
+              <div className="pt-1">
+                <span className="text-xs uppercase tracking-wider text-slate-500 font-semibold block mb-2 font-mono">
+                  Target Roles
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  {PROFILE.openRoles.map((role) => (
+                    <span
+                      key={role}
+                      className="px-2.5 py-1 text-xs rounded bg-[#0F141E] text-slate-300 border border-[#1E2738]"
+                    >
+                      {role}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Primary Call to Actions */}
+              <div className="flex flex-wrap items-center gap-3 pt-3">
+                <a
+                  href="#projects"
+                  className="px-5 py-2.5 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition-all shadow-[0_0_20px_rgba(245,158,11,0.25)] flex items-center gap-2 active:scale-95"
                 >
-                  <LinkedinIcon className="w-3.5 h-3.5" />
-                  <span>LinkedIn Profile</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </motion.a>
-                <motion.a
-                  whileHover={{ scale: 1.04, y: -1 }}
-                  whileTap={{ scale: 0.96 }}
-                  href={PROFILE.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all ${buttonStyle}`}
+                  <span>Explore Featured Systems</span>
+                  <ArrowUpRight className="w-4 h-4" />
+                </a>
+
+                <a
+                  href={PROFILE.resumePdf}
+                  download="Bayu_Satria_Portfolio.pdf"
+                  className="px-4 py-2.5 rounded-md bg-[#0F141E] hover:bg-[#151C2A] text-slate-200 border border-[#1E2738] hover:border-slate-600 font-semibold text-sm transition-all flex items-center gap-2"
                 >
-                  <GithubIcon className="w-3.5 h-3.5" />
-                  <span>GitHub</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </motion.a>
-                <motion.button
-                  whileHover={{ scale: 1.04, y: -1 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => handleCopy(PROFILE.email, 'email')}
-                  className={`inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-black transition-all ${buttonStyle}`}
-                >
-                  <Mail className="w-3.5 h-3.5" />
-                  <span>{copiedId === 'email' ? 'Email Copied!' : PROFILE.email}</span>
-                </motion.button>
+                  <FileDown className="w-4 h-4 text-amber-400" />
+                  <span>Download Dossier PDF</span>
+                </a>
+
+                <div className="flex items-center gap-2 pl-2">
+                  <a
+                    href={PROFILE.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-md bg-[#0F141E] border border-[#1E2738] hover:border-slate-500 text-slate-400 hover:text-white transition-colors"
+                    title="GitHub Profile"
+                  >
+                    <GithubIcon className="w-4 h-4" />
+                  </a>
+                  <a
+                    href={PROFILE.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2.5 rounded-md bg-[#0F141E] border border-[#1E2738] hover:border-slate-500 text-slate-400 hover:text-white transition-colors"
+                    title="LinkedIn Profile"
+                  >
+                    <LinkedinIcon className="w-4 h-4" />
+                  </a>
+                </div>
               </div>
             </div>
 
-            {/* Profile Photo Card fitting exact original photo aspect ratio */}
-            <motion.div
-              whileHover={{ scale: 1.02, y: -2 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              className="shrink-0 relative group self-center md:self-start"
-            >
-              <div className="relative w-36 sm:w-44 md:w-48 aspect-[718/902] rounded-[24px] overflow-hidden p-1 bg-gradient-to-b from-neutral-200 to-neutral-300 dark:from-neutral-700 dark:to-neutral-800 shadow-xl shadow-neutral-900/10 dark:shadow-black/40 ring-1 ring-black/5 dark:ring-white/10">
-                <img
-                  src={PROFILE.avatar}
-                  alt={PROFILE.name}
-                  className="w-full h-full object-cover rounded-[20px] select-none"
-                />
-              </div>
-              <div
-                className={`absolute -bottom-2.5 right-2 px-3 py-1 rounded-full text-[11px] font-bold tracking-tight shadow-md border flex items-center gap-1.5 ${isDark
-                    ? "bg-neutral-900 border-neutral-700 text-neutral-200"
-                    : "bg-white border-neutral-200 text-neutral-800"
-                  }`}
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Available for roles</span>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Core Machine Learning Pillars Strip */}
-          <div className="mt-8 pt-7 border-t border-neutral-500/15 grid sm:grid-cols-3 gap-4">
-            {ML_PILLARS.map((pillar, idx) => {
-              const Icon = pillar.icon;
-              return (
-                <div
-                  key={idx}
-                  className={`p-4 rounded-2xl border transition-all ${isDark
-                      ? "bg-white/[0.03] border-white/10"
-                      : "bg-white/60 border-neutral-200/80"
-                    }`}
-                >
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <Icon className={`w-4 h-4 shrink-0 ${isDark ? "text-neutral-300" : "text-neutral-700"}`} />
-                    <h2 className={`text-xs font-black uppercase tracking-wider ${isDark ? "text-neutral-200" : "text-neutral-800"}`}>
-                      {pillar.title}
-                    </h2>
+            {/* Right: Studio Portrait in Industrial Frame */}
+            <div className="lg:col-span-4 flex justify-center lg:justify-end">
+              <div className="relative group">
+                <div className="w-64 sm:w-72 rounded-xl bg-[#0F141E] p-2 border border-[#1E2738] shadow-2xl relative overflow-hidden">
+                  <div className="aspect-[4/5] rounded-lg overflow-hidden bg-slate-950 relative">
+                    <img
+                      src={PROFILE.avatar}
+                      alt={PROFILE.name}
+                      className="w-full h-full object-cover object-top filter grayscale contrast-105 group-hover:grayscale-0 transition-all duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#070A0F] via-transparent to-transparent opacity-60" />
                   </div>
-                  <p className={`text-xs font-medium leading-relaxed ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
-                    {pillar.desc}
-                  </p>
+                  <div className="p-3 text-left space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-white">
+                        {PROFILE.shortName}
+                      </span>
+                      <span className="text-[10px] font-mono text-amber-400 font-semibold px-1.5 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                        BNSP CADS
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 truncate">
+                      {PROFILE.institution}
+                    </p>
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION: QUANTITATIVE IMPACT METRICS */}
+        <section id="impact" className="space-y-4">
+          <div className="flex items-center justify-between border-b border-[#1E2738] pb-3">
+            <div>
+              <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider">
+                Measurable Value
+              </span>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">
+                Engineering Impact at a Glance
+              </h2>
+            </div>
+            <span className="text-xs text-slate-400 font-mono hidden sm:inline">
+              Production Verified
+            </span>
           </div>
 
-          {/* Mobile Category Switcher */}
-          <div className="mt-6 pt-5 border-t border-neutral-500/15 flex md:hidden">
-            <div
-              className={`w-full grid grid-cols-3 p-1 rounded-2xl ${isDark ? "bg-white/[0.06]" : "bg-black/[0.05]"
-                }`}
-            >
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {IMPACT_STATS.map((stat, idx) => (
+              <div
+                key={idx}
+                className="rounded-lg bg-[#0C1017] border border-[#1E2738] p-4 sm:p-5 hover:border-slate-600 transition-all relative overflow-hidden group"
+              >
+                <div className="text-2xl sm:text-3xl font-extrabold text-amber-400 tracking-tight mb-1 font-mono">
+                  {stat.value}
+                </div>
+                <div className="text-sm font-bold text-white mb-1.5">
+                  {stat.label}
+                </div>
+                <div className="text-xs text-slate-400 leading-snug">
+                  {stat.desc}
+                </div>
+                <div className="mt-3 pt-3 border-t border-slate-800/80 text-[11px] font-mono text-slate-400">
+                  {stat.context}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION: FEATURED CASE STUDIES */}
+        <section id="projects" className="space-y-8">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#1E2738] pb-4">
+            <div>
+              <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider">
+                Production Case Studies
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white">
+                What I Have Built & Improved
+              </h2>
+            </div>
+
+            {/* Category Filter Pills */}
+            <div className="flex flex-wrap gap-1.5 bg-[#0F141E] p-1 rounded-lg border border-[#1E2738]">
               {[
-                { id: 'all', label: 'All (4)' },
-                { id: 'ml', label: 'ML & AI (2)' },
-                { id: 'web', label: 'Web & IoT (2)' }
+                { id: "all", label: "All Systems (4)" },
+                { id: "energy", label: "IoT & Energy" },
+                { id: "automation", label: "Automation & OCR" },
+                { id: "ml", label: "Applied NLP & DL" },
+                { id: "health", label: "Health Recommender" }
               ].map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveFilter(tab.id as 'all' | 'ml' | 'web')}
-                  className={`py-2 rounded-xl text-xs font-black transition-all text-center ${activeFilter === tab.id
-                      ? isDark ? "bg-white text-neutral-950 shadow-xs" : "bg-neutral-900 text-white shadow-xs"
-                      : isDark
-                        ? "text-neutral-400"
-                        : "text-neutral-600"
-                    }`}
+                  onClick={() => setActiveCategory(tab.id)}
+                  className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
+                    activeCategory === tab.id
+                      ? "bg-amber-500 text-slate-950 font-bold shadow-sm"
+                      : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                  }`}
                 >
                   {tab.label}
                 </button>
               ))}
             </div>
           </div>
-        </section>
 
-        {/* Live Projects Grid Showcase with Visual Previews */}
-        <section id="projects" className="space-y-4">
-          <div className="flex items-center justify-between px-2">
-            <div>
-              <h2 className={`text-xl sm:text-2xl font-black tracking-tight ${isDark ? "text-white" : "text-neutral-950"}`}>
-                Machine Learning & Systems Showcase
-              </h2>
-              <p className={`text-xs sm:text-sm font-medium mt-0.5 ${isDark ? "text-neutral-400" : "text-neutral-700"}`}>
-                Applied research, deep learning classification pipelines, and full-stack telemetry deployments.
-              </p>
-            </div>
-          </div>
+          {/* PROJECT LIST */}
+          <div className="space-y-12">
+            {filteredProjects.map((project) => (
+              <article
+                key={project.id}
+                className="rounded-xl bg-[#0C1017] border border-[#1E2738] p-6 sm:p-8 hover:border-slate-700 transition-all space-y-6"
+              >
+                {/* Project Header Row */}
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 border-b border-[#1E2738] pb-5">
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        PROJECT {project.number}
+                      </span>
+                      <span className="text-xs text-slate-400 font-medium">
+                        {project.organization}
+                      </span>
+                      <span className="text-slate-600">•</span>
+                      <span className="text-xs text-slate-400">
+                        {project.role}
+                      </span>
+                    </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <AnimatePresence mode="popLayout">
-              {visibleProjects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  isDark={isDark}
-                  onOpenModal={handleOpenModal}
-                  onCopy={handleCopy}
-                  copiedId={copiedId}
-                />
-              ))}
-            </AnimatePresence>
-          </div>
-        </section>
-
-        {/* Technical Competencies Bento Grid */}
-        <section
-          id="skills"
-          className={`rounded-[32px] p-7 sm:p-9 backdrop-blur-2xl transition-all duration-300 ${glassPill}`}
-        >
-          <div className="mb-6">
-            <div className={`flex items-center gap-2 text-xs font-black uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-600"}`}>
-              <Cpu className="w-3.5 h-3.5" />
-              <span>Technical Skills & Methodologies</span>
-            </div>
-            <h2 className={`text-xl sm:text-2xl font-black tracking-tight mt-1 ${isDark ? "text-white" : "text-neutral-900"}`}>
-              Machine Learning & Engineering Ecosystem
-            </h2>
-          </div>
-
-          <div className="grid sm:grid-cols-3 gap-5">
-            {SKILL_GROUPS.map((group, idx) => {
-              const Icon = group.icon;
-              return (
-                <motion.div
-                  key={idx}
-                  whileHover={{ y: -3 }}
-                  transition={{ duration: 0.25 }}
-                  className={`rounded-2xl p-5 border transition-all ${isDark
-                      ? "bg-white/[0.04] border-white/10 hover:border-white/25"
-                      : "bg-white/80 border-neutral-200/80 hover:border-neutral-300 shadow-2xs"
-                    }`}
-                >
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <span className={`p-2 rounded-xl ${isDark ? "bg-white/10 text-white" : "bg-neutral-100 text-neutral-900"}`}>
-                      <Icon className="w-4 h-4" />
-                    </span>
-                    <h3 className={`text-sm font-black tracking-tight ${isDark ? "text-white" : "text-neutral-900"}`}>
-                      {group.category}
+                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                      {project.title}
                     </h3>
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5">
-                    {group.skills.map((skill) => (
-                      <motion.span
-                        key={skill}
-                        whileHover={{ scale: 1.05 }}
-                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all cursor-default ${isDark
-                            ? "bg-white/[0.06] text-neutral-300 border border-white/10 hover:border-white/20"
-                            : "bg-neutral-100 text-neutral-700 border border-neutral-200 hover:border-neutral-300"
-                          }`}
+                  {/* Impact Metric & External Link */}
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="px-3 py-1.5 rounded-md bg-[#0F141E] border border-amber-500/30 text-right">
+                      <span className="block text-xs font-mono text-amber-400 font-bold">
+                        {project.impactMetric}
+                      </span>
+                      <span className="block text-[11px] text-slate-400">
+                        {project.impactLabel}
+                      </span>
+                    </div>
+
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-3.5 py-2 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-all shadow-sm active:scale-95"
                       >
-                        {skill}
-                      </motion.span>
-                    ))}
+                        <span>Visit Live Platform</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </a>
+                    )}
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Minimal Footer */}
-        <footer
-          className={`rounded-[28px] px-7 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-bold backdrop-blur-2xl ${glassPill}`}
-        >
-          <span className={isDark ? "text-neutral-400" : "text-neutral-500"}>
-            © {new Date().getFullYear()} {PROFILE.name}. All rights reserved.
-          </span>
-          <div className="flex flex-wrap items-center gap-5">
-            <a
-              href={`mailto:${PROFILE.email}`}
-              className={`hover:underline underline-offset-4 ${isDark ? "text-white" : "text-neutral-900"}`}
-            >
-              {PROFILE.email}
-            </a>
-            <a
-              href={PROFILE.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`hover:underline underline-offset-4 ${isDark ? "text-white" : "text-neutral-900"}`}
-            >
-              LinkedIn ↗
-            </a>
-            <a
-              href={PROFILE.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`hover:underline underline-offset-4 ${isDark ? "text-white" : "text-neutral-900"}`}
-            >
-              GitHub ↗
-            </a>
-          </div>
-        </footer>
-      </main>
-
-      {/* Full-Screen Interactive Lightbox & Architecture Modal */}
-      <AnimatePresence>
-        {activeModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => setActiveModal(null)}
-            className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-8 flex items-start justify-center bg-black/75 backdrop-blur-md"
-          >
-            <motion.div
-              initial={{ scale: 0.94, opacity: 0, y: 20 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.94, opacity: 0, y: 20 }}
-              transition={{ type: "spring", duration: 0.45, bounce: 0.15 }}
-              onClick={(e) => e.stopPropagation()}
-              className={`max-w-4xl w-full my-6 sm:my-10 rounded-[32px] p-6 sm:p-8 space-y-6 ${isDark
-                  ? "bg-neutral-900/95 border border-white/20 text-neutral-100 shadow-2xl"
-                  : "bg-white/95 border border-neutral-200 text-neutral-900 shadow-2xl"
-                }`}
-            >
-              {/* Modal Header */}
-              <div className="flex items-start justify-between gap-4 border-b border-neutral-500/15 pb-4">
-                <div>
-                  <div className={`text-xs font-black uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                    {activeModal.context} ({activeModal.year})
-                  </div>
-                  <h3 className={`text-xl sm:text-2xl font-black tracking-tight mt-1.5 ${isDark ? "text-white" : "text-neutral-900"}`}>
-                    {activeModal.title}
-                  </h3>
-                </div>
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  onClick={() => setActiveModal(null)}
-                  className={`p-2 rounded-full transition-all shrink-0 ${buttonStyle}`}
-                  title="Close"
-                >
-                  <X className="w-5 h-5" />
-                </motion.button>
-              </div>
-
-              {/* Large Image Preview with Interactive Tabs */}
-              <div className="space-y-3">
-                <div className="rounded-2xl border border-neutral-500/20 shadow-xl bg-neutral-950 flex items-center justify-center p-2 sm:p-4 min-h-[300px] sm:min-h-[420px] max-h-[60vh] relative overflow-hidden group">
-                  <motion.img
-                    key={activeModal.images[modalImgIdx]?.url}
-                    src={activeModal.images[modalImgIdx]?.url}
-                    alt={activeModal.images[modalImgIdx]?.caption}
-                    initial={{ opacity: 0.85, scale: 0.99 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.25 }}
-                    className="max-w-full max-h-[54vh] w-auto h-auto object-contain rounded-lg"
-                  />
-                  {activeModal.images.length > 1 && (
-                    <>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => setModalImgIdx((prev) => (prev - 1 + activeModal.images.length) % activeModal.images.length)}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/65 hover:bg-black/90 text-white border border-white/20 flex items-center justify-center backdrop-blur-md shadow-lg transition-transform"
-                        title="Previous (Arrow Left)"
-                        aria-label="Previous image"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </motion.button>
-                      <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={() => setModalImgIdx((prev) => (prev + 1) % activeModal.images.length)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-9 h-9 rounded-full bg-black/65 hover:bg-black/90 text-white border border-white/20 flex items-center justify-center backdrop-blur-md shadow-lg transition-transform"
-                        title="Next (Arrow Right)"
-                        aria-label="Next image"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </motion.button>
-                    </>
-                  )}
                 </div>
 
-                {/* Clean Caption Bar Below Image */}
-                <div className="flex items-center justify-between text-xs px-1 gap-2">
-                  <p className={`font-semibold truncate ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
-                    {activeModal.images[modalImgIdx]?.caption}
-                  </p>
-                  <span className={`text-[11px] font-mono px-2.5 py-1 rounded-md shrink-0 ${isDark ? "bg-white/10 text-neutral-300" : "bg-neutral-200 text-neutral-700"}`}>
-                    {modalImgIdx + 1} / {activeModal.images.length}
+                {/* Problem & Solution Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-sm">
+                  <div className="rounded-lg bg-[#0F141E] p-4 border border-[#1E2738]/80 space-y-1.5">
+                    <span className="text-xs font-mono text-amber-400 uppercase font-semibold">
+                      The Challenge / Problem
+                    </span>
+                    <p className="text-slate-300 leading-relaxed text-[13px]">
+                      {project.challenge}
+                    </p>
+                  </div>
+                  <div className="rounded-lg bg-[#0F141E] p-4 border border-[#1E2738]/80 space-y-1.5">
+                    <span className="text-xs font-mono text-sky-400 uppercase font-semibold">
+                      The Engineering Solution
+                    </span>
+                    <p className="text-slate-300 leading-relaxed text-[13px]">
+                      {project.solution}
+                    </p>
+                  </div>
+                </div>
+
+                {/* What Was Built & Key Improvements */}
+                <div className="space-y-2">
+                  <span className="text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider">
+                    Key Deliverables & Concrete Results
                   </span>
-                </div>
-
-                {/* Thumbnail Switcher */}
-                {activeModal.images.length > 1 && (
-                  <div className="flex items-center gap-2.5 overflow-x-auto pb-1 pt-1">
-                    {activeModal.images.map((img, i) => (
-                      <motion.button
-                        key={i}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => setModalImgIdx(i)}
-                        className={`relative rounded-xl overflow-hidden border-2 transition-all shrink-0 w-24 sm:w-28 h-16 bg-neutral-950 flex items-center justify-center p-1 ${modalImgIdx === i
-                            ? isDark ? "border-white scale-105 shadow-md" : "border-neutral-900 scale-105 shadow-md"
-                            : "border-transparent opacity-50 hover:opacity-100"
-                          }`}
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                    {project.highlights.map((item, idx) => (
+                      <li
+                        key={idx}
+                        className="flex items-start gap-2.5 text-xs sm:text-[13px] text-slate-300 leading-snug"
                       >
-                        <img src={img.url} alt={img.caption} className="max-w-full max-h-full object-contain" />
-                      </motion.button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Architecture & Engineering Details */}
-              <div className="space-y-4 text-xs sm:text-sm">
-                <div>
-                  <div className={`text-xs font-black uppercase tracking-wider mb-2 flex items-center gap-1.5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                    <Layers className={`w-3.5 h-3.5 ${isDark ? "text-neutral-300" : "text-neutral-700"}`} />
-                    <span>System Architecture Flow</span>
-                  </div>
-                  <p
-                    className={`p-4 rounded-2xl font-bold leading-relaxed ${isDark ? "bg-white/[0.06] text-neutral-200" : "bg-neutral-100 text-neutral-800"
-                      }`}
-                  >
-                    {activeModal.architecture}
-                  </p>
-                </div>
-
-                <div>
-                  <div className={`text-xs font-black uppercase tracking-wider mb-2 flex items-center gap-1.5 ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                    <ShieldCheck className={`w-3.5 h-3.5 ${isDark ? "text-neutral-300" : "text-neutral-700"}`} />
-                    <span>Key Engineering Deliverables</span>
-                  </div>
-                  <ul className={`space-y-2.5 font-medium ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
-                    {activeModal.deliverables.map((point, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5">
-                        <span
-                          className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${isDark ? "bg-neutral-400" : "bg-neutral-700"
-                            }`}
-                        />
-                        <span>{point}</span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-1.5 shrink-0" />
+                        <span>{item}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
+
+                {/* Screenshots Gallery (If Present) */}
+                {project.images.length > 0 && (
+                  <div className="space-y-3 pt-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                        <Eye className="w-3.5 h-3.5 text-amber-400" />
+                        System Telemetry & Interface Previews ({project.images.length})
+                      </span>
+                      <span className="text-[11px] text-slate-500 font-mono">
+                        Click to view high-res capture
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3">
+                      {project.images.map((img, imgIdx) => (
+                        <div
+                          key={imgIdx}
+                          onClick={() =>
+                            setSelectedImage({
+                              project,
+                              index: imgIdx
+                            })
+                          }
+                          className="group relative rounded-lg overflow-hidden border border-[#1E2738] bg-[#0F141E] cursor-pointer hover:border-amber-400/50 transition-all"
+                        >
+                          <div className="aspect-[16/10] overflow-hidden bg-slate-950">
+                            <img
+                              src={img.url}
+                              alt={img.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="p-2 text-left">
+                            <div className="text-[11px] font-semibold text-slate-200 group-hover:text-amber-300 transition-colors truncate">
+                              {img.title}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Tech Stack Pills */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-3 border-t border-[#1E2738]/60">
+                  <span className="text-[11px] font-mono text-slate-400 mr-2">
+                    Stack:
+                  </span>
+                  {project.stack.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2 py-0.5 rounded text-[11px] font-mono bg-[#0F141E] text-slate-300 border border-[#1E2738]"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION: SKILLS & TECHNICAL COMPETENCIES */}
+        <section id="skills" className="space-y-6">
+          <div className="border-b border-[#1E2738] pb-3">
+            <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider">
+              Tooling & Capabilities
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">
+              Core Technical Competencies
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {SKILL_GROUPS.map((group, idx) => (
+              <div
+                key={idx}
+                className="rounded-xl bg-[#0C1017] border border-[#1E2738] p-6 space-y-4 hover:border-slate-700 transition-all"
+              >
+                <div className="space-y-1">
+                  <h3 className="text-base font-bold text-white flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-amber-400" />
+                    <span>{group.title}</span>
+                  </h3>
+                  <p className="text-xs text-slate-400">
+                    {group.description}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap gap-1.5 pt-2">
+                  {group.tools.map((tool) => (
+                    <span
+                      key={tool}
+                      className="px-2.5 py-1 text-xs rounded-md bg-[#0F141E] text-slate-300 border border-[#1E2738] hover:border-amber-400/40 transition-colors font-mono"
+                    >
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* SECTION: EDUCATION & CERTIFICATION */}
+        <section id="about" className="space-y-6">
+          <div className="border-b border-[#1E2738] pb-3">
+            <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider">
+              Background & Credentials
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white">
+              Education & Professional Certification
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Education Card */}
+            <div className="rounded-xl bg-[#0C1017] border border-[#1E2738] p-6 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-semibold text-slate-400 uppercase">
+                  Higher Education
+                </span>
+                <span className="text-xs font-mono text-amber-400">
+                  Graduate
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-white">
+                Bachelor of Computer Science (S.Kom)
+              </h3>
+              <p className="text-sm font-semibold text-slate-300">
+                Informatics Engineering • Universitas Komputer Indonesia (UNIKOM)
+              </p>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Focused on machine learning, deep learning text classification,
+                data structures, algorithms, and distributed software engineering.
+              </p>
+            </div>
+
+            {/* Certification Card */}
+            <div className="rounded-xl bg-[#0C1017] border border-[#1E2738] p-6 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-semibold text-slate-400 uppercase">
+                  National Certification
+                </span>
+                <span className="text-xs font-mono text-amber-400">
+                  BNSP CADS
+                </span>
+              </div>
+              <h3 className="text-lg font-bold text-white">
+                Certified Associate Data Scientist (CADS)
+              </h3>
+              <p className="text-sm font-semibold text-slate-300">
+                Badan Nasional Sertifikasi Profesi (BNSP)
+              </p>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Formally assessed and certified in core data science competencies:
+                data collection, statistical preprocessing, exploratory data
+                analysis, predictive modeling, and model evaluation.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION: GET IN TOUCH / FOOTER */}
+        <section id="contact" className="rounded-2xl bg-[#0C1017] border border-[#1E2738] p-8 sm:p-12 text-center space-y-6 relative overflow-hidden">
+          <div className="max-w-xl mx-auto space-y-3">
+            <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
+              Let's Build Something Together
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
+              Open to Engineering Opportunities
+            </h2>
+            <p className="text-sm text-slate-300 leading-relaxed">
+              Available for full-time roles in AI, Machine Learning, Data Science,
+              Data Analysis, and Software Engineering. Let's discuss how my
+              systems background can add value to your team.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+            <button
+              onClick={handleCopyEmail}
+              className="px-5 py-2.5 rounded-md bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-sm transition-all flex items-center gap-2 active:scale-95 shadow-lg shadow-amber-500/20"
+            >
+              {copiedEmail ? (
+                <>
+                  <Check className="w-4 h-4" />
+                  <span>Email Copied to Clipboard</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4" />
+                  <span>Copy idewanyomanbayusw@gmail.com</span>
+                </>
+              )}
+            </button>
+
+            <a
+              href={`mailto:${PROFILE.email}`}
+              className="px-4 py-2.5 rounded-md bg-[#0F141E] hover:bg-[#151C2A] text-slate-200 border border-[#1E2738] hover:border-slate-500 font-semibold text-sm transition-all flex items-center gap-2"
+            >
+              <Mail className="w-4 h-4 text-amber-400" />
+              <span>Send Direct Email</span>
+            </a>
+
+            <a
+              href={PROFILE.resumePdf}
+              download="Bayu_Satria_Portfolio.pdf"
+              className="px-4 py-2.5 rounded-md bg-[#0F141E] hover:bg-[#151C2A] text-slate-200 border border-[#1E2738] hover:border-slate-500 font-semibold text-sm transition-all flex items-center gap-2"
+            >
+              <FileDown className="w-4 h-4 text-amber-400" />
+              <span>Download Dossier PDF</span>
+            </a>
+          </div>
+
+          <div className="pt-8 border-t border-[#1E2738] flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-3">
+            <div className="flex items-center gap-2">
+              <span>© {new Date().getFullYear()} {PROFILE.name}</span>
+              <span className="text-slate-600">•</span>
+              <span className="flex items-center gap-1.5 text-slate-300">
+                <MapPin className="w-3.5 h-3.5 text-amber-400" />
+                <span>Bandung, West Java, Indonesia</span>
+              </span>
+            </div>
+
+            <div className="flex items-center gap-4 text-slate-400">
+              <span className="flex items-center gap-1.5 font-mono text-[11px]">
+                <Clock className="w-3.5 h-3.5 text-slate-400" />
+                <span>WIB (UTC+7): {currentTime || "13:45:00"}</span>
+              </span>
+              <a
+                href={PROFILE.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                GitHub
+              </a>
+              <a
+                href={PROFILE.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* FLOATING ACTION BOTTOM DOCK */}
+      <aside aria-label="Quick Action Dock" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 px-3 py-2 rounded-full bg-[#0F141E]/90 backdrop-blur-md border border-[#1E2738] shadow-2xl flex items-center gap-2 sm:gap-3 text-xs">
+        <span className="text-[11px] font-mono font-bold text-amber-400 px-2 py-0.5 rounded bg-amber-500/10 hidden sm:inline">
+          FAST ACCESS
+        </span>
+
+        <a
+          href="https://bysense.batarienergy.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#151C2A] hover:bg-slate-800 text-slate-200 hover:text-white transition-colors"
+        >
+          <span>BySense</span>
+          <ArrowUpRight className="w-3 h-3 text-amber-400" />
+        </a>
+
+        <a
+          href="https://brin-project-kp.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#151C2A] hover:bg-slate-800 text-slate-200 hover:text-white transition-colors"
+        >
+          <span>BRIN</span>
+          <ArrowUpRight className="w-3 h-3 text-amber-400" />
+        </a>
+
+        <a
+          href="https://nutrimood.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#151C2A] hover:bg-slate-800 text-slate-200 hover:text-white transition-colors"
+        >
+          <span>NutriMood</span>
+          <ArrowUpRight className="w-3 h-3 text-amber-400" />
+        </a>
+
+        <div className="w-px h-4 bg-slate-700 mx-0.5" />
+
+        <button
+          onClick={handleCopyEmail}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition-all"
+        >
+          {copiedEmail ? <Check className="w-3 h-3" /> : <Mail className="w-3 h-3" />}
+          <span>{copiedEmail ? "Copied" : "Email"}</span>
+        </button>
+
+        <a
+          href={PROFILE.resumePdf}
+          download="Bayu_Satria_Portfolio.pdf"
+          className="p-1.5 rounded-full bg-[#151C2A] hover:bg-slate-800 text-slate-200 hover:text-white transition-colors"
+          title="Download PDF Dossier"
+        >
+          <FileDown className="w-3.5 h-3.5 text-amber-400" />
+        </a>
+      </aside>
+
+      {/* FULLSCREEN IMAGE LIGHTBOX MODAL */}
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="relative max-w-5xl w-full bg-[#0C1017] rounded-xl border border-[#1E2738] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Top Header */}
+              <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#1E2738] bg-[#0F141E]">
+                <div className="flex items-center gap-2 truncate">
+                  <span className="font-mono text-xs text-amber-400 font-bold">
+                    {selectedImage.project.number}
+                  </span>
+                  <span className="text-slate-500">•</span>
+                  <span className="text-sm font-bold text-white truncate">
+                    {selectedImage.project.images[selectedImage.index].title}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-slate-400">
+                    {selectedImage.index + 1} /{" "}
+                    {selectedImage.project.images.length}
+                  </span>
+                  <button
+                    onClick={() => setSelectedImage(null)}
+                    className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
 
-              {/* Modal Action CTA */}
-              <div className="pt-4 border-t border-neutral-500/15 flex flex-wrap items-center justify-between gap-3">
-                {activeModal.liveUrl ? (
-                  <motion.a
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
-                    href={activeModal.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-black tracking-tight ${isDark
-                        ? "bg-white text-neutral-950 hover:bg-neutral-200"
-                        : "bg-neutral-900 text-white hover:bg-neutral-800"
-                      }`}
-                  >
-                    <span>Launch {activeModal.domain}</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </motion.a>
-                ) : (
-                  <span className={`text-xs font-bold ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
-                    Undergraduate Academic Research Publication
-                  </span>
-                )}
+              {/* Modal Image Area */}
+              <div className="relative flex-1 bg-black flex items-center justify-center overflow-hidden min-h-[350px] max-h-[65vh]">
+                <img
+                  src={selectedImage.project.images[selectedImage.index].url}
+                  alt={selectedImage.project.images[selectedImage.index].title}
+                  className="max-h-full max-w-full object-contain"
+                />
 
-                {activeModal.liveUrl && (
-                  <motion.button
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
-                    onClick={() => handleCopy(activeModal.liveUrl!, 'modal')}
-                    className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all ${buttonStyle}`}
-                  >
-                    {copiedId === 'modal' ? 'Link Copied!' : 'Copy Project URL'}
-                  </motion.button>
+                {/* Left/Right Navigation Arrows */}
+                {selectedImage.project.images.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImage({
+                          ...selectedImage,
+                          index:
+                            (selectedImage.index -
+                              1 +
+                              selectedImage.project.images.length) %
+                            selectedImage.project.images.length
+                        });
+                      }}
+                      className="absolute left-3 p-2 rounded-full bg-black/60 hover:bg-black/80 text-white border border-slate-700 transition-colors"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImage({
+                          ...selectedImage,
+                          index:
+                            (selectedImage.index + 1) %
+                            selectedImage.project.images.length
+                        });
+                      }}
+                      className="absolute right-3 p-2 rounded-full bg-black/60 hover:bg-black/80 text-white border border-slate-700 transition-colors"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
                 )}
+              </div>
+
+              {/* Modal Caption Footer */}
+              <div className="p-4 bg-[#0F141E] border-t border-[#1E2738] text-xs text-slate-300 leading-relaxed">
+                <span className="font-semibold text-white mr-1">
+                  Figure Details:
+                </span>
+                {selectedImage.project.images[selectedImage.index].caption}
               </div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-      {/* Floating Action Dock */}
-      <FloatingDock
-        isDark={isDark}
-        onToggleTheme={toggleTheme}
-        onCopyEmail={() => handleCopy(PROFILE.email, 'Email address')}
-        activeSection={activeSection}
-      />
-
-      {/* Tactile Toast Notification */}
-      <ToastNotification message={toastMessage} isDark={isDark} />
     </div>
   );
 }
