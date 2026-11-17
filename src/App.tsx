@@ -466,6 +466,7 @@ export default function App() {
     project: Project;
     index: number;
   } | null>(null);
+  const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
 
@@ -1311,67 +1312,127 @@ export default function App() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
             {/* Degree */}
-            <TiltCard isDark={isDark} maxTilt={5}>
-              <div className={`rounded-2xl p-6 border backdrop-blur-md space-y-3 ${isDark
+            <TiltCard isDark={isDark} maxTilt={4} className="h-full">
+              <div className={`h-full rounded-2xl p-6 border backdrop-blur-md flex flex-col justify-between space-y-5 ${isDark
                 ? "bg-zinc-900/70 border-white/10 shadow-specular-dark"
                 : "bg-white border-black/10 shadow-xs"
                 }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-zinc-400" : "text-zinc-500"
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-zinc-400" : "text-zinc-500"
+                      }`}>
+                      Academic Degree
+                    </span>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${isDark ? "text-zinc-300 border-white/10" : "text-zinc-700 border-black/10"
+                      }`}>
+                      Graduated
+                    </span>
+                  </div>
+                  <h3 className={`text-lg sm:text-xl font-extrabold tracking-tight ${isDark ? "text-white" : "text-zinc-900"
                     }`}>
-                    Academic Degree
-                  </span>
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded-full border ${isDark ? "text-zinc-300 border-white/10" : "text-zinc-700 border-black/10"
+                    Bachelor of Computer Science (S.Kom)
+                  </h3>
+                  <p className={`text-sm font-semibold ${isDark ? "text-zinc-300" : "text-zinc-700"
                     }`}>
-                    Graduated
-                  </span>
+                    Universitas Komputer Indonesia (UNIKOM) | Informatics Engineering
+                  </p>
+                  <p className={`text-xs leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"
+                    }`}>
+                    Specialized in software systems engineering, distributed data pipelines, and applied machine learning architectures.
+                  </p>
                 </div>
-                <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-zinc-900"
-                  }`}>
-                  Bachelor of Computer Science (S.Kom)
-                </h3>
-                <p className={`text-sm ${isDark ? "text-zinc-300" : "text-zinc-700"
-                  }`}>
-                  Universitas Komputer Indonesia (UNIKOM) | Informatics Engineering
-                </p>
-                <p className={`text-xs leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"
-                  }`}>
-                  Specialized in software systems engineering, data pipelines, and
-                  machine learning architectures.
-                </p>
+
+                <div className={`pt-4 border-t space-y-2 text-xs ${isDark ? "border-white/10" : "border-black/5"}`}>
+                  <div className="flex justify-between items-center">
+                    <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>Institution:</span>
+                    <span className={`font-semibold ${isDark ? "text-zinc-300" : "text-zinc-800"}`}>UNIKOM Bandung</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>Department:</span>
+                    <span className={`font-semibold ${isDark ? "text-zinc-300" : "text-zinc-800"}`}>Teknik Informatika</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>Core Competencies:</span>
+                    <span className={`font-semibold ${isDark ? "text-zinc-300" : "text-zinc-800"}`}>ML, OCR, Systems, IoT</span>
+                  </div>
+                </div>
               </div>
             </TiltCard>
 
-            {/* Certification (CADS) */}
-            <TiltCard isDark={isDark} maxTilt={5}>
-              <div className={`rounded-2xl p-6 border backdrop-blur-md space-y-3 ${isDark
+            {/* Certification (CADS) with Visual Preview */}
+            <TiltCard isDark={isDark} maxTilt={4} className="h-full">
+              <div className={`h-full rounded-2xl p-6 border backdrop-blur-md flex flex-col justify-between space-y-5 ${isDark
                 ? "bg-zinc-900/70 border-white/10 shadow-specular-dark"
                 : "bg-white border-black/10 shadow-xs"
                 }`}>
-                <div className="flex items-center justify-between">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-zinc-400" : "text-zinc-500"
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-zinc-400" : "text-zinc-500"
+                      }`}>
+                      National Certification
+                    </span>
+                    <span className="text-xs font-bold px-2 py-0.5 rounded-full text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      Verified CADS
+                    </span>
+                  </div>
+
+                  <h3 className={`text-lg sm:text-xl font-extrabold tracking-tight ${isDark ? "text-white" : "text-zinc-900"
                     }`}>
-                    National Certification
-                  </span>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded-full text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
-                    Verified CADS
-                  </span>
+                    Certified Associate Data Scientist (CADS)
+                  </h3>
+
+                  <p className={`text-sm font-semibold ${isDark ? "text-zinc-300" : "text-zinc-700"
+                    }`}>
+                    Badan Nasional Sertifikasi Profesi (BNSP) & LSP Informatika
+                  </p>
+
+                  <p className={`text-xs leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"
+                    }`}>
+                    Officially assessed and verified in data preprocessing, statistical modeling, predictive pipelines, and production machine learning.
+                  </p>
                 </div>
-                <h3 className={`text-lg font-bold ${isDark ? "text-white" : "text-zinc-900"
-                  }`}>
-                  Certified Associate Data Scientist (CADS)
-                </h3>
-                <p className={`text-sm ${isDark ? "text-zinc-300" : "text-zinc-700"
-                  }`}>
-                  Badan Nasional Sertifikasi Profesi (BNSP)
-                </p>
-                <p className={`text-xs leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"
-                  }`}>
-                  Officially assessed and verified in data preprocessing, statistical
-                  modeling, predictive pipelines, and production machine learning.
-                </p>
+
+                {/* Interactive Certificate Thumbnail */}
+                <div
+                  onClick={() => {
+                    sounds.playChime(600, 840);
+                    setShowCertificateModal(true);
+                  }}
+                  onMouseEnter={() => sounds.playHover()}
+                  className={`group/cert cursor-pointer rounded-xl border overflow-hidden transition-all duration-300 relative ${isDark
+                    ? "bg-zinc-950 border-white/10 hover:border-white/30"
+                    : "bg-zinc-100 border-black/10 hover:border-black/30"
+                    }`}
+                >
+                  <div className="aspect-[16/9] overflow-hidden bg-black/10 relative flex items-center justify-center">
+                    <img
+                      src="/credentials/bnsp-cads-certificate.jpg"
+                      alt="BNSP Certified Associate Data Scientist (CADS)"
+                      className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/cert:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/45 opacity-0 group-hover/cert:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="px-3.5 py-1.5 rounded-full bg-white text-black text-xs font-bold flex items-center gap-1.5 shadow-lg">
+                        <Eye className="w-3.5 h-3.5" />
+                        <span>Inspect Certificate</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`p-2.5 flex items-center justify-between text-xs font-bold border-t ${isDark ? "bg-zinc-950/80 border-white/5 text-zinc-300" : "bg-zinc-50 border-black/5 text-zinc-700"
+                    }`}>
+                    <div className="flex items-center gap-1.5 truncate">
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                      <span className="truncate">Reg. TIK.317.00907 2026</span>
+                    </div>
+                    <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${isDark ? "bg-zinc-800 text-zinc-300" : "bg-zinc-200/80 text-zinc-700"}`}>
+                      2026 - 2029
+                    </span>
+                  </div>
+                </div>
               </div>
             </TiltCard>
           </div>
@@ -1632,6 +1693,92 @@ export default function App() {
                   Figure Details:
                 </span>
                 {selectedImage.project.images[selectedImage.index].caption}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* BNSP CERTIFICATE LIGHTBOX MODAL */}
+      <AnimatePresence>
+        {showCertificateModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6"
+            onClick={() => {
+              sounds.playClick();
+              setShowCertificateModal(false);
+            }}
+          >
+            <motion.div
+              initial={{ scale: 0.96, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              className={`relative max-w-2xl w-full rounded-2xl border overflow-hidden shadow-2xl flex flex-col max-h-[92vh] ${isDark
+                ? "bg-zinc-900 border-white/15 shadow-specular-dark"
+                : "bg-white border-black/10"
+                }`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Modal Top Header */}
+              <div className={`flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 border-b ${isDark
+                ? "bg-zinc-950 border-white/10"
+                : "bg-zinc-50 border-black/10"
+                }`}>
+                <div className="flex items-center gap-2 truncate pr-2">
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0">
+                    BNSP CADS
+                  </span>
+                  <span className="text-zinc-500">|</span>
+                  <span className={`text-xs sm:text-sm font-bold truncate ${isDark ? "text-white" : "text-zinc-900"
+                    }`}>
+                    Sertifikat Kompetensi Ilmuwan Data Madya
+                  </span>
+                </div>
+
+                <button
+                  onClick={() => {
+                    sounds.playClick();
+                    setShowCertificateModal(false);
+                  }}
+                  onMouseEnter={() => sounds.playHover()}
+                  className={`p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg transition-colors ${isDark
+                    ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                    : "text-zinc-500 hover:text-black hover:bg-zinc-200"
+                    }`}
+                  aria-label="Close Certificate Preview"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Certificate Image Area */}
+              <div className="relative flex-1 bg-zinc-950 flex items-center justify-center overflow-auto p-2 sm:p-4 min-h-[280px] max-h-[68vh]">
+                <img
+                  src="/credentials/bnsp-cads-certificate.jpg"
+                  alt="BNSP Certified Associate Data Scientist (CADS) - I Dewa Nyoman Bayu Satria Wibawa"
+                  className="max-h-full max-w-full object-contain rounded-lg shadow-xl"
+                />
+              </div>
+
+              {/* Modal Caption Footer */}
+              <div className={`p-3.5 sm:p-4 border-t text-xs leading-relaxed ${isDark
+                ? "bg-zinc-950 border-white/10 text-zinc-300"
+                : "bg-zinc-50 border-black/10 text-zinc-700"
+                }`}>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <div>
+                    <span className={`font-bold mr-1 ${isDark ? "text-white" : "text-zinc-900"}`}>
+                      Lembaga Sertifikasi:
+                    </span>
+                    Badan Nasional Sertifikasi Profesi (BNSP) & LSP Informatika
+                  </div>
+                  <div className={`font-mono text-[11px] ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+                    No. Reg. TIK.317.00907 2026
+                  </div>
+                </div>
               </div>
             </motion.div>
           </motion.div>
