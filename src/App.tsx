@@ -94,7 +94,7 @@ const PROFILE = {
   valueHook: "I build machine learning models, automation scripts, and web or mobile apps that cut down repetitive manual work.",
   bio: "Informatics Engineering graduate from UNIKOM with BNSP Associate Data Scientist certification. Experienced in engineering end-to-end ML classification pipelines, IoT solar telemetry networks, and OCR automation that deliver measurable operational efficiency. Driven by practical engineering that turns complex data pipelines into reliable, production software.",
   email: "idewanyomanbayusw@gmail.com",
-  linkedin: "https://linkedin.com/in/idewanyomanbayusw",
+  linkedin: "https://www.linkedin.com/in/idewanyomanbayu",
   github: "https://github.com/idewbayu14",
   resumePdf: "/CV_Idew_Bayu.pdf",
   avatar: "/profile/idew-bayu.jpg",
