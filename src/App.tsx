@@ -107,6 +107,8 @@ const PROFILE = {
   ]
 };
 
+const COMPOSE_EMAIL_URL = `mailto:${PROFILE.email}?subject=Career%20Opportunity%20%2F%20Project%20Inquiry%20-%20Bayu%20Satria&body=Hi%20Bayu%2C%0A%0AWe%20came%20across%20your%20portfolio%20and%20would%20like%20to%20discuss...%0A%0ABest%20regards%2C`;
+
 const IMPACT_STATS = [
   {
     value: "~80%",
@@ -467,7 +469,6 @@ export default function App() {
     index: number;
   } | null>(null);
   const [showCertificateModal, setShowCertificateModal] = useState<boolean>(false);
-  const [copiedEmail, setCopiedEmail] = useState(false);
   const [currentTime, setCurrentTime] = useState("");
 
   useEffect(() => {
@@ -504,14 +505,6 @@ export default function App() {
     const interval = setInterval(updateWIBTime, 1000);
     return () => clearInterval(interval);
   }, []);
-
-  const handleCopyEmail = (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    sounds.playClick();
-    navigator.clipboard.writeText(PROFILE.email);
-    setCopiedEmail(true);
-    setTimeout(() => setCopiedEmail(false), 2500);
-  };
 
   const handleToggleTheme = () => {
     sounds.playChime(isDark ? 880 : 540, isDark ? 660 : 780);
@@ -669,27 +662,23 @@ export default function App() {
               <span>Download CV</span>
             </a>
 
-            <button
-              onClick={handleCopyEmail}
+            <a
+              href={COMPOSE_EMAIL_URL}
+              onClick={() => {
+                sounds.playClick();
+                if (navigator.clipboard) navigator.clipboard.writeText(PROFILE.email);
+              }}
               onMouseEnter={() => sounds.playHover()}
               className={`flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1.5 text-xs font-bold rounded-xl transition-all duration-200 active:scale-95 ${isDark
                 ? "bg-white hover:bg-zinc-200 text-black shadow-lg shadow-white/5"
                 : "bg-zinc-900 hover:bg-black text-white shadow-sm"
                 }`}
+              title={`Compose email offering or inquiry to ${PROFILE.email}`}
             >
-              {copiedEmail ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Copied</span>
-                </>
-              ) : (
-                <>
-                  <Mail className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Get in Touch</span>
-                  <span className="sm:hidden">Contact</span>
-                </>
-              )}
-            </button>
+              <Mail className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Get in Touch</span>
+              <span className="sm:hidden">Contact</span>
+            </a>
           </div>
         </div>
       </header>
@@ -1540,14 +1529,19 @@ export default function App() {
 
         <div className="w-px h-4 mx-0.5 bg-zinc-700 shrink-0" />
 
-        <button
-          onClick={handleCopyEmail}
+        <a
+          href={COMPOSE_EMAIL_URL}
+          onClick={() => {
+            sounds.playClick();
+            if (navigator.clipboard) navigator.clipboard.writeText(PROFILE.email);
+          }}
           onMouseEnter={() => sounds.playHover()}
           className="flex items-center gap-1 px-3 py-1 rounded-full font-bold transition-all shrink-0 active:scale-95 bg-white hover:bg-zinc-200 text-black shadow-xs"
+          title={`Compose email to ${PROFILE.email}`}
         >
-          {copiedEmail ? <Check className="w-3 h-3 text-emerald-600" /> : <Mail className="w-3 h-3" />}
-          <span>{copiedEmail ? "Copied" : "Email"}</span>
-        </button>
+          <Mail className="w-3 h-3" />
+          <span>Email</span>
+        </a>
 
         <a
           href={PROFILE.resumePdf}
