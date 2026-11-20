@@ -81,6 +81,7 @@ interface Project {
   stack: string[];
   liveUrl?: string;
   liveLabel?: string;
+  storeLinks?: { label: string; url: string; platform: 'Shopee' | 'Tokopedia' | 'TikTok Shop' }[];
   images: ProjectImage[];
 }
 
@@ -222,7 +223,8 @@ const PROJECTS: Project[] = [
     highlights: [
       "Sped up product photo indexing to launch over 600 SKUs across Shopee, Tokopedia, and TikTok Shop to drive online sales.",
       "Engineered an automated OCR to Excel script that cut grooming receipt bookkeeping time by roughly 75%.",
-      "Eliminated repetitive manual transcription errors and established instant reconciliation for daily store revenue."
+      "Eliminated repetitive manual transcription errors and established instant reconciliation for daily store revenue.",
+      "Live verified stores operating on Shopee (640+ products, 5.0 rating), Tokopedia (2,300+ sales), and TikTok Shop Mall."
     ],
     stack: [
       "Python",
@@ -233,7 +235,52 @@ const PROJECTS: Project[] = [
       "Excel Automation",
       "Regex"
     ],
-    images: []
+    liveUrl: "https://www.tokopedia.com/zoom-petcare/product",
+    liveLabel: "tokopedia.com/zoom-petcare",
+    storeLinks: [
+      {
+        platform: "Shopee",
+        label: "Shopee Star Seller",
+        url: "https://shopee.co.id/zoompetcare?entryPoint=ShopBySearch&searchKeyword=zoom%20petcare"
+      },
+      {
+        platform: "Tokopedia",
+        label: "Tokopedia Official",
+        url: "https://www.tokopedia.com/zoom-petcare/product"
+      },
+      {
+        platform: "TikTok Shop",
+        label: "TikTok Shop Mall",
+        url: "https://vt.tiktok.com/ZSpwd4QS7/?page=Mall"
+      }
+    ],
+    images: [
+      {
+        url: "/projects/zoom-shopee-store.jpg",
+        title: "Shopee Verified Storefront (643 Products, 5.0 Rating)",
+        caption: "Zoom Petcare Star Seller storefront on Shopee with 643 catalog items uploaded and indexed via automation scripts, achieving a 5.0 rating across 313 customer reviews."
+      },
+      {
+        url: "/projects/zoom-tokopedia-store.jpg",
+        title: "Tokopedia Verified Storefront (2,301+ Items Sold)",
+        caption: "Official Tokopedia store metrics demonstrating 2,301+ verified sales and 5.0 rating, powered by standardized inventory assets and metadata extraction."
+      },
+      {
+        url: "/projects/zoom-tokopedia-catalog.jpg",
+        title: "Tokopedia 86-Category Showcase Architecture",
+        caption: "Live inventory hierarchy spanning 86 structured showcase categories across pet nutrition, dermatology, and care supplies."
+      },
+      {
+        url: "/projects/zoom-tiktok-store.jpg",
+        title: "TikTok Shop Mall Official Channel",
+        caption: "TikTok Shop Mall official store page displaying 100% authentic badge, 4.8 star rating, and automated product catalog distribution."
+      },
+      {
+        url: "/projects/zoom-tiktok-catalog.jpg",
+        title: "TikTok Shop Real-time Product Catalog",
+        caption: "Active product listings synchronized across pet nutrition and care categories on TikTok Shop Mall."
+      }
+    ]
   },
   {
     id: "brin-autonomous",
@@ -1161,7 +1208,42 @@ export default function App() {
                           </div>
                         </div>
 
-                        {project.liveUrl && (
+                        {project.storeLinks && project.storeLinks.length > 0 ? (
+                          <div className="flex flex-col items-start lg:items-end gap-1.5">
+                            <span className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
+                              Live Verified Stores:
+                            </span>
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              {project.storeLinks.map((store) => (
+                                <a
+                                  key={store.platform}
+                                  href={store.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  onClick={() => sounds.playClick()}
+                                  onMouseEnter={() => sounds.playHover()}
+                                  className={`inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold rounded-lg border transition-all duration-200 active:scale-95 ${
+                                    store.platform === "Shopee"
+                                      ? isDark
+                                        ? "bg-amber-500/10 text-amber-300 border-amber-500/30 hover:bg-amber-500/20"
+                                        : "bg-amber-50 text-amber-800 border-amber-200 hover:bg-amber-100"
+                                      : store.platform === "Tokopedia"
+                                      ? isDark
+                                        ? "bg-emerald-500/10 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/20"
+                                        : "bg-emerald-50 text-emerald-800 border-emerald-200 hover:bg-emerald-100"
+                                      : isDark
+                                      ? "bg-pink-500/10 text-pink-300 border-pink-500/30 hover:bg-pink-500/20"
+                                      : "bg-pink-50 text-pink-800 border-pink-200 hover:bg-pink-100"
+                                  }`}
+                                  title={`Open ${store.label}`}
+                                >
+                                  <span>{store.platform}</span>
+                                  <ArrowUpRight className="w-3 h-3 opacity-70" />
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        ) : project.liveUrl ? (
                           <a
                             href={project.liveUrl}
                             target="_blank"
@@ -1176,7 +1258,7 @@ export default function App() {
                             <span>Visit Live Platform</span>
                             <ArrowUpRight className="w-3.5 h-3.5" />
                           </a>
-                        )}
+                        ) : null}
                       </div>
                     </div>
 
@@ -1620,6 +1702,19 @@ export default function App() {
           className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors shrink-0 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
         >
           <span>BySense</span>
+          <ArrowUpRight className="w-3 h-3 text-zinc-400" />
+        </a>
+
+        <a
+          href="https://www.tokopedia.com/zoom-petcare/product"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => sounds.playClick()}
+          onMouseEnter={() => sounds.playHover()}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors shrink-0 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
+          title="Zoom Petcare Verified Store"
+        >
+          <span>Zoom</span>
           <ArrowUpRight className="w-3 h-3 text-zinc-400" />
         </a>
 
