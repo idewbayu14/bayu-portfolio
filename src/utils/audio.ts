@@ -1,13 +1,11 @@
 // Apple & Linear-inspired Web Audio API Synthesizer
-// Studio-calibrated acoustic tactile feedback, warm haptic micro-taps, and harmonious acoustic chords
-// Zero external audio files required, zero latency, calibrated comfortable volume levels
+// Zero external assets, instant zero-latency response, calibrated audible volume
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
   public enabled: boolean = true;
   private lastScrollTime: number = 0;
   private lastCardFrictionTime: number = 0;
-  private hasPlayedWelcome: boolean = false;
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -22,8 +20,7 @@ class SoundEngine {
   /**
    * Browser Autoplay Policy Handler:
    * Modern browsers require a user gesture (tap, click, keydown, scroll) to resume AudioContext.
-   * This listener detects the first interaction, resumes the context silently,
-   * and plays a warm welcoming arrival chord.
+   * This listener detects the first interaction and resumes the context silently.
    */
   public initAutoplayUnlock() {
     if (typeof window === 'undefined') return;
@@ -31,17 +28,8 @@ class SoundEngine {
     const unlock = () => {
       const ctx = this.getContext();
       if (ctx && ctx.state === 'suspended') {
-        ctx.resume().then(() => {
-          if (!this.hasPlayedWelcome && this.enabled) {
-            this.hasPlayedWelcome = true;
-            this.playWelcome();
-          }
-        }).catch(() => {});
-      } else if (ctx && !this.hasPlayedWelcome && this.enabled) {
-        this.hasPlayedWelcome = true;
-        this.playWelcome();
+        ctx.resume().catch(() => {});
       }
-
       window.removeEventListener('pointerdown', unlock);
       window.removeEventListener('touchstart', unlock);
       window.removeEventListener('keydown', unlock);
@@ -78,55 +66,13 @@ class SoundEngine {
       localStorage.setItem('sound_enabled', String(this.enabled));
     }
     if (this.enabled) {
-      this.playChime(523.25, 659.25, 783.99);
+      this.playChime(680, 1020);
     }
     return this.enabled;
   }
 
   /**
-   * Warm Welcome Arrival Chord (Diputar halus saat pertama kali pengunjung berinteraksi)
-   * Referensi: Apple device wake-up & boutique studio arrival ambient chord
-   */
-  public playWelcome() {
-    if (!this.enabled) return;
-    const ctx = this.getContext();
-    if (!ctx) return;
-
-    try {
-      const now = ctx.currentTime;
-      // Warm A Major Triad: A4 (440Hz), C#5 (554.37Hz), E5 (659.25Hz)
-      const chord = [440, 554.37, 659.25];
-      chord.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(1600, now);
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + i * 0.08);
-
-        // Soft ambient swell and gentle bell decay
-        gain.gain.setValueAtTime(0.0001, now + i * 0.08);
-        gain.gain.linearRampToValueAtTime(0.045, now + i * 0.08 + 0.03);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.08 + 0.38);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now + i * 0.08);
-        osc.stop(now + i * 0.08 + 0.4);
-      });
-    } catch {
-      // Ignore
-    }
-  }
-
-  /**
-   * Tactile Mechanical Click (Apple Trackpad / Lubricated mechanical switch "thock")
-   * Referensi: Apple Magic Trackpad haptic feedback & Linear.app task toggle
+   * Tactile Mechanical Click Sound (Punchy Apple trackpad / tactile switch click)
    */
   public playClick() {
     if (!this.enabled) return;
@@ -136,57 +82,54 @@ class SoundEngine {
     try {
       const t = ctx.currentTime;
 
-      // 1. Tactile click transient (lembut, tidak cempreng)
+      // High click transient
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       const filter = ctx.createBiquadFilter();
 
-      filter.type = 'bandpass';
-      filter.frequency.setValueAtTime(580, t);
-      filter.Q.setValueAtTime(1.6, t);
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(2400, t);
 
-      osc.type = 'sine';
+      osc.type = 'triangle';
       osc.frequency.setValueAtTime(480, t);
-      osc.frequency.exponentialRampToValueAtTime(140, t + 0.024);
+      osc.frequency.exponentialRampToValueAtTime(80, t + 0.045);
 
-      gain.gain.setValueAtTime(0.10, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.024);
+      gain.gain.setValueAtTime(0.32, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.045);
 
       osc.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
 
       osc.start(t);
-      osc.stop(t + 0.026);
+      osc.stop(t + 0.05);
 
-      // 2. Deep warm acoustic body thump (memberi bobot fisik saklar)
-      const body = ctx.createOscillator();
-      const bodyGain = ctx.createGain();
-      body.type = 'sine';
-      body.frequency.setValueAtTime(130, t);
-      body.frequency.exponentialRampToValueAtTime(45, t + 0.032);
+      // Low mechanical pop body
+      const sub = ctx.createOscillator();
+      const subGain = ctx.createGain();
+      sub.type = 'sine';
+      sub.frequency.setValueAtTime(220, t);
+      sub.frequency.exponentialRampToValueAtTime(60, t + 0.035);
+      subGain.gain.setValueAtTime(0.28, t);
+      subGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
 
-      bodyGain.gain.setValueAtTime(0.09, t);
-      bodyGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.032);
+      sub.connect(subGain);
+      subGain.connect(ctx.destination);
 
-      body.connect(bodyGain);
-      bodyGain.connect(ctx.destination);
-
-      body.start(t);
-      body.stop(t + 0.035);
+      sub.start(t);
+      sub.stop(t + 0.04);
     } catch {
       // Audio autoplay policy catch
     }
   }
 
   /**
-   * Velvet Card Friction / Surface Tilt (Sensasi gesekan halus saat kursor melintasi kartu 3D)
-   * Referensi: Raycast card hover & kartu deck halus
+   * Tactile Card Friction / Shuffle Sound (Suara gesekan permukaan kartu saat di-hover)
    */
   public playCardFriction() {
     if (!this.enabled) return;
     const now = performance.now();
-    if (now - this.lastCardFrictionTime < 90) return;
+    if (now - this.lastCardFrictionTime < 70) return;
     this.lastCardFrictionTime = now;
 
     const ctx = this.getContext();
@@ -194,34 +137,56 @@ class SoundEngine {
 
     try {
       const t = ctx.currentTime;
-      const osc = ctx.createOscillator();
+      const duration = 0.065; // 65ms tactile friction sweep
+      const bufferSize = Math.floor(ctx.sampleRate * duration);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+
+      // White/pink texture noise burst
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.45));
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const bandpass = ctx.createBiquadFilter();
+      bandpass.type = 'bandpass';
+      bandpass.Q.setValueAtTime(2.2, t);
+      // Downward frequency sweep simulating sliding friction across smooth glass/deck
+      bandpass.frequency.setValueAtTime(1750, t);
+      bandpass.frequency.exponentialRampToValueAtTime(420, t + duration);
+
       const gain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
+      gain.gain.setValueAtTime(0.28, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
 
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(460, t);
+      // Add soft physical card displacement thump
+      const cardThump = ctx.createOscillator();
+      const thumpGain = ctx.createGain();
+      cardThump.type = 'sine';
+      cardThump.frequency.setValueAtTime(170, t);
+      cardThump.frequency.exponentialRampToValueAtTime(65, t + 0.04);
+      thumpGain.gain.setValueAtTime(0.2, t);
+      thumpGain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(260, t);
-      osc.frequency.exponentialRampToValueAtTime(120, t + 0.032);
-
-      gain.gain.setValueAtTime(0.035, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.032);
-
-      osc.connect(filter);
-      filter.connect(gain);
+      noise.connect(bandpass);
+      bandpass.connect(gain);
       gain.connect(ctx.destination);
 
-      osc.start(t);
-      osc.stop(t + 0.035);
+      cardThump.connect(thumpGain);
+      thumpGain.connect(ctx.destination);
+
+      noise.start(t);
+      cardThump.start(t);
+      cardThump.stop(t + 0.045);
     } catch {
       // Ignore
     }
   }
 
   /**
-   * Warm Haptic Micro-Tap (Hover tombol & tab)
-   * Referensi: Apple Watch Digital Crown micro-tick & Linear.app navigation tap
+   * Crisp button/pill hover tick
    */
   public playHover() {
     if (!this.enabled) return;
@@ -232,38 +197,31 @@ class SoundEngine {
       const t = ctx.currentTime;
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
-      const filter = ctx.createBiquadFilter();
 
-      filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(820, t);
-
-      // Frekuensi rendah-menengah organik, tidak menusuk telinga
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(420, t);
-      osc.frequency.exponentialRampToValueAtTime(240, t + 0.016);
+      osc.frequency.setValueAtTime(1600, t);
+      osc.frequency.exponentialRampToValueAtTime(750, t + 0.02);
 
-      gain.gain.setValueAtTime(0.042, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.016);
+      gain.gain.setValueAtTime(0.14, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.02);
 
-      osc.connect(filter);
-      filter.connect(gain);
+      osc.connect(gain);
       gain.connect(ctx.destination);
 
       osc.start(t);
-      osc.stop(t + 0.018);
+      osc.stop(t + 0.025);
     } catch {
       // Ignore
     }
   }
 
   /**
-   * Rotary Crown Wheel Tick on Scroll (Detent halus roda putar saat scroll)
-   * Referensi: Leica camera dial detent & digital crown rotary click
+   * Rotational crown tick on scroll (loud enough to hear cleanly, throttled)
    */
   public playScrollTick() {
     if (!this.enabled) return;
     const now = performance.now();
-    if (now - this.lastScrollTime < 115) return;
+    if (now - this.lastScrollTime < 95) return;
     this.lastScrollTime = now;
 
     const ctx = this.getContext();
@@ -276,58 +234,51 @@ class SoundEngine {
       const filter = ctx.createBiquadFilter();
 
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(650, t);
+      filter.frequency.setValueAtTime(2000, t);
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(300, t);
-      osc.frequency.exponentialRampToValueAtTime(150, t + 0.012);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(850, t);
+      osc.frequency.exponentialRampToValueAtTime(260, t + 0.018);
 
-      gain.gain.setValueAtTime(0.030, t);
-      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.012);
+      gain.gain.setValueAtTime(0.18, t);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.018);
 
       osc.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
 
       osc.start(t);
-      osc.stop(t + 0.014);
+      osc.stop(t + 0.022);
     } catch {
       // Ignore
     }
   }
 
   /**
-   * Harmonious Glass Pentatonic Bell Chime (Modal buka, inspeksi sertifikat, ganti tema)
-   * Referensi: Apple Pay success chord & Stripe Press chapter transition chime
+   * Crystal chime for modal open, theme switch, or credential unlock
    */
-  public playChime(freq1 = 523.25, freq2 = 659.25, freq3 = 783.99) {
+  public playChime(freq1 = 560, freq2 = 920) {
     if (!this.enabled) return;
     const ctx = this.getContext();
     if (!ctx) return;
 
     try {
       const now = ctx.currentTime;
-      const chord = [freq1, freq2, freq3];
-      chord.forEach((freq, i) => {
+      [freq1, freq2].forEach((freq, i) => {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(2200, now);
 
         osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + i * 0.045);
+        osc.frequency.setValueAtTime(freq, now + i * 0.065);
 
-        gain.gain.setValueAtTime(0.065, now + i * 0.045);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.045 + 0.28);
+        gain.gain.setValueAtTime(0.22, now + i * 0.065);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.065 + 0.22);
 
-        osc.connect(filter);
-        filter.connect(gain);
+        osc.connect(gain);
         gain.connect(ctx.destination);
 
-        osc.start(now + i * 0.045);
-        osc.stop(now + i * 0.045 + 0.3);
+        osc.start(now + i * 0.065);
+        osc.stop(now + i * 0.065 + 0.24);
       });
     } catch {
       // Ignore
