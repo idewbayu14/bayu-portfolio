@@ -24,6 +24,7 @@ import { sounds } from './utils/audio';
 import { DataLattice3D } from './components/DataLattice3D';
 import { TiltCard } from './components/TiltCard';
 import { TableOfContents } from './components/TableOfContents';
+import { AnimatedLogo } from './components/AnimatedLogo';
 import {
   BySenseLogo,
   ZoomPetcareLogo,
@@ -632,12 +633,7 @@ export default function App() {
             onMouseEnter={() => sounds.playHover()}
             className="flex items-center gap-2.5 sm:gap-3 group focus:outline-none rounded-lg p-1"
           >
-            <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center font-extrabold text-xs tracking-tight transition-all duration-300 ${isDark
-              ? "bg-zinc-900 border border-white/15 text-white group-hover:border-white/40 shadow-specular-dark"
-              : "bg-white border border-black/10 text-zinc-900 group-hover:border-black/30 shadow-xs"
-              }`}>
-              IB
-            </div>
+            <AnimatedLogo size={36} isDark={isDark} />
             <div className="flex flex-col">
               <span className={`font-bold text-xs sm:text-sm tracking-tight transition-colors ${isDark ? "text-white group-hover:text-zinc-200" : "text-zinc-900 group-hover:text-black"
                 }`}>
@@ -1673,7 +1669,8 @@ export default function App() {
         <section className={`pt-12 border-t text-xs ${isDark ? "border-white/[0.08] text-zinc-500" : "border-black/[0.08] text-zinc-500"
           }`}>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+              <AnimatedLogo size={24} isDark={isDark} />
               <span className={`font-bold ${isDark ? "text-zinc-300" : "text-zinc-800"}`}>
                 {PROFILE.name}
               </span>
