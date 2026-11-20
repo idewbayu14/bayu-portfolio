@@ -25,6 +25,8 @@ import { DataLattice3D } from './components/DataLattice3D';
 import { TiltCard } from './components/TiltCard';
 import { TableOfContents } from './components/TableOfContents';
 import { AnimatedLogo } from './components/AnimatedLogo';
+import { DraftingRuleLine } from './components/DraftingRuleLine';
+import { EngineeringSeal } from './components/EngineeringSeal';
 import {
   BySenseLogo,
   ZoomPetcareLogo,
@@ -825,6 +827,9 @@ export default function App() {
                   }`}>
                   {PROFILE.role}
                 </p>
+
+                {/* Soft Architectural Drafting Ruler Accent Line */}
+                <DraftingRuleLine isDark={isDark} className="pt-2 pb-1" />
               </motion.div>
 
               {/* The Core Value Proposition Hook */}
@@ -979,13 +984,23 @@ export default function App() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 pointer-events-none" />
                     )}
                   </div>
-                  <div className="p-3 text-left space-y-1">
+                  <div className="p-3 text-left space-y-1.5">
                     <div className="flex items-center justify-between">
-                      <span className={`text-xs font-bold ${
-                        isDark ? "text-white" : "text-zinc-900"
-                      }`}>
-                        {PROFILE.shortName}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <EngineeringSeal isDark={isDark} size={28} />
+                        <div>
+                          <span className={`text-xs font-bold block leading-tight ${
+                            isDark ? "text-white" : "text-zinc-900"
+                          }`}>
+                            {PROFILE.shortName}
+                          </span>
+                          <span className={`text-[10px] block leading-tight ${
+                            isDark ? "text-zinc-400" : "text-zinc-500 font-medium"
+                          }`}>
+                            Informatics Engineer
+                          </span>
+                        </div>
+                      </div>
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${
                         isDark
                           ? "text-zinc-200 bg-zinc-800 border-white/15"
