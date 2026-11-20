@@ -92,6 +92,7 @@ const PROFILE = {
   education: "Informatics Engineering Graduate",
   institution: "Universitas Komputer Indonesia (UNIKOM)",
   certification: "BNSP Certified Associate Data Scientist (CADS)",
+  gpa: "3.90 / 4.00 (Magna Cum Laude)",
   valueHook: "I build machine learning models, automation scripts, and web or mobile apps that cut down repetitive manual work.",
   bio: "Informatics Engineering graduate from UNIKOM with BNSP Associate Data Scientist certification. Experienced in engineering end-to-end ML classification pipelines, IoT solar telemetry networks, and OCR automation that deliver measurable operational efficiency. Driven by practical engineering that turns complex data pipelines into reliable, production software.",
   email: "idewanyomanbayusw@gmail.com",
@@ -559,6 +560,7 @@ export default function App() {
   }, [isDark]);
 
   useEffect(() => {
+    sounds.initAutoplayUnlock();
     const handleScroll = () => {
       sounds.playScrollTick();
     };
@@ -851,10 +853,10 @@ export default function App() {
                   }`}
               >
                 Graduated with an Informatics Engineering degree from Universitas
-                Komputer Indonesia. Proven track record building real-time IoT
-                telemetry dashboards at Batari Energy, automated computer vision
-                OCR pipelines at Zoom Petcare, and deep learning sentiment
-                inference APIs at BRIN.
+                Komputer Indonesia with Magna Cum Laude honors (IPK 3.90 / 4.00).
+                Proven track record building real-time IoT telemetry dashboards
+                at Batari Energy, automated computer vision OCR pipelines at Zoom
+                Petcare, and deep learning sentiment inference APIs at BRIN.
               </motion.p>
 
               {/* Target Roles Pill List */}
@@ -1481,15 +1483,20 @@ export default function App() {
                 : "bg-white border-black/10 shadow-xs"
                 }`}>
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
                     <span className={`text-xs font-bold uppercase tracking-wider ${isDark ? "text-zinc-400" : "text-zinc-500"
                       }`}>
                       Academic Degree
                     </span>
-                    <span className="text-xs font-bold px-2 py-0.5 rounded-full text-amber-500 bg-amber-500/10 border border-amber-500/20 flex items-center gap-1.5">
-                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                      Magna Cum Laude
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full text-amber-400 bg-amber-400/10 border border-amber-400/20">
+                        IPK 3.90 / 4.00
+                      </span>
+                      <span className="text-xs font-bold px-2 py-0.5 rounded-full text-amber-500 bg-amber-500/10 border border-amber-500/20 flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+                        Magna Cum Laude
+                      </span>
+                    </div>
                   </div>
 
                   <h3 className={`text-lg sm:text-xl font-extrabold tracking-tight ${isDark ? "text-white" : "text-zinc-900"
@@ -1504,7 +1511,7 @@ export default function App() {
 
                   <p className={`text-xs leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"
                     }`}>
-                    Graduated with Magna Cum Laude academic distinction. Specialized in software systems engineering, data pipelines, and applied machine learning architectures.
+                    Graduated with Magna Cum Laude honors and a 3.90 / 4.00 GPA in Informatics Engineering. Specialized in software systems engineering, data pipelines, and applied machine learning architectures.
                   </p>
                 </div>
 
@@ -1516,8 +1523,8 @@ export default function App() {
                       url: "/credentials/graduation-magna-cum-laude.jpg",
                       title: "Bachelor of Computer Science (S.Kom) Convocation",
                       subtitle: "Universitas Komputer Indonesia (UNIKOM) | Teknik Informatika",
-                      badge: "Magna Cum Laude",
-                      caption: "Informatics Engineering graduation convocation honored with Magna Cum Laude academic distinction."
+                      badge: "IPK 3.90 • Magna Cum Laude",
+                      caption: "Informatics Engineering graduation convocation honored with Magna Cum Laude academic distinction (GPA 3.90 / 4.00)."
                     });
                   }}
                   onMouseEnter={() => sounds.playHover()}

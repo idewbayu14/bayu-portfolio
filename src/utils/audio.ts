@@ -13,7 +13,29 @@ class SoundEngine {
       if (saved !== null) {
         this.enabled = saved === 'true';
       }
+      this.initAutoplayUnlock();
     }
+  }
+
+  public initAutoplayUnlock() {
+    if (typeof window === 'undefined') return;
+    const unlock = () => {
+      const ctx = this.getContext();
+      if (ctx && ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
+      window.removeEventListener('pointerdown', unlock);
+      window.removeEventListener('touchstart', unlock);
+      window.removeEventListener('keydown', unlock);
+      window.removeEventListener('wheel', unlock);
+      window.removeEventListener('scroll', unlock);
+    };
+
+    window.addEventListener('pointerdown', unlock, { passive: true, once: true });
+    window.addEventListener('touchstart', unlock, { passive: true, once: true });
+    window.addEventListener('keydown', unlock, { passive: true, once: true });
+    window.addEventListener('wheel', unlock, { passive: true, once: true });
+    window.addEventListener('scroll', unlock, { passive: true, once: true });
   }
 
   private getContext(): AudioContext | null {
@@ -27,7 +49,7 @@ class SoundEngine {
       }
     }
     if (this.ctx && this.ctx.state === 'suspended') {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
     return this.ctx;
   }
