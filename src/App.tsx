@@ -517,11 +517,11 @@ export default function App() {
     index: number;
   } | null>(null);
   const [selectedCredential, setSelectedCredential] = useState<{
-    url: string;
     title: string;
     subtitle: string;
     badge: string;
-    caption: string;
+    pages: { url: string; label: string; caption: string }[];
+    pageIndex: number;
   } | null>(null);
   const [currentTime, setCurrentTime] = useState("");
 
@@ -1244,6 +1244,11 @@ export default function App() {
                                 </a>
                               ))}
                             </div>
+                            <span className={`text-[10.5px] leading-snug max-w-[280px] text-left lg:text-right pt-0.5 ${
+                              isDark ? "text-zinc-500" : "text-zinc-600"
+                            }`}>
+                              Catatan: Tautan toko marketplace mungkin memerlukan login atau aplikasi mobile. Bukti visual terverifikasi tersedia di galeri bawah tanpa login.
+                            </span>
                           </div>
                         ) : project.liveUrl ? (
                           <a
@@ -1316,10 +1321,12 @@ export default function App() {
                     {/* Image Gallery Showcase */}
                     {project.images.length > 0 && (
                       <div className="space-y-2.5 pt-2">
-                        <div className="flex items-center justify-between">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <span className={`text-xs uppercase tracking-wider font-extrabold ${isDark ? "text-zinc-400" : "text-zinc-500"
                             }`}>
-                            Production Interface Snapshots ({project.images.length})
+                            {project.id === "zoom-petcare"
+                              ? `Verified Storefront Snapshots (${project.images.length}) • Bukti Langsung Tanpa Perlu Login`
+                              : `Production Interface Snapshots (${project.images.length})`}
                           </span>
                           <span className={`text-[11px] ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
                             Click snapshot to expand full resolution
@@ -1520,11 +1527,17 @@ export default function App() {
                   onClick={() => {
                     sounds.playChime(600, 840);
                     setSelectedCredential({
-                      url: "/credentials/graduation-magna-cum-laude.jpg",
                       title: "Bachelor of Computer Science (S.Kom) Convocation",
                       subtitle: "Universitas Komputer Indonesia (UNIKOM) | Teknik Informatika",
                       badge: "IPK 3.90 • Magna Cum Laude",
-                      caption: "Informatics Engineering graduation convocation honored with Magna Cum Laude academic distinction (GPA 3.90 / 4.00)."
+                      pages: [
+                        {
+                          url: "/credentials/graduation-magna-cum-laude.jpg",
+                          label: "Foto Wisuda Resmi",
+                          caption: "Informatics Engineering graduation convocation honored with Magna Cum Laude academic distinction (GPA 3.90 / 4.00)."
+                        }
+                      ],
+                      pageIndex: 0
                     });
                   }}
                   onMouseEnter={() => sounds.playHover()}
@@ -1592,7 +1605,7 @@ export default function App() {
 
                   <p className={`text-xs leading-relaxed ${isDark ? "text-zinc-400" : "text-zinc-600"
                     }`}>
-                    Officially assessed and verified in data preprocessing, statistical modeling, predictive pipelines, and production machine learning.
+                    Officially assessed and verified across 9 core competency units covering data acquisition, cleansing, feature engineering, predictive modeling, and model evaluation by LSP Informatika.
                   </p>
                 </div>
 
@@ -1601,11 +1614,22 @@ export default function App() {
                   onClick={() => {
                     sounds.playChime(600, 840);
                     setSelectedCredential({
-                      url: "/credentials/bnsp-cads-certificate.jpg",
-                      title: "Sertifikat Kompetensi Ilmuwan Data Madya",
+                      title: "Sertifikat Kompetensi Ilmuwan Data Madya (CADS)",
                       subtitle: "Badan Nasional Sertifikasi Profesi (BNSP) & LSP Informatika",
                       badge: "BNSP CADS",
-                      caption: "No. Reg. TIK.317.00907 2026 | No. Sertifikat: 62015 2120 6 0038615 2026 | Valid 2026 - 2029"
+                      pages: [
+                        {
+                          url: "/credentials/bnsp-cads-front.jpg",
+                          label: "Halaman 1: Sertifikat Kompetensi (Depan)",
+                          caption: "No. Reg. TIK.317.00907 2026 | No. Sertifikat: 62015 2120 6 0038615 2026 | Valid 2026 - 2029"
+                        },
+                        {
+                          url: "/credentials/bnsp-cads-back.jpg",
+                          label: "Halaman 2: 9 Unit Kompetensi (Belakang)",
+                          caption: "Daftar 9 Unit Kompetensi Resmi BNSP: Pengumpulan Data, Pembersihan, Pemodelan, Evaluasi Model & Pasfoto Resmi."
+                        }
+                      ],
+                      pageIndex: 0
                     });
                   }}
                   onMouseEnter={() => sounds.playHover()}
@@ -1616,7 +1640,7 @@ export default function App() {
                 >
                   <div className="aspect-[16/9] overflow-hidden bg-black/10 relative flex items-center justify-center">
                     <img
-                      src="/credentials/bnsp-cads-certificate.jpg"
+                      src="/credentials/bnsp-cads-front.jpg"
                       alt="BNSP Certified Associate Data Scientist (CADS)"
                       className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/cert:scale-105"
                       loading="lazy"
@@ -1624,7 +1648,7 @@ export default function App() {
                     <div className="absolute inset-0 bg-black/45 opacity-0 group-hover/cert:opacity-100 transition-opacity flex items-center justify-center">
                       <div className="px-3.5 py-1.5 rounded-full bg-white text-black text-xs font-bold flex items-center gap-1.5 shadow-lg">
                         <Eye className="w-3.5 h-3.5" />
-                        <span>Inspect Certificate</span>
+                        <span>Inspect Certificate (2 Pages)</span>
                       </div>
                     </div>
                   </div>
@@ -1636,7 +1660,7 @@ export default function App() {
                       <span className="truncate">Reg. TIK.317.00907 2026</span>
                     </div>
                     <span className={`text-[10px] font-mono px-2 py-0.5 rounded-md ${isDark ? "bg-zinc-800 text-zinc-300" : "bg-zinc-200/80 text-zinc-700"}`}>
-                      2026 - 2029
+                      2 Halaman (Depan & Belakang)
                     </span>
                   </div>
                 </div>
@@ -1709,19 +1733,6 @@ export default function App() {
           className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors shrink-0 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
         >
           <span>BySense</span>
-          <ArrowUpRight className="w-3 h-3 text-zinc-400" />
-        </a>
-
-        <a
-          href="https://www.tokopedia.com/zoom-petcare/product"
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={() => sounds.playClick()}
-          onMouseEnter={() => sounds.playHover()}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-full transition-colors shrink-0 bg-zinc-800/80 hover:bg-zinc-700 text-zinc-200 hover:text-white"
-          title="Zoom Petcare Verified Store"
-        >
-          <span>Zoom</span>
           <ArrowUpRight className="w-3 h-3 text-zinc-400" />
         </a>
 
@@ -1966,29 +1977,108 @@ export default function App() {
                   </span>
                 </div>
 
-                <button
-                  onClick={() => {
-                    sounds.playClick();
-                    setSelectedCredential(null);
-                  }}
-                  onMouseEnter={() => sounds.playHover()}
-                  className={`p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg transition-colors ${isDark
-                    ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
-                    : "text-zinc-500 hover:text-black hover:bg-zinc-200"
-                    }`}
-                  aria-label="Close Preview"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center gap-2.5 shrink-0">
+                  {selectedCredential.pages.length > 1 && (
+                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded-md ${
+                      isDark ? "bg-zinc-800 text-zinc-300" : "bg-zinc-200 text-zinc-700"
+                    }`}>
+                      {selectedCredential.pageIndex + 1} / {selectedCredential.pages.length}
+                    </span>
+                  )}
+                  <button
+                    onClick={() => {
+                      sounds.playClick();
+                      setSelectedCredential(null);
+                    }}
+                    onMouseEnter={() => sounds.playHover()}
+                    className={`p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg transition-colors ${isDark
+                      ? "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                      : "text-zinc-500 hover:text-black hover:bg-zinc-200"
+                      }`}
+                    aria-label="Close Preview"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
+
+              {/* Page Switcher Tabs (when multi-page, e.g. BNSP Front & Back) */}
+              {selectedCredential.pages.length > 1 && (
+                <div className={`px-4 py-2 border-b flex items-center justify-center gap-2 shrink-0 ${
+                  isDark ? "bg-zinc-950/80 border-white/5" : "bg-zinc-100/90 border-black/5"
+                }`}>
+                  {selectedCredential.pages.map((p, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        sounds.playClick();
+                        setSelectedCredential({
+                          ...selectedCredential,
+                          pageIndex: idx
+                        });
+                      }}
+                      onMouseEnter={() => sounds.playHover()}
+                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                        selectedCredential.pageIndex === idx
+                          ? isDark
+                            ? "bg-white text-black shadow-xs"
+                            : "bg-zinc-900 text-white shadow-xs"
+                          : isDark
+                          ? "bg-zinc-800/80 text-zinc-400 hover:text-white"
+                          : "bg-zinc-200 text-zinc-600 hover:text-black"
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Modal Image Area (Fits native aspect ratio with zero cut-off) */}
               <div className="relative flex-1 min-h-0 bg-zinc-950 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
                 <img
-                  src={selectedCredential.url}
-                  alt={selectedCredential.title}
-                  className="max-h-[66vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-lg shadow-xl select-none"
+                  src={selectedCredential.pages[selectedCredential.pageIndex].url}
+                  alt={selectedCredential.pages[selectedCredential.pageIndex].label}
+                  className="max-h-[64vh] sm:max-h-[70vh] w-auto max-w-full object-contain rounded-lg shadow-xl select-none"
                 />
+
+                {/* Left/Right Navigation Arrows for Multi-page Credential */}
+                {selectedCredential.pages.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        sounds.playClick();
+                        setSelectedCredential({
+                          ...selectedCredential,
+                          pageIndex:
+                            (selectedCredential.pageIndex - 1 + selectedCredential.pages.length) %
+                            selectedCredential.pages.length
+                        });
+                      }}
+                      onMouseEnter={() => sounds.playHover()}
+                      className="absolute left-2 sm:left-4 p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-black text-white border border-zinc-700 transition-colors shadow-lg"
+                      aria-label="Previous Page"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        sounds.playClick();
+                        setSelectedCredential({
+                          ...selectedCredential,
+                          pageIndex: (selectedCredential.pageIndex + 1) % selectedCredential.pages.length
+                        });
+                      }}
+                      onMouseEnter={() => sounds.playHover()}
+                      className="absolute right-2 sm:right-4 p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-black text-white border border-zinc-700 transition-colors shadow-lg"
+                      aria-label="Next Page"
+                    >
+                      <ChevronRight className="w-5 h-5" />
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Modal Caption Footer */}
@@ -2003,7 +2093,7 @@ export default function App() {
                     </span>
                   </div>
                   <div className={`font-mono text-[11px] shrink-0 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
-                    {selectedCredential.caption}
+                    {selectedCredential.pages[selectedCredential.pageIndex].caption}
                   </div>
                 </div>
               </div>
