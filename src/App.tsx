@@ -25,7 +25,6 @@ import { DataLattice3D } from './components/DataLattice3D';
 import { TiltCard } from './components/TiltCard';
 import { TableOfContents } from './components/TableOfContents';
 import { AnimatedLogo } from './components/AnimatedLogo';
-import { DraftingRuleLine } from './components/DraftingRuleLine';
 import { EngineeringSeal } from './components/EngineeringSeal';
 import {
   BySenseLogo,
@@ -827,9 +826,6 @@ export default function App() {
                   }`}>
                   {PROFILE.role}
                 </p>
-
-                {/* Soft Architectural Drafting Ruler Accent Line */}
-                <DraftingRuleLine isDark={isDark} className="pt-2 pb-1" />
               </motion.div>
 
               {/* The Core Value Proposition Hook */}
